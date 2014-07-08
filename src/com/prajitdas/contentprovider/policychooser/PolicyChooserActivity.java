@@ -1,9 +1,11 @@
-package com.prajitdas.dataprovider;
+package com.prajitdas.contentprovider.policychooser;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.prajitdas.contentprovider.R;
 
 public class PolicyChooserActivity extends Activity {
 
