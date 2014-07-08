@@ -1,4 +1,4 @@
-package com.prajitdas.privacycontrolleddataprovider;
+package com.prajitdas.dataprovider;
 
 import android.app.Activity;
 import android.os.Bundle;
