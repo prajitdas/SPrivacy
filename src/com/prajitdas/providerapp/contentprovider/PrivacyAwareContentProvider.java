@@ -1,4 +1,4 @@
-package com.prajitdas.contentprovider;
+package com.prajitdas.providerapp.contentprovider;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
