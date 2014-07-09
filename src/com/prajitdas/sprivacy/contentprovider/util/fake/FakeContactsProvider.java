@@ -1,12 +1,12 @@
-package com.prajitdas.sprivacy.contentprovider;
+package com.prajitdas.sprivacy.contentprovider.util.fake;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 
-public class PrivacyAwareContentProvider extends ContentProvider {
-	
+public class FakeContactsProvider extends ContentProvider {
+
 	@Override
 	public boolean onCreate() {
 		// TODO Auto-generated method stub
