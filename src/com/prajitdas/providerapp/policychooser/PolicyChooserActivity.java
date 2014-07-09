@@ -4,15 +4,44 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.TextView;
+import android.widget.ToggleButton;
 
+import com.prajitdas.providerapp.ProviderApplication;
 import com.prajitdas.providerapp.R;
+import com.prajitdas.providerapp.contentprovider.util.apppolicy.ApplicationPolicy;
 
 public class PolicyChooserActivity extends Activity {
+	private TextView mLargeTextViewContactsAccessPolicy;
+	private ToggleButton mToggleButtonContactsAccessPolicy;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_policy_chooser);
+		
+		//Right now adding simple strings for the applications's info 
+		//and policies eventually has to be objects the design needs to be done for that
+		ProviderApplication.getApplicationsInfo().getPolicies().add(
+				new ApplicationPolicy(0,"contentparser", "contacts", false));
+		mLargeTextViewContactsAccessPolicy = (TextView) findViewById(R.id.textViewContactsAccessPolicy);
+		mToggleButtonContactsAccessPolicy = (ToggleButton) findViewById(R.id.toggleButtonContactsAccessPolicy);
+		
+		mLargeTextViewContactsAccessPolicy.setText(R.string.text_view_contacts_access_policy_text);
+		
+		addOnClickListener();
+	}
+
+	private void addOnClickListener() {
+		mToggleButtonContactsAccessPolicy.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				ProviderApplication.getApplicationsInfo().getPolicies().get(0).togglePolicy();
+			}
+		});
 	}
 
 	@Override

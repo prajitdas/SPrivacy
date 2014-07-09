@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.net.Uri;
 
 public class PrivacyAwareContentProvider extends ContentProvider {
-
+	
 	@Override
 	public boolean onCreate() {
 		// TODO Auto-generated method stub

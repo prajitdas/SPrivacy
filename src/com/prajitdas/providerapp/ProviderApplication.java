@@ -1,11 +1,14 @@
 package com.prajitdas.providerapp;
 
+import com.prajitdas.providerapp.contentprovider.util.ApplicationsInfo;
+
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.widget.Toast;
 
 public class ProviderApplication extends Application {
+	private static ApplicationsInfo applicationsInfo;
 	private static final String DEBUG_TAG = "ProviderApplicationDebugTag";
 	private static ProviderApplication singleton;
 
@@ -21,6 +24,14 @@ public class ProviderApplication extends Application {
 		ProviderApplication.singleton = singleton;
 	}
 
+	public static ApplicationsInfo getApplicationsInfo() {
+		return applicationsInfo;
+	}
+
+	public static void setApplicationsInfo(ApplicationsInfo applicationsInfo) {
+		ProviderApplication.applicationsInfo = applicationsInfo;
+	}
+	
 	public static void makeToast(Context context, String someString) {
 		Toast.makeText(context, someString, Toast.LENGTH_LONG).show();
 	}
