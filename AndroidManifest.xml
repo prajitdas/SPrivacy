@@ -22,6 +22,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application>
+        
+		<provider 	android:name="FakeImageProvider" 
+					android:authorities="com.prajitdas.sprivacy.contentprovider.util.fake"
+					android:exported="true"
+					android:permission="com.prajitdas.sprivacy.permission.READ_PROVIDER" >
+        </provider>
+
+		<provider 	android:name="RealImageProvider"
+		    		android:authorities="com.prajitdas.sprivacy.contentprovider.util.real"
+					android:exported="true"
+					android:permission="com.prajitdas.sprivacy.permission.READ_PROVIDER" >
+        </provider>
+
+	</application>
 
 </manifest>
