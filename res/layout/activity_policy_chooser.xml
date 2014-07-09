@@ -17,7 +17,7 @@
     <ToggleButton
         android:id="@+id/toggleButtonContactsAccessPolicy"
         android:layout_width="100dp"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_marginRight="20dp"

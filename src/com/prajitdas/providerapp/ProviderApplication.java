@@ -8,7 +8,7 @@ import android.content.res.Configuration;
 import android.widget.Toast;
 
 public class ProviderApplication extends Application {
-	private static ApplicationsInfo applicationsInfo;
+	private static ApplicationsInfo applicationsInfo = new ApplicationsInfo();
 	private static final String DEBUG_TAG = "ProviderApplicationDebugTag";
 	private static ProviderApplication singleton;
 
