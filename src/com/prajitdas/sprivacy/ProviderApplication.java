@@ -1,6 +1,6 @@
-package com.prajitdas.providerapp;
+package com.prajitdas.sprivacy;
 
-import com.prajitdas.providerapp.contentprovider.util.ApplicationsInfo;
+import com.prajitdas.sprivacy.contentprovider.util.ApplicationsInfo;
 
 import android.app.Application;
 import android.content.Context;

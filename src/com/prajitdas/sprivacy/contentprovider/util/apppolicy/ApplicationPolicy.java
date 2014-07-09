@@ -1,4 +1,4 @@
-package com.prajitdas.providerapp.contentprovider.util.apppolicy;
+package com.prajitdas.sprivacy.contentprovider.util.apppolicy;
 
 public class ApplicationPolicy {
 	private int id;

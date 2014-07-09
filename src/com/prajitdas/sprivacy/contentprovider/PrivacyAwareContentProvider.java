@@ -1,4 +1,4 @@
-package com.prajitdas.providerapp.contentprovider;
+package com.prajitdas.sprivacy.contentprovider;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
