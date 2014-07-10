@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore.Images;
 import android.provider.MediaStore.Images.Media;
+import android.util.Log;
 
 public class RealImageProvider extends ContentProvider {
 	private static final String PROVIDER_NAME = "com.prajitdas.sprivacy.contentprovider.util.real";
@@ -25,6 +26,11 @@ public class RealImageProvider extends ContentProvider {
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder) {
+		Log.v(ProviderApplication.getDebugTag(), ImageQuery.baseUri.toString()
+											+projection.toString()
+											+selection
+											+selectionArgs.toString()
+											+sortOrder);
 		return Media.query(	ProviderApplication.getSingleton().getContentResolver(),
 							ImageQuery.baseUri,
 							projection, 
