@@ -2,8 +2,6 @@ package com.prajitdas.sprivacy.contentprovider.util;
 
 import java.util.ArrayList;
 
-import com.prajitdas.sprivacy.contentprovider.util.apppolicy.ApplicationPolicy;
-
 public class ApplicationsInfo {
 	private ArrayList<ApplicationPolicy> policies;
 

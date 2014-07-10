@@ -1,7 +1,7 @@
 package com.prajitdas.sprivacy;
 
+import com.prajitdas.sprivacy.contentprovider.util.ApplicationPolicy;
 import com.prajitdas.sprivacy.contentprovider.util.ApplicationsInfo;
-import com.prajitdas.sprivacy.contentprovider.util.apppolicy.ApplicationPolicy;
 
 import android.app.Application;
 import android.content.Context;
