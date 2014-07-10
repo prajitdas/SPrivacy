@@ -4,6 +4,14 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
+<!--
+	Permissions need to be included in the future     
+	<permission android:name="com.prajitdas.contentprovider.permission.DEADLY_ACTIVITY"
+        android:label="@string/permlab_deadlyActivity"
+        android:description="@string/permdesc_deadlyActivity"
+        android:permissionGroup="android.permission-group.COST_MONEY"
+        android:protectionLevel="dangerous" /> -->
+    
     <uses-sdk
         android:minSdkVersion="16"
         android:targetSdkVersion="21" />
@@ -22,6 +30,7 @@
 		<provider android:name="SContentProvider" 
 			android:authorities="com.prajitdas.contentprovider"
 			android:exported="true" >
+<!-- 			android:permission="com.prajitdas.contentprovider.permission." > -->
 		</provider>
     </application>
 
