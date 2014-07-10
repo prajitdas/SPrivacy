@@ -15,9 +15,10 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.provider.MediaStore.Images;
 import android.provider.MediaStore.Images.Media;
+import android.util.Log;
 
 public class SContentProvider extends ContentProvider {
-	static final String PROVIDER_NAME = "com.example.provider.Media";
+	static final String PROVIDER_NAME = "com.prajitdas.contentprovider";
 	static final String URL = "content://" + PROVIDER_NAME + "/images";
 	static final Uri CONTENT_URI = Uri.parse(URL);
 	
@@ -116,16 +117,18 @@ public class SContentProvider extends ContentProvider {
 			*/
 			sortOrder = NAME;
 		}
-		Cursor c = Media.query(ProviderApplication.getSingleton().getContentResolver(), 
-				ImageQuery.baseUri,
-				projection, 
-				selection, 
-				selectionArgs, 
-				sortOrder);
+//		Cursor c = getContext().getContentResolver()
+//				.query(ImageQuery.baseUri,
+//				projection, 
+//				selection, 
+//				selectionArgs, 
+//				sortOrder);
+		Cursor c = null;
+		Log.v(ProviderApplication.getDebugTag(), "I came here");
 		/** 
 		* register to watch a content URI for changes
 		*/
-		c.setNotificationUri(getContext().getContentResolver(), uri);
+//		c.setNotificationUri(getContext().getContentResolver(), uri);
 		
 		return c;
 	}
@@ -134,7 +137,8 @@ public class SContentProvider extends ContentProvider {
      * This interface defines constants for the Cursor and CursorLoader, based on constants defined
      * in the {@link Images.Media} class.
      */
-    private interface ImageQuery {
+    @SuppressWarnings("unused")
+	private interface ImageQuery {
 		Uri baseUri = Images.Media.EXTERNAL_CONTENT_URI;
 //		String[] projection = { ImageColumns._ID };
 //		String selection = ImageColumns.BUCKET_DISPLAY_NAME + " = 'Camera'";
