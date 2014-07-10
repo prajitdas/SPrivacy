@@ -23,16 +23,12 @@ import android.util.Log;
 public class PrivacyAwareContentContracts implements ProviderContstants {
     
     public static Uri getImageContentUri() {
-		if(isThisAllowed())
+		if(ProviderApplication.getApplicationsInfo().getPolicies().get(0).isAllowAccess())
 			return REAL_IMAGE_CONTENT_URI;
 		return FAKE_IMAGE_CONTENT_URI;
 	}
-	
-	private static boolean isThisAllowed() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-	   /**
+    
+    /**
      * Broadcast Action:  A broadcast to indicate the end of an MTP session with the host.
      * This broadcast is only sent if MTP activity has modified the media database during the
      * most recent MTP session.

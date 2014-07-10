@@ -39,6 +39,7 @@ public class PolicyChooserActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
+				//This is get(0) as there is only one application now
 				ProviderApplication.getApplicationsInfo().getPolicies().get(0).togglePolicy();
 			}
 		});

@@ -1,6 +1,7 @@
 package com.prajitdas.sprivacy;
 
 import com.prajitdas.sprivacy.contentprovider.util.ApplicationsInfo;
+import com.prajitdas.sprivacy.contentprovider.util.apppolicy.ApplicationPolicy;
 
 import android.app.Application;
 import android.content.Context;
@@ -11,6 +12,10 @@ public class ProviderApplication extends Application {
 	private static ApplicationsInfo applicationsInfo = new ApplicationsInfo();
 	private static final String DEBUG_TAG = "ProviderApplicationDebugTag";
 	private static ProviderApplication singleton;
+	
+	static {
+		applicationsInfo.getPolicies().add(new ApplicationPolicy(0, "contentParser", "images", false));
+	}
 
 	public static String getDebugTag() {
 		return DEBUG_TAG;
