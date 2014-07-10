@@ -23,16 +23,14 @@
             </intent-filter>
         </activity>
         
-		<provider 	android:name="FakeImageProvider" 
+		<provider 	android:name="com.prajitdas.sprivacy.contentprovider.util.fake.FakeImageProvider" 
 					android:authorities="com.prajitdas.sprivacy.contentprovider.util.fake"
-					android:exported="true"
-					android:permission="com.prajitdas.sprivacy.permission.READ_PROVIDER" >
+					android:exported="true" >
         </provider>
 
-		<provider 	android:name="RealImageProvider"
-		    		android:authorities="com.prajitdas.sprivacy.contentprovider.util.real"
-					android:exported="true"
-					android:permission="com.prajitdas.sprivacy.permission.READ_PROVIDER" >
+		<provider 	android:name="com.prajitdas.sprivacy.contentprovider.util.real.RealImageProvider" 
+					android:authorities="com.prajitdas.sprivacy.contentprovider.util.real"
+					android:exported="true" >
         </provider>
 
 	</application>

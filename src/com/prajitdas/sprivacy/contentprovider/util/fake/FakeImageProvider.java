@@ -2,10 +2,21 @@ package com.prajitdas.sprivacy.contentprovider.util.fake;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
+import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
 
 public class FakeImageProvider extends ContentProvider {
+	private static final String PROVIDER_NAME = "com.prajitdas.sprivacy.contentprovider.util.fake";
+	private static final String URL = "content://" + PROVIDER_NAME + "/images";
+	public static final Uri CONTENT_URI = Uri.parse(URL);
+	
+	private static final int IMAGES = 1;
+	private static final UriMatcher uriMatcher;
+	static{
+		uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+		uriMatcher.addURI(PROVIDER_NAME, "images", IMAGES);
+	}
 
 	@Override
 	public boolean onCreate() {
