@@ -1,22 +1,17 @@
 package com.prajitdas.sprivacychooser;
 
-import com.prajitdas.sprivacychooser.util.ApplicationPolicy;
-import com.prajitdas.sprivacychooser.util.ApplicationsInfo;
-
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.widget.Toast;
+
+import com.prajitdas.sprivacychooser.util.ApplicationsInfo;
 
 public class SPrivacyChooserApplication extends Application {
 	private static ApplicationsInfo applicationsInfo = new ApplicationsInfo();
 	private static final String DEBUG_TAG = "ProviderApplicationDebugTag";
 	private static SPrivacyChooserApplication singleton;
 	
-	static {
-		applicationsInfo.getPolicies().add(new ApplicationPolicy(0, "contentParser", "images", false));
-	}
-
 	public static String getDebugTag() {
 		return DEBUG_TAG;
 	}
