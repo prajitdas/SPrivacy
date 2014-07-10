@@ -1,4 +1,4 @@
-package com.prajitdas.sprivacy.contentprovider.util;
+package com.prajitdas.sprivacychooser.util;
 
 public class ApplicationPolicy {
 	private int id;

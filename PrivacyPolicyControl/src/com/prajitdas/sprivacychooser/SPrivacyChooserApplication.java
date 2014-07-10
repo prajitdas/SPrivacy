@@ -1,17 +1,17 @@
-package com.prajitdas.sprivacy;
+package com.prajitdas.sprivacychooser;
 
-import com.prajitdas.sprivacy.contentprovider.util.ApplicationPolicy;
-import com.prajitdas.sprivacy.contentprovider.util.ApplicationsInfo;
+import com.prajitdas.sprivacychooser.util.ApplicationPolicy;
+import com.prajitdas.sprivacychooser.util.ApplicationsInfo;
 
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.widget.Toast;
 
-public class ProviderApplication extends Application {
+public class SPrivacyChooserApplication extends Application {
 	private static ApplicationsInfo applicationsInfo = new ApplicationsInfo();
 	private static final String DEBUG_TAG = "ProviderApplicationDebugTag";
-	private static ProviderApplication singleton;
+	private static SPrivacyChooserApplication singleton;
 	
 	static {
 		applicationsInfo.getPolicies().add(new ApplicationPolicy(0, "contentParser", "images", false));
@@ -21,12 +21,12 @@ public class ProviderApplication extends Application {
 		return DEBUG_TAG;
 	}
 
-	public static ProviderApplication getSingleton() {
+	public static SPrivacyChooserApplication getSingleton() {
 		return singleton;
 	}
 
-	public static void setSingleton(ProviderApplication singleton) {
-		ProviderApplication.singleton = singleton;
+	public static void setSingleton(SPrivacyChooserApplication singleton) {
+		SPrivacyChooserApplication.singleton = singleton;
 	}
 
 	public static ApplicationsInfo getApplicationsInfo() {
@@ -34,7 +34,7 @@ public class ProviderApplication extends Application {
 	}
 
 	public static void setApplicationsInfo(ApplicationsInfo applicationsInfo) {
-		ProviderApplication.applicationsInfo = applicationsInfo;
+		SPrivacyChooserApplication.applicationsInfo = applicationsInfo;
 	}
 	
 	public static void makeToast(Context context, String someString) {
