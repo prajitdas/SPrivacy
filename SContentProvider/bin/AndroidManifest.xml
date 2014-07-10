@@ -15,7 +15,8 @@
         android:theme="@style/AppTheme" >
         
 		<provider android:name="SContentProvider" 
-			android:authorities="com.prajitdas.contentprovider">
+			android:authorities="com.prajitdas.contentprovider"
+			android:exported="true" >
 		</provider>
     </application>
 
