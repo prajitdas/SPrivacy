@@ -14,8 +14,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.provider.MediaStore.Images;
-import android.provider.MediaStore.Images.Media;
-import android.util.Log;
 
 public class SContentProvider extends ContentProvider {
 	static final String PROVIDER_NAME = "com.prajitdas.contentprovider";
@@ -117,33 +115,39 @@ public class SContentProvider extends ContentProvider {
 			*/
 			sortOrder = NAME;
 		}
-//		Cursor c = getContext().getContentResolver()
-//				.query(ImageQuery.baseUri,
-//				projection, 
-//				selection, 
-//				selectionArgs, 
-//				sortOrder);
-		Cursor c = null;
-		Log.v(ProviderApplication.getDebugTag(), "I came here");
-		/** 
-		* register to watch a content URI for changes
-		*/
-//		c.setNotificationUri(getContext().getContentResolver(), uri);
-		
+		Cursor c;
+		if(isDataAccessAllowed()) {
+			c = getContext().getContentResolver()
+					.query(ImageQuery.baseUri,
+					projection, 
+					selection, 
+					selectionArgs, 
+					sortOrder);
+			/** 
+			* register to watch a content URI for changes
+			*/
+			c.setNotificationUri(getContext().getContentResolver(), uri);
+		}
+		else
+			c = null;
 		return c;
 	}
 	
 	/**
+	 * This code should be able to find what policies are there to protect what content.
+	 * @return
+	 */
+	private boolean isDataAccessAllowed() {
+ 
+		return false;
+	}
+
+	/**
      * This interface defines constants for the Cursor and CursorLoader, based on constants defined
      * in the {@link Images.Media} class.
      */
-    @SuppressWarnings("unused")
 	private interface ImageQuery {
 		Uri baseUri = Images.Media.EXTERNAL_CONTENT_URI;
-//		String[] projection = { ImageColumns._ID };
-//		String selection = ImageColumns.BUCKET_DISPLAY_NAME + " = 'Camera'";
-//	    String[] selectionArgs = null;
-//	    String sort = ImageColumns._ID + " DESC LIMIT 1";
     }
     
     @Override
