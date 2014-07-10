@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.prajitdas.contentprovider"
+    package="com.prajitdas.scontentprovider"
     android:versionCode="1"
     android:versionName="1.0" >
 
 <!--
 	Permissions need to be included in the future     
-	<permission android:name="com.prajitdas.contentprovider.permission.DEADLY_ACTIVITY"
+	<permission android:name="com.prajitdas.scontentprovider.permission.DEADLY_ACTIVITY"
         android:label="@string/permlab_deadlyActivity"
         android:description="@string/permdesc_deadlyActivity"
         android:permissionGroup="android.permission-group.COST_MONEY"
@@ -28,9 +28,9 @@
         android:theme="@style/AppTheme" >
         
 		<provider android:name="SContentProvider" 
-			android:authorities="com.prajitdas.contentprovider"
+			android:authorities="com.prajitdas.scontentprovider"
 			android:exported="true" >
-<!-- 			android:permission="com.prajitdas.contentprovider.permission." > -->
+<!-- 			android:permission="com.prajitdas.scontentprovider.permission." > -->
 		</provider>
     </application>
 
