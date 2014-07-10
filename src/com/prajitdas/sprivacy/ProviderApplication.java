@@ -14,7 +14,7 @@ public class ProviderApplication extends Application {
 	private static ProviderApplication singleton;
 	
 	static {
-		applicationsInfo.getPolicies().add(new ApplicationPolicy(0, "contentParser", "images", false));
+		applicationsInfo.getPolicies().add(new ApplicationPolicy(0, "contentParser", "images", true));
 	}
 
 	public static String getDebugTag() {
