@@ -1,4 +1,4 @@
-package com.prajitdas.sprivacychooser.util;
+package com.prajitdas.privacypolicycontrol.util;
 
 import java.util.ArrayList;
 

@@ -1,27 +1,27 @@
-package com.prajitdas.sprivacychooser;
+package com.prajitdas.privacypolicycontrol;
 
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.widget.Toast;
 
-import com.prajitdas.sprivacychooser.util.ApplicationsInfo;
+import com.prajitdas.privacypolicycontrol.util.ApplicationsInfo;
 
-public class SPrivacyChooserApplication extends Application {
+public class PrivacyPolicyControlApplication extends Application {
 	private static ApplicationsInfo applicationsInfo = new ApplicationsInfo();
 	private static final String DEBUG_TAG = "ProviderApplicationDebugTag";
-	private static SPrivacyChooserApplication singleton;
+	private static PrivacyPolicyControlApplication singleton;
 	
 	public static String getDebugTag() {
 		return DEBUG_TAG;
 	}
 
-	public static SPrivacyChooserApplication getSingleton() {
+	public static PrivacyPolicyControlApplication getSingleton() {
 		return singleton;
 	}
 
-	public static void setSingleton(SPrivacyChooserApplication singleton) {
-		SPrivacyChooserApplication.singleton = singleton;
+	public static void setSingleton(PrivacyPolicyControlApplication singleton) {
+		PrivacyPolicyControlApplication.singleton = singleton;
 	}
 
 	public static ApplicationsInfo getApplicationsInfo() {
@@ -29,7 +29,7 @@ public class SPrivacyChooserApplication extends Application {
 	}
 
 	public static void setApplicationsInfo(ApplicationsInfo applicationsInfo) {
-		SPrivacyChooserApplication.applicationsInfo = applicationsInfo;
+		PrivacyPolicyControlApplication.applicationsInfo = applicationsInfo;
 	}
 	
 	public static void makeToast(Context context, String someString) {

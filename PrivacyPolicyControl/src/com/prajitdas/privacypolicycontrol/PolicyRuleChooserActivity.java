@@ -1,4 +1,4 @@
-package com.prajitdas.sprivacychooser;
+package com.prajitdas.privacypolicycontrol;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -9,8 +9,7 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.prajitdas.sprivacy.R;
-import com.prajitdas.sprivacychooser.util.ApplicationPolicy;
+import com.prajitdas.privacypolicycontrol.util.ApplicationPolicy;
 
 public class PolicyRuleChooserActivity extends Activity {
 	private TextView mLargeTextViewContactsAccessPolicy;
@@ -23,7 +22,7 @@ public class PolicyRuleChooserActivity extends Activity {
 		
 		//Right now adding simple strings for the applications's info 
 		//and policies eventually has to be objects the design needs to be done for that
-		SPrivacyChooserApplication.getApplicationsInfo().getPolicies().add(
+		PrivacyPolicyControlApplication.getApplicationsInfo().getPolicies().add(
 				new ApplicationPolicy(0,"contentparser", "contacts", false));
 		mLargeTextViewContactsAccessPolicy = (TextView) findViewById(R.id.textViewContactsAccessPolicy);
 		mToggleButtonContactsAccessPolicy = (ToggleButton) findViewById(R.id.toggleButtonContactsAccessPolicy);
@@ -39,7 +38,7 @@ public class PolicyRuleChooserActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				//This is get(0) as there is only one application now
-				SPrivacyChooserApplication.getApplicationsInfo().getPolicies().get(0).togglePolicy();
+				PrivacyPolicyControlApplication.getApplicationsInfo().getPolicies().get(0).togglePolicy();
 			}
 		});
 	}
