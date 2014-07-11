@@ -1,4 +1,4 @@
-package com.prajitdas.privacypolicycontrol;
+package com.prajitdas.privacypolicy.control;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -9,7 +9,10 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.prajitdas.privacypolicycontrol.util.ApplicationPolicy;
+import com.prajitdas.privacypolicy.PrivacyPolicyApplication;
+import com.prajitdas.privacypolicy.R;
+import com.prajitdas.privacypolicy.provider.util.ApplicationPolicy;
+import com.prajitdas.privacypolicy.provider.util.DefaultPolicyLoader;
 
 public class PolicyRuleChooserActivity extends Activity {
 	private TextView mLargeTextViewContactsAccessPolicy;
@@ -19,11 +22,13 @@ public class PolicyRuleChooserActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_policy_chooser);
+		DefaultPolicyLoader.loadDefaultPolicies();
 		
 		//Right now adding simple strings for the applications's info 
 		//and policies eventually has to be objects the design needs to be done for that
-		PrivacyPolicyControlApplication.getApplicationsInfo().getPolicies().add(
+		PrivacyPolicyApplication.getApplicationsInfo().getPolicies().add(
 				new ApplicationPolicy(0,"contentparser", "contacts", false));
+		
 		mLargeTextViewContactsAccessPolicy = (TextView) findViewById(R.id.textViewContactsAccessPolicy);
 		mToggleButtonContactsAccessPolicy = (ToggleButton) findViewById(R.id.toggleButtonContactsAccessPolicy);
 		
@@ -34,11 +39,10 @@ public class PolicyRuleChooserActivity extends Activity {
 
 	private void addOnClickListener() {
 		mToggleButtonContactsAccessPolicy.setOnClickListener(new OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
 				//This is get(0) as there is only one application now
-				PrivacyPolicyControlApplication.getApplicationsInfo().getPolicies().get(0).togglePolicy();
+				PrivacyPolicyApplication.getApplicationsInfo().getPolicies().get(0).togglePolicy();
 			}
 		});
 	}

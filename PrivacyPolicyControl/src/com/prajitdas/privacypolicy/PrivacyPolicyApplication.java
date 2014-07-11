@@ -1,27 +1,27 @@
-package com.prajitdas.privacypolicycontrol;
+package com.prajitdas.privacypolicy;
 
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.widget.Toast;
 
-import com.prajitdas.privacypolicycontrol.util.ApplicationsInfo;
+import com.prajitdas.privacypolicy.provider.util.ApplicationsInfo;
 
-public class PrivacyPolicyControlApplication extends Application {
+public class PrivacyPolicyApplication extends Application {
 	private static ApplicationsInfo applicationsInfo = new ApplicationsInfo();
 	private static final String DEBUG_TAG = "ProviderApplicationDebugTag";
-	private static PrivacyPolicyControlApplication singleton;
-	
+	private static PrivacyPolicyApplication singleton;
+
 	public static String getDebugTag() {
 		return DEBUG_TAG;
 	}
 
-	public static PrivacyPolicyControlApplication getSingleton() {
+	public static PrivacyPolicyApplication getSingleton() {
 		return singleton;
 	}
 
-	public static void setSingleton(PrivacyPolicyControlApplication singleton) {
-		PrivacyPolicyControlApplication.singleton = singleton;
+	public static void setSingleton(PrivacyPolicyApplication singleton) {
+		PrivacyPolicyApplication.singleton = singleton;
 	}
 
 	public static ApplicationsInfo getApplicationsInfo() {
@@ -29,7 +29,7 @@ public class PrivacyPolicyControlApplication extends Application {
 	}
 
 	public static void setApplicationsInfo(ApplicationsInfo applicationsInfo) {
-		PrivacyPolicyControlApplication.applicationsInfo = applicationsInfo;
+		PrivacyPolicyApplication.applicationsInfo = applicationsInfo;
 	}
 	
 	public static void makeToast(Context context, String someString) {

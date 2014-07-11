@@ -1,4 +1,4 @@
-package com.prajitdas.privacypolicycontrol.util;
+package com.prajitdas.privacypolicy.provider.util;
 
 import java.util.ArrayList;
 
