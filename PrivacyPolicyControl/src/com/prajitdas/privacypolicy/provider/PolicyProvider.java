@@ -18,7 +18,7 @@ import android.util.Log;
 
 public class PolicyProvider extends ContentProvider {
 	// fields for my content provider
-	static final String PROVIDER_NAME = "com.prajitdas.privacypolicy";
+	static final String PROVIDER_NAME = "com.prajitdas.privacypolicy.provider";
 	static final String URL = "content://" + PROVIDER_NAME + "/policies";
 	static final Uri CONTENT_URI = Uri.parse(URL);
 	

@@ -6,7 +6,7 @@ import android.content.res.Configuration;
 import android.widget.Toast;
 
 public class PrivacyPolicyApplication extends Application {
-	private static final String DEBUG_TAG = "ProviderApplicationDebugTag";
+	private static final String DEBUG_TAG = "PrivacyPolicyApplicationDebugTag";
 	private static PrivacyPolicyApplication singleton;
 
 	public static String getDebugTag() {
