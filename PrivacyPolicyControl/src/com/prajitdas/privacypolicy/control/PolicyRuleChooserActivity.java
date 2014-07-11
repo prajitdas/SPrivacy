@@ -28,7 +28,6 @@ public class PolicyRuleChooserActivity extends Activity {
 		
 		//Right now adding simple strings for the applications's info 
 		//and policies eventually has to be objects the design needs to be done for that
-		DefaultPolicyLoader.addDefaultPolicies();
 		
 		mLargeTextViewContactsAccessPolicy = (TextView) findViewById(R.id.textViewContactsAccessPolicy);
 		mToggleButtonContactsAccessPolicy = (ToggleButton) findViewById(R.id.toggleButtonContactsAccessPolicy);
@@ -43,6 +42,7 @@ public class PolicyRuleChooserActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				//This is get(0) as there is only one application now
+				DefaultPolicyLoader.addDefaultPolicies();
 				togglePolicy(0);
 			}
 		});

@@ -4,6 +4,7 @@ import android.content.ContentValues;
 
 import com.prajitdas.privacypolicy.PrivacyPolicyApplication;
 import com.prajitdas.privacypolicy.provider.PolicyProvider;
+import com.prajitdas.privacypolicy.util.PolicyQuery;
 
 public class DefaultPolicyLoader {
 	
@@ -17,6 +18,6 @@ public class DefaultPolicyLoader {
 	    values.put(PolicyProvider.getAppname(), "com.prajitdas.parserapp");	    
 	    values.put(PolicyProvider.getResource(), "Images");
 	    values.put(PolicyProvider.getPolicy(), 1);
-	    PrivacyPolicyApplication.getSingleton().getContentResolver().insert(PolicyProvider.getContentUri(), values);
+	    PrivacyPolicyApplication.getSingleton().getContentResolver().insert(PolicyQuery.baseUri, values);
 	}
 }

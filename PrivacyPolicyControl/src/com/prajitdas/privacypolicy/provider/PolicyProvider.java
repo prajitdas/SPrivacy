@@ -18,27 +18,27 @@ import android.util.Log;
 
 public class PolicyProvider extends ContentProvider {
 	// fields for my content provider
-	private static final String PROVIDER_NAME = "com.prajitdas.privacypolicy.provider.policy";
-	private static final String URL = "content://" + PROVIDER_NAME + "/policies";
-	private static final Uri CONTENT_URI = Uri.parse(URL);
+	static final String PROVIDER_NAME = "com.prajitdas.privacypolicy";
+	static final String URL = "content://" + PROVIDER_NAME + "/policies";
+	static final Uri CONTENT_URI = Uri.parse(URL);
 	
 	// fields for the database
-	private static final String ID = "id";
-	private static final String APPNAME = "appname";
-	private static final String RESOURCE = "resource";
-	private static final String POLICY = "policy";
+	static final String ID = "id";
+	static final String APPNAME = "appname";
+	static final String RESOURCE = "resource";
+	static final String POLICY = "policy";
 		
 	// integer values used in content URI
-	private static final int POLICIES = 1;
-	private static final int POLICIES_ID = 2;
+	static final int POLICIES = 1;
+	static final int POLICIES_ID = 2;
 	
-	private DBHelper dbHelper;
+	DBHelper dbHelper;
 	
 	// projection map for a query
 	private static HashMap<String, String> PolicyMap;
 	
 	// maps content URI "patterns" to the integer values that were set above
-	private static final UriMatcher uriMatcher;
+	static final UriMatcher uriMatcher;
 	static{
 		uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 		uriMatcher.addURI(PROVIDER_NAME, "policies", POLICIES);
@@ -47,10 +47,10 @@ public class PolicyProvider extends ContentProvider {
 	
 	// database declarations
 	private SQLiteDatabase database;
-	private static final String DATABASE_NAME = "PrivacyPolicies";
-	private static final String TABLE_NAME = "policies";
-	private static final int DATABASE_VERSION = 1;
-	private static final String CREATE_TABLE = 
+	static final String DATABASE_NAME = "PrivacyPolicies";
+	static final String TABLE_NAME = "policies";
+	static final int DATABASE_VERSION = 1;
+	static final String CREATE_TABLE = 
 			" CREATE TABLE " + TABLE_NAME +
 			" (" + ID + "INTEGER PRIMARY KEY AUTOINCREMENT, " + 
 			APPNAME + " TEXT NOT NULL, " +
