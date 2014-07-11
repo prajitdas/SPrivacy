@@ -8,6 +8,16 @@
         android:minSdkVersion="16"
         android:targetSdkVersion="21" />
 
+    <permission android:description="@string/sprivacy_read_permission_description"
+            android:label="@string/sprivacy_read_permission_label"
+            android:name="android.permission.privacyPolicy.READ_POLICIES"
+            android:protectionLevel="normal" />
+    
+    <permission android:description="@string/sprivacy_write_permission_description"
+            android:label="@string/sprivacy_write_permission_label"
+            android:name="android.permission.privacyPolicy.WRITE_POLICIES"
+            android:protectionLevel="normal" />
+    
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -28,8 +38,10 @@
 			android:authorities="com.prajitdas.privacypolicy.provider"
             android:label="@string/provider_label"
             android:multiprocess="false"
-            android:exported="true">
-		</provider>
+            android:exported="true"
+			android:readPermission="android.permission.privacyPolicy.READ_POLICIES"
+            android:writePermission="android.permission.privacyPolicy.WRITE_POLICIES" />
+
 	</application>
 
 </manifest>

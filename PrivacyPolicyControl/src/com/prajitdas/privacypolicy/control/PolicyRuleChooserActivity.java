@@ -26,7 +26,7 @@ public class PolicyRuleChooserActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_policy_rule_chooser);
 		
-		DefaultPolicyLoader.addDefaultPolicies();
+//		DefaultPolicyLoader.addDefaultPolicies();
 		//Right now adding simple strings for the applications's info 
 		//and policies eventually has to be objects the design needs to be done for that
 		
