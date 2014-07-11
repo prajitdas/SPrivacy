@@ -37,7 +37,7 @@
             </intent-filter>
         </activity>
         
-		<provider android:name="BirthProvider" 
+		<provider android:name="PolicyProvider" 
 			android:authorities="com.prajitdas.privacypolicy.provider.Policy"
             android:label="@string/provider_label"
             android:multiprocess="false"
