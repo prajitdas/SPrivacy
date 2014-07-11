@@ -16,6 +16,9 @@
         android:minSdkVersion="16"
         android:targetSdkVersion="21" />
 
+    <!-- Required permission for reading the privacy policies -->
+    <uses-permission android:name="android.permission.privacyPolicy.READ_POLICIES" />
+    
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <!-- Required permission not required at or below Android 4.3 API level -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />

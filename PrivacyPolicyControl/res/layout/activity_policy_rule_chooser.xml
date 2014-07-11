@@ -26,5 +26,15 @@
         android:textOff="Contacts Access Prohibited"
         android:textOn="Contacts Access Permitted" 
         android:checked="false" />
+     
+     <Button
+         android:id="@+id/btnShow"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:layout_alignLeft="@+id/textViewContactsAccessPolicy"
+         android:layout_below="@+id/textViewContactsAccessPolicy"
+         android:layout_marginTop="20dp"
+         android:onClick="showAllPolicies"
+         android:text="@string/show" />
 
 </RelativeLayout>

@@ -1,7 +1,10 @@
 package com.prajitdas.privacypolicy.control;
 
 import android.app.Activity;
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,8 +14,8 @@ import android.widget.ToggleButton;
 
 import com.prajitdas.privacypolicy.PrivacyPolicyApplication;
 import com.prajitdas.privacypolicy.R;
-import com.prajitdas.privacypolicy.provider.util.ApplicationPolicy;
-import com.prajitdas.privacypolicy.provider.util.DefaultPolicyLoader;
+import com.prajitdas.privacypolicy.provider.PolicyProvider;
+import com.prajitdas.privacypolicy.util.PolicyQuery;
 
 public class PolicyRuleChooserActivity extends Activity {
 	private TextView mLargeTextViewContactsAccessPolicy;
@@ -21,13 +24,11 @@ public class PolicyRuleChooserActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_policy_chooser);
-		DefaultPolicyLoader.loadDefaultPolicies();
+		setContentView(R.layout.activity_policy_rule_chooser);
 		
 		//Right now adding simple strings for the applications's info 
 		//and policies eventually has to be objects the design needs to be done for that
-		PrivacyPolicyApplication.getApplicationsInfo().getPolicies().add(
-				new ApplicationPolicy(0,"contentparser", "contacts", false));
+		DefaultPolicyLoader.addDefaultPolicies();
 		
 		mLargeTextViewContactsAccessPolicy = (TextView) findViewById(R.id.textViewContactsAccessPolicy);
 		mToggleButtonContactsAccessPolicy = (ToggleButton) findViewById(R.id.toggleButtonContactsAccessPolicy);
@@ -42,7 +43,7 @@ public class PolicyRuleChooserActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				//This is get(0) as there is only one application now
-				PrivacyPolicyApplication.getApplicationsInfo().getPolicies().get(0).togglePolicy();
+				togglePolicy(0);
 			}
 		});
 	}
@@ -64,5 +65,58 @@ public class PolicyRuleChooserActivity extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	public void deleteAllPolicies (View view) {
+		// delete all the records and the table of the database provider
+		int count = getContentResolver().delete(PolicyQuery.baseUri, null, null);
+		String display = "Policies deleted = "+ count;
+		Log.v(PrivacyPolicyApplication.getDebugTag(), display);
+		PrivacyPolicyApplication.makeToast(this, display);
+	}
+
+	public void togglePolicy(int idOfPolicy) {
+		//Get a single policy to modify		
+		Cursor c = getContentResolver().query(PolicyQuery.baseUri, 
+				PolicyQuery.projection, 
+				Integer.toString(idOfPolicy), 
+				PolicyQuery.selectionArgs, 
+				PolicyQuery.sort);
+		if (!c.moveToFirst()) {
+			PrivacyPolicyApplication.makeToast(this, "Well, could not find the particular id!");
+		}
+		else {				
+			ContentValues values = new ContentValues();
+	
+			values.put(PolicyProvider.getAppname(), c.getString(c.getColumnIndex(PolicyProvider.getAppname())));
+		    values.put(PolicyProvider.getResource(), c.getString(c.getColumnIndex(PolicyProvider.getResource())));
+		    if(c.getString(c.getColumnIndex(PolicyProvider.getPolicy())).equals("1"))
+		    	values.put(PolicyProvider.getPolicy(), 0);
+		    else
+		    	values.put(PolicyProvider.getPolicy(), 1);
+		    getContentResolver().update(PolicyQuery.baseUri, values, Integer.toString(idOfPolicy), null);	
+			PrivacyPolicyApplication.makeToast(this, "Inserted: "+values.toString());
+		}
+	}
+
+	public void showAllPolicies(View view) {
+		// Show all the policies sorted by app name
+		Cursor c = getContentResolver().query(PolicyQuery.baseUri, 
+				PolicyQuery.projection, 
+				PolicyQuery.selection, 
+				PolicyQuery.selectionArgs, 
+				PolicyQuery.sort);
+		String result = "Results:";
+
+		if (!c.moveToFirst()) {
+			PrivacyPolicyApplication.makeToast(this, result+" no content yet!");
+		}
+		else {
+			do {
+				result = result + "\n" + c.getString(c.getColumnIndex(PolicyProvider.getAppname())) +
+						" trying to access resource " +  c.getString(c.getColumnIndex(PolicyProvider.getResource())) + 
+								" has policy set as : " + c.getString(c.getColumnIndex(PolicyProvider.getPolicy()));
+			} while (c.moveToNext());
+			PrivacyPolicyApplication.makeToast(this, result);
+		}
 	}
 }
