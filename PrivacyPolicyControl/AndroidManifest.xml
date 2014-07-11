@@ -38,7 +38,7 @@
         </activity>
         
 		<provider android:name="PolicyProvider" 
-			android:authorities="com.prajitdas.privacypolicy.provider.Policy"
+			android:authorities="com.prajitdas.privacypolicy.provider.policy"
             android:label="@string/provider_label"
             android:multiprocess="false"
             android:exported="true"
