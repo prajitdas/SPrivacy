@@ -1,10 +1,8 @@
-package com.prajitdas.privacypolicy.control;
+package com.prajitdas.sprivacy.policyprovider;
+
+import com.prajitdas.sprivacy.PrivacyPolicyApplication;
 
 import android.content.ContentValues;
-
-import com.prajitdas.privacypolicy.PrivacyPolicyApplication;
-import com.prajitdas.privacypolicy.provider.PolicyProvider;
-import com.prajitdas.privacypolicy.util.PolicyQuery;
 
 public class DefaultPolicyLoader {
 	

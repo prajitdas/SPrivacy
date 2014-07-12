@@ -1,4 +1,4 @@
-package com.prajitdas.privacypolicy.control;
+package com.prajitdas.sprivacy.policyprovider;
 
 import android.app.Activity;
 import android.content.ContentValues;
@@ -12,10 +12,8 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.prajitdas.privacypolicy.PrivacyPolicyApplication;
-import com.prajitdas.privacypolicy.R;
-import com.prajitdas.privacypolicy.provider.PolicyProvider;
-import com.prajitdas.privacypolicy.util.PolicyQuery;
+import com.prajitdas.sprivacy.PrivacyPolicyApplication;
+import com.prajitdas.sprivacy.R;
 
 public class PolicyRuleChooserActivity extends Activity {
 	private TextView mLargeTextViewContactsAccessPolicy;

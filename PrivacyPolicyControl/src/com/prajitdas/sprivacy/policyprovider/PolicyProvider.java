@@ -1,4 +1,4 @@
-package com.prajitdas.privacypolicy.provider;
+package com.prajitdas.sprivacy.policyprovider;
 
 import java.util.HashMap;
 
@@ -18,7 +18,7 @@ import android.util.Log;
 
 public class PolicyProvider extends ContentProvider {
 	// fields for my content provider
-	static final String PROVIDER_NAME = "com.prajitdas.privacypolicy.provider";
+	static final String PROVIDER_NAME = "com.prajitdas.sprivacy.policyprovider.Policy";
 	static final String URL = "content://" + PROVIDER_NAME + "/policies";
 	static final Uri CONTENT_URI = Uri.parse(URL);
 	

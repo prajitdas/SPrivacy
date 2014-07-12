@@ -1,4 +1,4 @@
-package com.prajitdas.privacypolicy;
+package com.prajitdas.sprivacy;
 
 import android.app.Application;
 import android.content.Context;

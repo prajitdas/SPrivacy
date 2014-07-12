@@ -1,4 +1,4 @@
-package com.prajitdas.privacypolicy.util;
+package com.prajitdas.sprivacy.policyprovider;
 
 public class PolicyRules {
 	private int id;
