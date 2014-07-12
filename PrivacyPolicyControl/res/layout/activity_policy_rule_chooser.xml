@@ -11,6 +11,7 @@
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="20dp"
         android:gravity="center"
+        android:text="@string/defaultText"
         android:layout_toLeftOf="@+id/toggleButtonContactsAccessPolicy"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -32,6 +33,7 @@
          android:layout_width="fill_parent"
          android:layout_height="wrap_content"
          android:layout_alignLeft="@+id/textViewContactsAccessPolicy"
+         android:layout_alignRight="@+id/toggleButtonContactsAccessPolicy"
          android:layout_below="@+id/textViewContactsAccessPolicy"
          android:layout_marginTop="20dp"
          android:onClick="showAllPolicies"

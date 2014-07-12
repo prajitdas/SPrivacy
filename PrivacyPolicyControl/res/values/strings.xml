@@ -8,6 +8,8 @@
     <string name="policy_chooser_activity_name">Policy Chooser</string>
     <string name="provider_label">Policy Provider</string>
     <string name="show">Show All Policies</string>
+    <string name="defaultText">Default Text</string>
+    
 
     <string name="sprivacy_read_permission_description">Permission to read the privacy policies stored by SPrivacy Control</string>
     <string name="sprivacy_read_permission_label">SPrivacy Read Permission</string>

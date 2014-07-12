@@ -6,9 +6,9 @@ import android.net.Uri;
  * This interface defines constants for the provider.
  */
 public interface PolicyQuery {
-	Uri baseUri = Uri.parse("content://com.prajitdas.privacypolicy.provider/policies");//PolicyProvider.getContentUri();
+	Uri baseUri = PolicyProvider.getContentUri();
 	String[] projection = null;
 	String selection = null;
     String[] selectionArgs = null;
-    String sort = " appName DESC";
+    String sort = PolicyProvider.APPNAME + " DESC";
 }
