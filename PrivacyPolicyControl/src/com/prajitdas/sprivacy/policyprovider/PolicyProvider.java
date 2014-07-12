@@ -52,7 +52,7 @@ public class PolicyProvider extends ContentProvider {
 	static final int DATABASE_VERSION = 1;
 	static final String CREATE_TABLE = 
 			" CREATE TABLE " + TABLE_NAME +
-			" (" + ID + "INTEGER PRIMARY KEY AUTOINCREMENT, " + 
+			" (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
 			APPNAME + " TEXT NOT NULL, " +
 			RESOURCE + " TEXT NOT NULL," +
 			POLICY + " INTEGER DEFAULT 0);";

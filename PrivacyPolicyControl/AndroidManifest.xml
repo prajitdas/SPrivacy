@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         
-		<provider android:name="PolicyProvider" 
+		<provider android:name="com.prajitdas.sprivacy.policyprovider.PolicyProvider" 
 			android:authorities="com.prajitdas.sprivacy.policyprovider.Policy"
             android:label="@string/provider_label"
             android:multiprocess="false"
