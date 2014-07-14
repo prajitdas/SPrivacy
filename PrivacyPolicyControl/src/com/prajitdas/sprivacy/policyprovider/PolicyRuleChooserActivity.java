@@ -3,6 +3,7 @@ package com.prajitdas.sprivacy.policyprovider;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -16,6 +17,7 @@ import android.widget.ToggleButton;
 import com.prajitdas.sprivacy.PrivacyPolicyApplication;
 import com.prajitdas.sprivacy.R;
 import com.prajitdas.sprivacy.policyprovider.util.PolicyQuery;
+import com.prajitdas.sprivacy.policyprovider.util.PolicyRules;
 
 public class PolicyRuleChooserActivity extends Activity {
 	private TextView mLargeTextViewContactsAccessPolicy;
@@ -28,12 +30,8 @@ public class PolicyRuleChooserActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_policy_rule_chooser);
 		
-//		DefaultPolicyLoader.addDefaultPolicies();
-		//Right now adding simple strings for the applications's info 
-		//and policies eventually has to be objects the design needs to be done for that
-		
-		instantiateViews();		
-		
+		instantiateViews();
+		loadDefaultPoliciesIntoDB();
 		addOnClickListener();
 	}
 
@@ -51,7 +49,7 @@ public class PolicyRuleChooserActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				//This is get(0) as there is only one application now
-				togglePolicy(0);
+				togglePolicy(1);
 			}
 		});
 		
@@ -91,7 +89,7 @@ public class PolicyRuleChooserActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	public void deleteAllPolicies() {
+	private void deleteAllPolicies() {
 		// delete all the records and the table of the database provider
 		int count = getContentResolver().delete(PolicyQuery.baseUri, null, null);
 		String display = "Policies deleted = "+ count;
@@ -99,7 +97,7 @@ public class PolicyRuleChooserActivity extends Activity {
 		PrivacyPolicyApplication.makeToast(this, display);
 	}
 
-	public void showAllPolicies() {
+	private void showAllPolicies() {
 		// Show all the policies sorted by app name
 		Cursor c = getContentResolver().query(PolicyQuery.baseUri, 
 				PolicyQuery.projection, 
@@ -121,7 +119,7 @@ public class PolicyRuleChooserActivity extends Activity {
 		}
 	}
 	
-	public void togglePolicy(int idOfPolicy) {
+	private void togglePolicy(int idOfPolicy) {
 		//Get a single policy to modify		
 		Cursor c = getContentResolver().query(PolicyQuery.baseUri, 
 				PolicyQuery.projection, 
@@ -141,7 +139,27 @@ public class PolicyRuleChooserActivity extends Activity {
 		    else
 		    	values.put(PolicyProvider.getPolicy(), 1);
 		    getContentResolver().update(PolicyQuery.baseUri, values, Integer.toString(idOfPolicy), null);	
-			PrivacyPolicyApplication.makeToast(this, "Inserted: "+values.toString());
+			PrivacyPolicyApplication.makeToast(this, "Updated: "+values.toString());
+		}
+	}
+	
+	private void loadDefaultPoliciesIntoDB() {
+		DefaultPolicyLoader defaultPolicy = new DefaultPolicyLoader();
+		for (PolicyRules defaultPolicyRule : defaultPolicy.getDefaultPolicies()) {
+			// Add a new policy record
+			ContentValues values = new ContentValues();
+		
+		    values.put(PolicyProvider.getAppname(), defaultPolicyRule.getAppName());	    
+		    values.put(PolicyProvider.getResource(), defaultPolicyRule.getResource());
+		    if(defaultPolicyRule.isPolicyRule())
+		    	values.put(PolicyProvider.getPolicy(), 1);
+		    else
+		    	values.put(PolicyProvider.getPolicy(), 0);
+			try {
+			    getContentResolver().insert(PolicyQuery.baseUri, values);
+			} catch(SQLException sqlE){
+				PrivacyPolicyApplication.makeToast(this, sqlE.getMessage());
+			}
 		}
 	}
 }

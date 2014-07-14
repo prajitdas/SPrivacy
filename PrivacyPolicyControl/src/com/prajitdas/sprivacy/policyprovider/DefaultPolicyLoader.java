@@ -1,22 +1,35 @@
 package com.prajitdas.sprivacy.policyprovider;
 
-import com.prajitdas.sprivacy.PrivacyPolicyApplication;
-import com.prajitdas.sprivacy.policyprovider.util.PolicyQuery;
+import java.util.ArrayList;
 
-import android.content.ContentValues;
+import com.prajitdas.sprivacy.policyprovider.util.PolicyRules;
 
 public class DefaultPolicyLoader {
 	
-	/**
-	 * At the moment the default policy is being loaded in a dumb way have to work on this to improve it
-	 */
-	public static void addDefaultPolicies() { 
-	    // Add a new policy record
-	    ContentValues values = new ContentValues();
+	private ArrayList<PolicyRules> defaultPolicies;
 	
-	    values.put(PolicyProvider.getAppname(), "com.prajitdas.parserapp");	    
-	    values.put(PolicyProvider.getResource(), "Images");
-	    values.put(PolicyProvider.getPolicy(), 1);
-	    PrivacyPolicyApplication.getSingleton().getContentResolver().insert(PolicyQuery.baseUri, values);
+	public ArrayList<PolicyRules> getDefaultPolicies() {
+		return defaultPolicies;
+	}
+
+	public void setDefaultPolicies(ArrayList<PolicyRules> defaultPolicies) {
+		this.defaultPolicies = defaultPolicies;
+	}
+
+	public DefaultPolicyLoader() {
+		defaultPolicies = new ArrayList<PolicyRules>();
+		defaultPolicies.add(naiveWayToAddPolicy());
+	}
+
+	/**
+	 * At the moment the default policy is being loaded in a naive way have to work on this to improve it
+	 */
+	private PolicyRules naiveWayToAddPolicy() { 
+		PolicyRules temp = new PolicyRules();
+		temp.setId(0);
+		temp.setAppName("com.prajitdas.parserapp");	    
+	    temp.setResource("Images");
+	    temp.setPolicyRule(false);
+	    return temp;
 	}
 }
