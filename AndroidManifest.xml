@@ -38,8 +38,7 @@
         
 		<provider android:name="com.prajitdas.sprivacy.policyprovider.PolicyProvider" 
 			android:authorities="com.prajitdas.sprivacy.policyprovider.Policy"
-            android:label="@string/provider_label"
-            android:multiprocess="false"
+            android:label="@string/policy_provider_label"
             android:exported="true"
 			android:readPermission="android.permission.sprivacy.policyprovider.READ_POLICIES"
             android:writePermission="android.permission.sprivacy.policyprovider.WRITE_POLICIES" >
@@ -47,6 +46,7 @@
 		
 		<provider android:name="com.prajitdas.sprivacy.contentprovider.SContentProvider" 
 			android:authorities="com.prajitdas.sprivacy.contentprovider.Content"
+            android:label="@string/content_provider_label"
 			android:exported="true"
 			android:permission="android.permission.sprivacy.contentprovider.READ_WRITE_POLICIES" >
 		</provider>
