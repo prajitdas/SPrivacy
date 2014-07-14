@@ -1,0 +1,50 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textViewContactsAccessPolicy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/toggleButtonContactsAccessPolicy"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="20dp"
+        android:gravity="center"
+        android:text="@string/defaultText"
+        android:layout_toLeftOf="@+id/toggleButtonContactsAccessPolicy"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <ToggleButton
+        android:id="@+id/toggleButtonContactsAccessPolicy"
+        android:layout_width="100dp"
+        android:layout_height="80dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/toggle_button_contacts_access_text"
+        android:textOff="Contacts Access Prohibited"
+        android:textOn="Contacts Access Permitted" 
+        android:checked="true" />
+
+     <Button
+         android:id="@+id/btnShow"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:layout_alignParentBottom="true"
+         android:layout_alignParentLeft="true"
+         android:layout_alignParentRight="true"
+         android:onClick="showAllPolicies"
+         android:text="@string/show" />
+
+     <Button
+         android:id="@+id/btnDelete"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:layout_above="@+id/btnShow"
+         android:layout_alignParentLeft="true"
+         android:onClick="showAllPolicies"
+         android:text="@string/delete" />
+
+</RelativeLayout>
