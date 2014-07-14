@@ -29,7 +29,7 @@ public class DefaultPolicyLoader {
 		temp.setId(0);
 		temp.setAppName("com.prajitdas.parserapp");	    
 	    temp.setResource("Images");
-	    temp.setPolicyRule(false);
+	    temp.setPolicyRule(true);
 	    return temp;
 	}
 }

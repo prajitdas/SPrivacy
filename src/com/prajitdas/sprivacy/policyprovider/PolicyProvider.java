@@ -2,8 +2,6 @@ package com.prajitdas.sprivacy.policyprovider;
 
 import java.util.HashMap;
 
-import com.prajitdas.sprivacy.SPrivacyApplication;
-import com.prajitdas.sprivacy.policyprovider.util.PolicyQuery;
 import com.prajitdas.sprivacy.policyprovider.util.PolicyRules;
 
 import android.content.ContentProvider;
@@ -58,9 +56,10 @@ public class PolicyProvider extends ContentProvider {
 			" CREATE TABLE " + TABLE_NAME +
 			" (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
 			APPNAME + " TEXT NOT NULL, " +
-			RESOURCE + " TEXT NOT NULL," +
+			RESOURCE + " TEXT NOT NULL, " +
 			POLICY + " INTEGER DEFAULT 0);";
-	
+//	POLICY + " INTEGER DEFAULT 0, "+
+//	"UNIQUE(" + APPNAME + ", " + RESOURCE + ") ON CONFLICT ROLLBACK);";
 	
 	// class that creates and manages the provider's database 
 	private static class DBHelper extends SQLiteOpenHelper {
@@ -72,6 +71,7 @@ public class PolicyProvider extends ContentProvider {
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			db.execSQL(CREATE_TABLE);
+			loadDefaultPoliciesIntoDB(db);
 		}
 		
 		@Override
@@ -83,7 +83,32 @@ public class PolicyProvider extends ContentProvider {
 			onCreate(db);
 		}
 	
+		private void loadDefaultPoliciesIntoDB(SQLiteDatabase db) {
+			DefaultPolicyLoader defaultPolicy = new DefaultPolicyLoader();
+			for (PolicyRules defaultPolicyRule : defaultPolicy.getDefaultPolicies()) {
+				StringBuilder insertQuery = new StringBuilder("INSERT INTO " + TABLE_NAME +
+						"(" + APPNAME + 
+						", " + RESOURCE +
+						", " + POLICY +
+						") VALUES ('");
+				insertQuery.append(defaultPolicyRule.getAppName());
+				insertQuery.append("', '");
+				insertQuery.append(defaultPolicyRule.getResource());
+				insertQuery.append("', ");
+			    if(defaultPolicyRule.isPolicyRule())
+			    	insertQuery.append("1");
+			    else
+			    	insertQuery.append("0");
+				insertQuery.append(");");
+				db.execSQL(insertQuery.toString());
+			}
+		}		
 	}
+	
+//	private boolean doesDatabaseExist() {
+//	    File dbFile = getContext().getDatabasePath(DATABASE_NAME);
+//	    return dbFile.exists();
+//	}
 	
 	@Override
 	public boolean onCreate() {
@@ -95,28 +120,7 @@ public class PolicyProvider extends ContentProvider {
 		if(database == null)
 			return false;
 		else {
-			loadDefaultPoliciesIntoDB();
 			return true;
-		}
-	}
-	
-	private void loadDefaultPoliciesIntoDB() {
-		DefaultPolicyLoader defaultPolicy = new DefaultPolicyLoader();
-		for (PolicyRules defaultPolicyRule : defaultPolicy.getDefaultPolicies()) {
-			// Add a new policy record
-			ContentValues values = new ContentValues();
-		
-		    values.put(PolicyProvider.getAppname(), defaultPolicyRule.getAppName());	    
-		    values.put(PolicyProvider.getResource(), defaultPolicyRule.getResource());
-		    if(defaultPolicyRule.isPolicyRule())
-		    	values.put(PolicyProvider.getPolicy(), 1);
-		    else
-		    	values.put(PolicyProvider.getPolicy(), 0);
-			try {
-			    insert(PolicyQuery.baseUri, values);
-			} catch(SQLException sqlE){
-				SPrivacyApplication.makeToast(getContext(), sqlE.getMessage());
-			}
 		}
 	}
 	

@@ -131,9 +131,12 @@ public class SContentProvider extends ContentProvider {
 			* register to watch a content URI for changes
 			*/
 			c.setNotificationUri(getContext().getContentResolver(), uri);
+			SPrivacyApplication.makeToast(getContext(), "Policy true");
 		}
-		else
+		else {
+			SPrivacyApplication.makeToast(getContext(), "Policy false");
 			c = null;
+		}
 		return c;
 	}
 	
@@ -162,7 +165,6 @@ public class SContentProvider extends ContentProvider {
 					return true;
 			}
 		}
-		SPrivacyApplication.makeToast(getContext(), "Policy false");
 		return false;
 	}
 

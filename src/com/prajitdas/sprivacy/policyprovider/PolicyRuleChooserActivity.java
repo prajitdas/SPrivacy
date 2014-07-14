@@ -38,6 +38,12 @@ public class PolicyRuleChooserActivity extends Activity {
 		mButtonShow = (Button) findViewById(R.id.btnShow);
 		mButtonDelete = (Button) findViewById(R.id.btnDelete);
 		
+		if(isDataAccessAllowed(1))
+			mToggleButtonContactsAccessPolicy.setChecked(true);
+		else
+			mToggleButtonContactsAccessPolicy.setChecked(false);
+
+		mButtonDelete.setVisibility(View.GONE);
 		mLargeTextViewContactsAccessPolicy.setText(R.string.text_view_contacts_access_policy_text);
 	}
 
@@ -138,5 +144,22 @@ public class PolicyRuleChooserActivity extends Activity {
 		    getContentResolver().update(PolicyQuery.baseUri, values, Integer.toString(idOfPolicy), null);	
 			SPrivacyApplication.makeToast(this, "Updated: "+values.toString());
 		}
+	}
+	
+	private boolean isDataAccessAllowed(int idOfPolicy) {
+		//Get a single policy to modify		
+		Cursor c = getContentResolver().query(PolicyQuery.baseUri, 
+				PolicyQuery.projection, 
+				Integer.toString(idOfPolicy), 
+				PolicyQuery.selectionArgs, 
+				PolicyQuery.sort);
+		if (!c.moveToFirst()) {
+			SPrivacyApplication.makeToast(this, "Well, could not find the particular id setting default true!");
+			return true;
+		}
+		c.moveToFirst();
+	    if(c.getString(c.getColumnIndex(PolicyProvider.getPolicy())).equals("1"))
+	    	return true;
+		return false;
 	}
 }

@@ -7,7 +7,7 @@
 	<permission android:name="android.permission.sprivacy.contentprovider.READ_WRITE_POLICIES"
         android:label="@string/permlabel_read_write_content"
         android:description="@string/permdesc_read_write_content"
-        android:protectionLevel="normal" />
+        android:protectionLevel="dangerous" />
     
     <uses-sdk
         android:minSdkVersion="16"
