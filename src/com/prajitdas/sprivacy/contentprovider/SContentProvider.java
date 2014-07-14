@@ -172,10 +172,10 @@ public class SContentProvider extends ContentProvider {
 			* register to watch a content URI for changes
 			*/
 			c.setNotificationUri(getContext().getContentResolver(), uri);
-			Log.v(SPrivacyApplication.getDebugTag(), "Policy true");
+			Log.v(SPrivacyApplication.getDebugTag(), "Image Policy true");
 		}
 		else {
-			Log.v(SPrivacyApplication.getDebugTag(), "Policy false");
+			Log.v(SPrivacyApplication.getDebugTag(), "Image Policy false");
 			c = null;
 		}
 		return c;
@@ -196,10 +196,10 @@ public class SContentProvider extends ContentProvider {
 			* register to watch a content URI for changes
 			*/
 			c.setNotificationUri(getContext().getContentResolver(), uri);
-			Log.v(SPrivacyApplication.getDebugTag(), "Policy true");
+			Log.v(SPrivacyApplication.getDebugTag(), "File Policy true");
 		}
 		else {
-			Log.v(SPrivacyApplication.getDebugTag(), "Policy false");
+			Log.v(SPrivacyApplication.getDebugTag(), "File Policy false");
 			c = null;
 		}
 		return c;
@@ -220,10 +220,10 @@ public class SContentProvider extends ContentProvider {
 			* register to watch a content URI for changes
 			*/
 			c.setNotificationUri(getContext().getContentResolver(), uri);
-			Log.v(SPrivacyApplication.getDebugTag(), "Policy true");
+			Log.v(SPrivacyApplication.getDebugTag(), "Video Policy true");
 		}
 		else {
-			Log.v(SPrivacyApplication.getDebugTag(), "Policy false");
+			Log.v(SPrivacyApplication.getDebugTag(), "Video Policy false");
 			c = null;
 		}
 		return c;
@@ -244,10 +244,10 @@ public class SContentProvider extends ContentProvider {
 			* register to watch a content URI for changes
 			*/
 			c.setNotificationUri(getContext().getContentResolver(), uri);
-			Log.v(SPrivacyApplication.getDebugTag(), "Policy true");
+			Log.v(SPrivacyApplication.getDebugTag(), "Audio Policy true");
 		}
 		else {
-			Log.v(SPrivacyApplication.getDebugTag(), "Policy false");
+			Log.v(SPrivacyApplication.getDebugTag(), "Audio Policy false");
 			c = null;
 		}
 		return c;
@@ -268,10 +268,10 @@ public class SContentProvider extends ContentProvider {
 			* register to watch a content URI for changes
 			*/
 			c.setNotificationUri(getContext().getContentResolver(), uri);
-			Log.v(SPrivacyApplication.getDebugTag(), "Policy true");
+			Log.v(SPrivacyApplication.getDebugTag(), "Contact Policy true");
 		}
 		else {
-			Log.v(SPrivacyApplication.getDebugTag(), "Policy false");
+			Log.v(SPrivacyApplication.getDebugTag(), "Contact Policy false");
 			c = null;
 		}
 		return c;
