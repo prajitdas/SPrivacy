@@ -14,7 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.prajitdas.sprivacy.PrivacyPolicyApplication;
+import com.prajitdas.sprivacy.SPrivacyApplication;
 import com.prajitdas.sprivacy.R;
 import com.prajitdas.sprivacy.policyprovider.util.PolicyQuery;
 import com.prajitdas.sprivacy.policyprovider.util.PolicyRules;
@@ -93,8 +93,8 @@ public class PolicyRuleChooserActivity extends Activity {
 		// delete all the records and the table of the database provider
 		int count = getContentResolver().delete(PolicyQuery.baseUri, null, null);
 		String display = "Policies deleted = "+ count;
-		Log.v(PrivacyPolicyApplication.getDebugTag(), display);
-		PrivacyPolicyApplication.makeToast(this, display);
+		Log.v(SPrivacyApplication.getDebugTag(), display);
+		SPrivacyApplication.makeToast(this, display);
 	}
 
 	private void showAllPolicies() {
@@ -107,7 +107,7 @@ public class PolicyRuleChooserActivity extends Activity {
 		String result = "Results:";
 
 		if (!c.moveToFirst()) {
-			PrivacyPolicyApplication.makeToast(this, result+" no content yet!");
+			SPrivacyApplication.makeToast(this, result+" no content yet!");
 		}
 		else {
 			do {
@@ -115,7 +115,7 @@ public class PolicyRuleChooserActivity extends Activity {
 						" trying to access resource " +  c.getString(c.getColumnIndex(PolicyProvider.getResource())) + 
 								" has policy set as : " + c.getString(c.getColumnIndex(PolicyProvider.getPolicy()));
 			} while (c.moveToNext());
-			PrivacyPolicyApplication.makeToast(this, result);
+			SPrivacyApplication.makeToast(this, result);
 		}
 	}
 	
@@ -127,7 +127,7 @@ public class PolicyRuleChooserActivity extends Activity {
 				PolicyQuery.selectionArgs, 
 				PolicyQuery.sort);
 		if (!c.moveToFirst()) {
-			PrivacyPolicyApplication.makeToast(this, "Well, could not find the particular id!");
+			SPrivacyApplication.makeToast(this, "Well, could not find the particular id!");
 		}
 		else {				
 			ContentValues values = new ContentValues();
@@ -139,7 +139,7 @@ public class PolicyRuleChooserActivity extends Activity {
 		    else
 		    	values.put(PolicyProvider.getPolicy(), 1);
 		    getContentResolver().update(PolicyQuery.baseUri, values, Integer.toString(idOfPolicy), null);	
-			PrivacyPolicyApplication.makeToast(this, "Updated: "+values.toString());
+			SPrivacyApplication.makeToast(this, "Updated: "+values.toString());
 		}
 	}
 	
@@ -158,7 +158,7 @@ public class PolicyRuleChooserActivity extends Activity {
 			try {
 			    getContentResolver().insert(PolicyQuery.baseUri, values);
 			} catch(SQLException sqlE){
-				PrivacyPolicyApplication.makeToast(this, sqlE.getMessage());
+				SPrivacyApplication.makeToast(this, sqlE.getMessage());
 			}
 		}
 	}

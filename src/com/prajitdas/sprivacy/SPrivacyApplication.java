@@ -5,20 +5,20 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.widget.Toast;
 
-public class PrivacyPolicyApplication extends Application {
+public class SPrivacyApplication extends Application {
 	private static final String DEBUG_TAG = "PrivacyPolicyApplicationDebugTag";
-	private static PrivacyPolicyApplication singleton;
+	private static SPrivacyApplication singleton;
 
 	public static String getDebugTag() {
 		return DEBUG_TAG;
 	}
 
-	public static PrivacyPolicyApplication getSingleton() {
+	public static SPrivacyApplication getSingleton() {
 		return singleton;
 	}
 
-	public static void setSingleton(PrivacyPolicyApplication singleton) {
-		PrivacyPolicyApplication.singleton = singleton;
+	public static void setSingleton(SPrivacyApplication singleton) {
+		SPrivacyApplication.singleton = singleton;
 	}
 
 	public static void makeToast(Context context, String someString) {
