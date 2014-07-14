@@ -2,6 +2,10 @@ package com.prajitdas.sprivacy.contentprovider;
 
 import java.util.HashMap;
 
+import com.prajitdas.sprivacy.SPrivacyApplication;
+import com.prajitdas.sprivacy.policyprovider.PolicyProvider;
+import com.prajitdas.sprivacy.policyprovider.util.PolicyQuery;
+
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -138,7 +142,27 @@ public class SContentProvider extends ContentProvider {
 	 * @return
 	 */
 	private boolean isDataAccessAllowed() {
- 
+		String[] projection = { PolicyProvider.getPolicy() };
+		// Show all the policies sorted by app name
+		Cursor c = getContext().getContentResolver().query(PolicyQuery.baseUri, 
+				projection, 
+				PolicyProvider.getId() + " = '1' ", 
+				PolicyQuery.selectionArgs, 
+				PolicyQuery.sort);
+		String result = "Results:";
+
+		if (!c.moveToFirst()) {
+			SPrivacyApplication.makeToast(getContext(), result+" no content yet!");
+		}
+		else {
+			if(c.getCount() > 1)
+				SPrivacyApplication.makeToast(getContext(), "Too many policies");
+			else {
+				if(c.getString(c.getColumnIndex(PolicyProvider.getPolicy())).equals("1"))
+					return true;
+			}
+		}
+		SPrivacyApplication.makeToast(getContext(), "Policy false");
 		return false;
 	}
 

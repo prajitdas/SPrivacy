@@ -2,6 +2,10 @@ package com.prajitdas.sprivacy.policyprovider;
 
 import java.util.HashMap;
 
+import com.prajitdas.sprivacy.SPrivacyApplication;
+import com.prajitdas.sprivacy.policyprovider.util.PolicyQuery;
+import com.prajitdas.sprivacy.policyprovider.util.PolicyRules;
+
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -90,8 +94,30 @@ public class PolicyProvider extends ContentProvider {
 		
 		if(database == null)
 			return false;
-		else
-			return true;	
+		else {
+			loadDefaultPoliciesIntoDB();
+			return true;
+		}
+	}
+	
+	private void loadDefaultPoliciesIntoDB() {
+		DefaultPolicyLoader defaultPolicy = new DefaultPolicyLoader();
+		for (PolicyRules defaultPolicyRule : defaultPolicy.getDefaultPolicies()) {
+			// Add a new policy record
+			ContentValues values = new ContentValues();
+		
+		    values.put(PolicyProvider.getAppname(), defaultPolicyRule.getAppName());	    
+		    values.put(PolicyProvider.getResource(), defaultPolicyRule.getResource());
+		    if(defaultPolicyRule.isPolicyRule())
+		    	values.put(PolicyProvider.getPolicy(), 1);
+		    else
+		    	values.put(PolicyProvider.getPolicy(), 0);
+			try {
+			    insert(PolicyQuery.baseUri, values);
+			} catch(SQLException sqlE){
+				SPrivacyApplication.makeToast(getContext(), sqlE.getMessage());
+			}
+		}
 	}
 	
 	@Override

@@ -3,7 +3,6 @@ package com.prajitdas.sprivacy.policyprovider;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -17,7 +16,6 @@ import android.widget.ToggleButton;
 import com.prajitdas.sprivacy.SPrivacyApplication;
 import com.prajitdas.sprivacy.R;
 import com.prajitdas.sprivacy.policyprovider.util.PolicyQuery;
-import com.prajitdas.sprivacy.policyprovider.util.PolicyRules;
 
 public class PolicyRuleChooserActivity extends Activity {
 	private TextView mLargeTextViewContactsAccessPolicy;
@@ -31,7 +29,6 @@ public class PolicyRuleChooserActivity extends Activity {
 		setContentView(R.layout.activity_policy_rule_chooser);
 		
 		instantiateViews();
-		loadDefaultPoliciesIntoDB();
 		addOnClickListener();
 	}
 
@@ -140,26 +137,6 @@ public class PolicyRuleChooserActivity extends Activity {
 		    	values.put(PolicyProvider.getPolicy(), 1);
 		    getContentResolver().update(PolicyQuery.baseUri, values, Integer.toString(idOfPolicy), null);	
 			SPrivacyApplication.makeToast(this, "Updated: "+values.toString());
-		}
-	}
-	
-	private void loadDefaultPoliciesIntoDB() {
-		DefaultPolicyLoader defaultPolicy = new DefaultPolicyLoader();
-		for (PolicyRules defaultPolicyRule : defaultPolicy.getDefaultPolicies()) {
-			// Add a new policy record
-			ContentValues values = new ContentValues();
-		
-		    values.put(PolicyProvider.getAppname(), defaultPolicyRule.getAppName());	    
-		    values.put(PolicyProvider.getResource(), defaultPolicyRule.getResource());
-		    if(defaultPolicyRule.isPolicyRule())
-		    	values.put(PolicyProvider.getPolicy(), 1);
-		    else
-		    	values.put(PolicyProvider.getPolicy(), 0);
-			try {
-			    getContentResolver().insert(PolicyQuery.baseUri, values);
-			} catch(SQLException sqlE){
-				SPrivacyApplication.makeToast(this, sqlE.getMessage());
-			}
 		}
 	}
 }
