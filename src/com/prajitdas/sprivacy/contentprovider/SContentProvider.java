@@ -7,46 +7,59 @@ import com.prajitdas.sprivacy.policyprovider.PolicyProvider;
 import com.prajitdas.sprivacy.policyprovider.util.PolicyQuery;
 
 import android.content.ContentProvider;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.Images;
+import android.provider.MediaStore.Video;
 import android.util.Log;
 
 public class SContentProvider extends ContentProvider {
 	static final String PROVIDER_NAME = "com.prajitdas.sprivacy.contentprovider.Content";
-	static final String URL = "content://" + PROVIDER_NAME + "/images";
-	static final Uri CONTENT_URI = Uri.parse(URL);
+	static final String URL = "content://" + PROVIDER_NAME;
+
+	static final Uri IMAGES_CONTENT_URI = Uri.parse(URL + "/images");
+	static final Uri FILES_CONTENT_URI = Uri.parse(URL + "/files");
+	static final Uri VIDEOS_CONTENT_URI = Uri.parse(URL + "/videos");
+	static final Uri AUDIOS_CONTENT_URI = Uri.parse(URL + "/audios");
+	static final Uri CONTACTS_CONTENT_URI = Uri.parse(URL + "/contacts");
 	
 	static final String _ID = "_id";
-	static final String NAME = "imagefilename";
+	static final String NAME = "name";
 	
 	static final int IMAGES = 1;
+	static final int FILES = 2;
+	static final int VIDEOS = 3;
+	static final int AUDIOS = 4;
+	static final int CONTACTS = 5;
 	
 	static final UriMatcher uriMatcher;
 	static{
 		uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 		uriMatcher.addURI(PROVIDER_NAME, "images", IMAGES);
+		uriMatcher.addURI(PROVIDER_NAME, "files", FILES);
+		uriMatcher.addURI(PROVIDER_NAME, "videos", VIDEOS);
+		uriMatcher.addURI(PROVIDER_NAME, "audios", AUDIOS);
+		uriMatcher.addURI(PROVIDER_NAME, "contacts", CONTACTS);
 	}
 	
-	private static HashMap<String, String> IMAGES_PROJECTION_MAP;
+	private static HashMap<String, String> PROJECTION_MAP;
 	
 	/**
 	* Database specific constant declarations
 	*/
 	private SQLiteDatabase db;
 	static final String DATABASE_NAME = "Content";
-	static final String IMAGES_TABLE_NAME = "images";
+	static final String TABLE_NAME = "content";
 	static final int DATABASE_VERSION = 1;
 	static final String CREATE_DB_TABLE =
-			" CREATE TABLE " + IMAGES_TABLE_NAME +
+			" CREATE TABLE " + TABLE_NAME +
 			" (_id INTEGER PRIMARY KEY AUTOINCREMENT, " + 
 			NAME + " TEXT NOT NULL);";
 	
@@ -66,7 +79,7 @@ public class SContentProvider extends ContentProvider {
 		
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			db.execSQL("DROP TABLE IF EXISTS " +  IMAGES_TABLE_NAME);
+			db.execSQL("DROP TABLE IF EXISTS " +  TABLE_NAME);
 			onCreate(db);
 		}
 	}
@@ -84,46 +97,73 @@ public class SContentProvider extends ContentProvider {
 	}
 	
 	@Override
-	public Uri insert(Uri uri, ContentValues values) {
-		/**
-		* Add a new student record
-		*/
-		long rowID = db.insert(IMAGES_TABLE_NAME, "", values);
-		/** 
-		* If record is added successfully
-		*/
-		if (rowID > 0) {
-			Uri _uri = ContentUris.withAppendedId(CONTENT_URI, rowID);
-			getContext().getContentResolver().notifyChange(_uri, null);
-			return _uri;
+	public String getType(Uri uri) {
+		switch (uriMatcher.match(uri)){
+			/**
+			* Get all student records 
+			*/
+			case IMAGES:
+				return "vnd.android.cursor.dir/image";
+			case FILES:
+				return "vnd.android.cursor.dir/file";
+			case VIDEOS:
+				return "vnd.android.cursor.dir/video";
+			case AUDIOS:
+				return "vnd.android.cursor.dir/audio";
+			case CONTACTS:
+				return "vnd.android.cursor.dir/contact";
+			default:
+				throw new IllegalArgumentException("Unsupported URI: " + uri);
 		}
-		throw new SQLException("Failed to add a record into " + uri);
 	}
-	
+
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection, 
 			String[] selectionArgs, String sortOrder) {
 	
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-		qb.setTables(IMAGES_TABLE_NAME);
-		
-		switch (uriMatcher.match(uri)) {
-			case IMAGES:
-				qb.setProjectionMap(IMAGES_PROJECTION_MAP);
-				break;
-			default:
-				throw new IllegalArgumentException("Unknown URI " + uri);
-		}
+		qb.setTables(TABLE_NAME);
 		if (sortOrder == null || sortOrder == ""){
 			/** 
 			* By default sort on student names
 			*/
 			sortOrder = NAME;
 		}
+
+		Cursor c;
+		switch (uriMatcher.match(uri)) {
+			case IMAGES:
+				qb.setProjectionMap(PROJECTION_MAP);
+				c = setImageData(uri, projection, selection, selectionArgs, sortOrder);
+				break;
+			case FILES:
+				qb.setProjectionMap(PROJECTION_MAP);
+				c = setFileData(uri, projection, selection, selectionArgs, sortOrder);
+				break;
+			case VIDEOS:
+				qb.setProjectionMap(PROJECTION_MAP);
+				c = setVideoData(uri, projection, selection, selectionArgs, sortOrder);
+				break;
+			case AUDIOS:
+				qb.setProjectionMap(PROJECTION_MAP);
+				c = setAudioData(uri, projection, selection, selectionArgs, sortOrder);
+				break;
+			case CONTACTS:
+				qb.setProjectionMap(PROJECTION_MAP);
+				c = setContactData(uri, projection, selection, selectionArgs, sortOrder);
+				break;
+			default:
+				throw new IllegalArgumentException("Unknown URI " + uri);
+		}
+		return c;
+	}
+	
+	private Cursor setImageData(Uri uri, String[] projection, String selection, 
+			String[] selectionArgs, String sortOrder) {
 		Cursor c;
 		if(isDataAccessAllowed()) {
 			c = getContext().getContentResolver()
-					.query(ImageQuery.baseUri,
+					.query(RealURIsForQuery.imageUri,
 					projection, 
 					selection, 
 					selectionArgs, 
@@ -140,7 +180,114 @@ public class SContentProvider extends ContentProvider {
 		}
 		return c;
 	}
+
 	
+	private Cursor setFileData(Uri uri, String[] projection, String selection, 
+			String[] selectionArgs, String sortOrder) {
+		Cursor c;
+		if(isDataAccessAllowed()) {
+			c = getContext().getContentResolver()
+					.query(RealURIsForQuery.fileUri,
+					projection, 
+					selection, 
+					selectionArgs, 
+					sortOrder);
+			/** 
+			* register to watch a content URI for changes
+			*/
+			c.setNotificationUri(getContext().getContentResolver(), uri);
+			Log.v(SPrivacyApplication.getDebugTag(), "Policy true");
+		}
+		else {
+			Log.v(SPrivacyApplication.getDebugTag(), "Policy false");
+			c = null;
+		}
+		return c;
+	}
+
+	
+	private Cursor setVideoData(Uri uri, String[] projection, String selection, 
+			String[] selectionArgs, String sortOrder) {
+		Cursor c;
+		if(isDataAccessAllowed()) {
+			c = getContext().getContentResolver()
+					.query(RealURIsForQuery.videoUri,
+					projection, 
+					selection, 
+					selectionArgs, 
+					sortOrder);
+			/** 
+			* register to watch a content URI for changes
+			*/
+			c.setNotificationUri(getContext().getContentResolver(), uri);
+			Log.v(SPrivacyApplication.getDebugTag(), "Policy true");
+		}
+		else {
+			Log.v(SPrivacyApplication.getDebugTag(), "Policy false");
+			c = null;
+		}
+		return c;
+	}
+
+	
+	private Cursor setAudioData(Uri uri, String[] projection, String selection, 
+			String[] selectionArgs, String sortOrder) {
+		Cursor c;
+		if(isDataAccessAllowed()) {
+			c = getContext().getContentResolver()
+					.query(RealURIsForQuery.audioUri,
+					projection, 
+					selection, 
+					selectionArgs, 
+					sortOrder);
+			/** 
+			* register to watch a content URI for changes
+			*/
+			c.setNotificationUri(getContext().getContentResolver(), uri);
+			Log.v(SPrivacyApplication.getDebugTag(), "Policy true");
+		}
+		else {
+			Log.v(SPrivacyApplication.getDebugTag(), "Policy false");
+			c = null;
+		}
+		return c;
+	}
+
+	
+	private Cursor setContactData(Uri uri, String[] projection, String selection, 
+			String[] selectionArgs, String sortOrder) {
+		Cursor c;
+		if(isDataAccessAllowed()) {
+			c = getContext().getContentResolver()
+					.query(RealURIsForQuery.contactUri,
+					projection, 
+					selection, 
+					selectionArgs, 
+					sortOrder);
+			/** 
+			* register to watch a content URI for changes
+			*/
+			c.setNotificationUri(getContext().getContentResolver(), uri);
+			Log.v(SPrivacyApplication.getDebugTag(), "Policy true");
+		}
+		else {
+			Log.v(SPrivacyApplication.getDebugTag(), "Policy false");
+			c = null;
+		}
+		return c;
+	}
+
+	/**
+     * This interface defines constants for the Cursor and CursorLoader
+     */
+	private interface RealURIsForQuery {
+		Uri imageUri = Images.Media.EXTERNAL_CONTENT_URI;
+		Uri fileUri = Images.Media.EXTERNAL_CONTENT_URI;
+		Uri videoUri = Video.Media.EXTERNAL_CONTENT_URI;
+		Uri audioUri = Audio.Media.EXTERNAL_CONTENT_URI;
+		Uri contactUri = Images.Media.EXTERNAL_CONTENT_URI;
+    }
+
 	/**
 	 * This code should be able to find what policies are there to protect what content.
 	 * @return
@@ -169,55 +316,18 @@ public class SContentProvider extends ContentProvider {
 		return false;
 	}
 
-	/**
-     * This interface defines constants for the Cursor and CursorLoader, based on constants defined
-     * in the {@link Images.Media} class.
-     */
-	private interface ImageQuery {
-		Uri baseUri = Images.Media.EXTERNAL_CONTENT_URI;
-    }
-    
-    @Override
-	public int delete(Uri uri, String selection, String[] selectionArgs) {
-		int count = 0;
-		
-		switch (uriMatcher.match(uri)){
-			case IMAGES:
-				count = db.delete(IMAGES_TABLE_NAME, selection, selectionArgs);
-				break;
-			default: 
-				throw new IllegalArgumentException("Unknown URI " + uri);
+	@Override
+	public Uri insert(Uri uri, ContentValues values) {
+		return null;
 	}
 	
-	getContext().getContentResolver().notifyChange(uri, null);
-	return count;
+    @Override
+	public int delete(Uri uri, String selection, String[] selectionArgs) {
+    	return 0;
 	}
 	
 	@Override
 	public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-		int count = 0;
-		
-		switch (uriMatcher.match(uri)){
-			case IMAGES:
-				count = db.update(IMAGES_TABLE_NAME, values, selection, selectionArgs);
-				break;
-			default: 
-				throw new IllegalArgumentException("Unknown URI " + uri );
-		}
-		getContext().getContentResolver().notifyChange(uri, null);
-		return count;
-	}
-	
-	@Override
-	public String getType(Uri uri) {
-		switch (uriMatcher.match(uri)){
-			/**
-			* Get all student records 
-			*/
-			case IMAGES:
-				return "vnd.android.cursor.dir/image";
-			default:
-				throw new IllegalArgumentException("Unsupported URI: " + uri);
-		}
-	}
+		return 0;
+	}	
 }
