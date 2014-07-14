@@ -4,17 +4,17 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-	<permission android:name="android.permission.sprivacy.contentprovider.READ_WRITE_POLICIES"
+	<permission android:name="android.permission.sprivacy.READ_WRITE_CONTENT"
         android:label="@string/permlabel_read_write_content"
         android:description="@string/permdesc_read_write_content"
         android:protectionLevel="normal" />
     
-	<permission android:name="android.permission.sprivacy.policyprovider.READ_POLICIES"
+	<permission android:name="android.permission.sprivacy.READ_POLICIES"
         android:label="@string/permlabel_read_policy"
         android:description="@string/permdesc_read_policy"
         android:protectionLevel="normal" />
 	
-	<permission android:name="android.permission.sprivacy.policyprovider.WRITE_POLICIES"
+	<permission android:name="android.permission.sprivacy.WRITE_POLICIES"
         android:label="@string/permlabel_write_policy"
         android:description="@string/permdesc_write_policy"
         android:protectionLevel="normal" />
@@ -24,8 +24,6 @@
         android:targetSdkVersion="21" />
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <!-- Required permission for reading the privacy policies -->
-    <uses-permission android:name="android.permission.sprivacy.policyprovider.READ_POLICIES" />    
     <!-- Required permission not required at or below Android 4.3 API level -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <!-- Unusual but true! -->
@@ -50,15 +48,15 @@
 			android:authorities="com.prajitdas.sprivacy.policyprovider.Policy"
             android:label="@string/policy_provider_label"
             android:exported="true"
-			android:readPermission="android.permission.sprivacy.policyprovider.READ_POLICIES"
-            android:writePermission="android.permission.sprivacy.policyprovider.WRITE_POLICIES" >
+			android:readPermission="android.permission.sprivacy.READ_POLICIES"
+            android:writePermission="android.permission.sprivacy.WRITE_POLICIES" >
 		</provider>
 		
 		<provider android:name="com.prajitdas.sprivacy.contentprovider.SContentProvider" 
 			android:authorities="com.prajitdas.sprivacy.contentprovider.Content"
             android:label="@string/content_provider_label"
 			android:exported="true" 
-			android:permission="android.permission.sprivacy.contentprovider.READ_WRITE_POLICIES" >
+			android:permission="android.permission.sprivacy.READ_WRITE_CONTENT" >
 		</provider>
     </application>
 
