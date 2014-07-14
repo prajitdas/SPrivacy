@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">SContentProvider</string>
+    <string name="permlabel_read_write_content">Read Write Cotnent</string>
+    <string name="permdesc_read_write_content">Read Write Content</string>
+    
 </resources>

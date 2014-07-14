@@ -1,4 +1,4 @@
-package com.prajitdas.scontentprovider;
+package com.prajitdas.sprivacy.contentprovider;
 
 import java.util.HashMap;
 

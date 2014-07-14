@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -19,6 +20,8 @@ import com.prajitdas.sprivacy.policyprovider.util.PolicyQuery;
 public class PolicyRuleChooserActivity extends Activity {
 	private TextView mLargeTextViewContactsAccessPolicy;
 	private ToggleButton mToggleButtonContactsAccessPolicy;
+	private Button mButtonShow;
+	private Button mButtonDelete;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -29,12 +32,18 @@ public class PolicyRuleChooserActivity extends Activity {
 		//Right now adding simple strings for the applications's info 
 		//and policies eventually has to be objects the design needs to be done for that
 		
-		mLargeTextViewContactsAccessPolicy = (TextView) findViewById(R.id.textViewContactsAccessPolicy);
-		mToggleButtonContactsAccessPolicy = (ToggleButton) findViewById(R.id.toggleButtonContactsAccessPolicy);
-		
-		mLargeTextViewContactsAccessPolicy.setText(R.string.text_view_contacts_access_policy_text);
+		instantiateViews();		
 		
 		addOnClickListener();
+	}
+
+	private void instantiateViews() {
+		mLargeTextViewContactsAccessPolicy = (TextView) findViewById(R.id.textViewContactsAccessPolicy);
+		mToggleButtonContactsAccessPolicy = (ToggleButton) findViewById(R.id.toggleButtonContactsAccessPolicy);
+		mButtonShow = (Button) findViewById(R.id.btnShow);
+		mButtonDelete = (Button) findViewById(R.id.btnDelete);
+		
+		mLargeTextViewContactsAccessPolicy.setText(R.string.text_view_contacts_access_policy_text);
 	}
 
 	private void addOnClickListener() {
@@ -43,6 +52,22 @@ public class PolicyRuleChooserActivity extends Activity {
 			public void onClick(View v) {
 				//This is get(0) as there is only one application now
 				togglePolicy(0);
+			}
+		});
+		
+		mButtonShow.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				showAllPolicies();			
+			}
+		});
+		
+		mButtonDelete.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				deleteAllPolicies();
 			}
 		});
 	}
@@ -65,7 +90,8 @@ public class PolicyRuleChooserActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	public void deleteAllPolicies (View view) {
+	
+	public void deleteAllPolicies() {
 		// delete all the records and the table of the database provider
 		int count = getContentResolver().delete(PolicyQuery.baseUri, null, null);
 		String display = "Policies deleted = "+ count;
@@ -73,6 +99,28 @@ public class PolicyRuleChooserActivity extends Activity {
 		PrivacyPolicyApplication.makeToast(this, display);
 	}
 
+	public void showAllPolicies() {
+		// Show all the policies sorted by app name
+		Cursor c = getContentResolver().query(PolicyQuery.baseUri, 
+				PolicyQuery.projection, 
+				PolicyQuery.selection, 
+				PolicyQuery.selectionArgs, 
+				PolicyQuery.sort);
+		String result = "Results:";
+
+		if (!c.moveToFirst()) {
+			PrivacyPolicyApplication.makeToast(this, result+" no content yet!");
+		}
+		else {
+			do {
+				result = result + "\n" + c.getString(c.getColumnIndex(PolicyProvider.getAppname())) +
+						" trying to access resource " +  c.getString(c.getColumnIndex(PolicyProvider.getResource())) + 
+								" has policy set as : " + c.getString(c.getColumnIndex(PolicyProvider.getPolicy()));
+			} while (c.moveToNext());
+			PrivacyPolicyApplication.makeToast(this, result);
+		}
+	}
+	
 	public void togglePolicy(int idOfPolicy) {
 		//Get a single policy to modify		
 		Cursor c = getContentResolver().query(PolicyQuery.baseUri, 
@@ -94,28 +142,6 @@ public class PolicyRuleChooserActivity extends Activity {
 		    	values.put(PolicyProvider.getPolicy(), 1);
 		    getContentResolver().update(PolicyQuery.baseUri, values, Integer.toString(idOfPolicy), null);	
 			PrivacyPolicyApplication.makeToast(this, "Inserted: "+values.toString());
-		}
-	}
-
-	public void showAllPolicies(View view) {
-		// Show all the policies sorted by app name
-		Cursor c = getContentResolver().query(PolicyQuery.baseUri, 
-				PolicyQuery.projection, 
-				PolicyQuery.selection, 
-				PolicyQuery.selectionArgs, 
-				PolicyQuery.sort);
-		String result = "Results:";
-
-		if (!c.moveToFirst()) {
-			PrivacyPolicyApplication.makeToast(this, result+" no content yet!");
-		}
-		else {
-			do {
-				result = result + "\n" + c.getString(c.getColumnIndex(PolicyProvider.getAppname())) +
-						" trying to access resource " +  c.getString(c.getColumnIndex(PolicyProvider.getResource())) + 
-								" has policy set as : " + c.getString(c.getColumnIndex(PolicyProvider.getPolicy()));
-			} while (c.moveToNext());
-			PrivacyPolicyApplication.makeToast(this, result);
 		}
 	}
 }

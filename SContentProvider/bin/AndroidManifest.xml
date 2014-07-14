@@ -1,25 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.prajitdas.scontentprovider"
+    package="com.prajitdas.sprivacy"
     android:versionCode="1"
     android:versionName="1.0" >
 
-<!--
-	Permissions need to be included in the future     
-	<permission android:name="com.prajitdas.scontentprovider.permission.DEADLY_ACTIVITY"
-        android:label="@string/permlab_deadlyActivity"
-        android:description="@string/permdesc_deadlyActivity"
-        android:permissionGroup="android.permission-group.COST_MONEY"
-        android:protectionLevel="dangerous" /> -->
+	<permission android:name="android.permission.sprivacy.contentprovider.READ_WRITE_POLICIES"
+        android:label="@string/permlabel_read_write_content"
+        android:description="@string/permdesc_read_write_content"
+        android:protectionLevel="normal" />
     
     <uses-sdk
         android:minSdkVersion="16"
         android:targetSdkVersion="21" />
 
-    <!-- Required permission for reading the privacy policies -->
-    <uses-permission android:name="android.permission.privacyPolicy.READ_POLICIES" />
-    
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <!-- Required permission for reading the privacy policies -->
+    <uses-permission android:name="android.permission.sprivacy.policyprovider.READ_POLICIES" />    
     <!-- Required permission not required at or below Android 4.3 API level -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <!-- Unusual but true! -->
@@ -30,10 +26,10 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         
-		<provider android:name="SContentProvider" 
-			android:authorities="com.prajitdas.scontentprovider"
-			android:exported="true" >
-<!-- 			android:permission="com.prajitdas.scontentprovider.permission." > -->
+		<provider android:name="com.prajitdas.sprivacy.contentprovider.SContentProvider" 
+			android:authorities="com.prajitdas.sprivacy.contentprovider.Content"
+			android:exported="true"
+			android:permission="android.permission.sprivacy.contentprovider.READ_WRITE_POLICIES" >
 		</provider>
     </application>
 
