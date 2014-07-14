@@ -1,4 +1,6 @@
-package com.prajitdas.sprivacy.policyprovider;
+package com.prajitdas.sprivacy.policyprovider.util;
+
+import com.prajitdas.sprivacy.policyprovider.PolicyProvider;
 
 import android.net.Uri;
 
@@ -10,5 +12,5 @@ public interface PolicyQuery {
 	String[] projection = null;
 	String selection = null;
     String[] selectionArgs = null;
-    String sort = PolicyProvider.APPNAME + " DESC";
+    String sort = PolicyProvider.getAppname() + " DESC";
 }

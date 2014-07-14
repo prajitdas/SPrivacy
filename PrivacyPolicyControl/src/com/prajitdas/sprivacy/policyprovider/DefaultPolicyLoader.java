@@ -1,6 +1,7 @@
 package com.prajitdas.sprivacy.policyprovider;
 
 import com.prajitdas.sprivacy.PrivacyPolicyApplication;
+import com.prajitdas.sprivacy.policyprovider.util.PolicyQuery;
 
 import android.content.ContentValues;
 
