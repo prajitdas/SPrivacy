@@ -7,9 +7,19 @@
 	<permission android:name="android.permission.sprivacy.contentprovider.READ_WRITE_POLICIES"
         android:label="@string/permlabel_read_write_content"
         android:description="@string/permdesc_read_write_content"
-        android:protectionLevel="dangerous" />
+        android:protectionLevel="normal" />
     
-    <uses-sdk
+	<permission android:name="android.permission.sprivacy.policyprovider.READ_POLICIES"
+        android:label="@string/permlabel_read_policy"
+        android:description="@string/permdesc_read_policy"
+        android:protectionLevel="normal" />
+	
+	<permission android:name="android.permission.sprivacy.policyprovider.WRITE_POLICIES"
+        android:label="@string/permlabel_write_policy"
+        android:description="@string/permdesc_write_policy"
+        android:protectionLevel="normal" />
+	
+	<uses-sdk
         android:minSdkVersion="16"
         android:targetSdkVersion="21" />
 
@@ -47,7 +57,7 @@
 		<provider android:name="com.prajitdas.sprivacy.contentprovider.SContentProvider" 
 			android:authorities="com.prajitdas.sprivacy.contentprovider.Content"
             android:label="@string/content_provider_label"
-			android:exported="true"
+			android:exported="true" 
 			android:permission="android.permission.sprivacy.contentprovider.READ_WRITE_POLICIES" >
 		</provider>
     </application>

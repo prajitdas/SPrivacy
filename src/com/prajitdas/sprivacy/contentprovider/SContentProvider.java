@@ -18,9 +18,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.provider.MediaStore.Images;
+import android.util.Log;
 
 public class SContentProvider extends ContentProvider {
-	static final String PROVIDER_NAME = "com.prajitdas.contentprovider";
+	static final String PROVIDER_NAME = "com.prajitdas.sprivacy.contentprovider.Content";
 	static final String URL = "content://" + PROVIDER_NAME + "/images";
 	static final Uri CONTENT_URI = Uri.parse(URL);
 	
@@ -131,10 +132,10 @@ public class SContentProvider extends ContentProvider {
 			* register to watch a content URI for changes
 			*/
 			c.setNotificationUri(getContext().getContentResolver(), uri);
-			SPrivacyApplication.makeToast(getContext(), "Policy true");
+			Log.v(SPrivacyApplication.getDebugTag(), "Policy true");
 		}
 		else {
-			SPrivacyApplication.makeToast(getContext(), "Policy false");
+			Log.v(SPrivacyApplication.getDebugTag(), "Policy false");
 			c = null;
 		}
 		return c;
