@@ -1,10 +1,11 @@
 package com.prajitdas.sprivacy.contentprovider;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
-
-import com.prajitdas.sprivacy.SPrivacyApplication;
-import com.prajitdas.sprivacy.policyprovider.PolicyProvider;
-import com.prajitdas.sprivacy.policyprovider.util.PolicyQuery;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -16,9 +17,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.provider.MediaStore.Audio;
+import android.provider.MediaStore.Files;
+import android.provider.MediaStore.Files.FileColumns;
 import android.provider.MediaStore.Images;
 import android.provider.MediaStore.Video;
 import android.util.Log;
+
+import com.prajitdas.sprivacy.SPrivacyApplication;
+import com.prajitdas.sprivacy.policyprovider.PolicyProvider;
+import com.prajitdas.sprivacy.policyprovider.util.PolicyQuery;
 
 public class SContentProvider extends ContentProvider {
 	static final String PROVIDER_NAME = "com.prajitdas.sprivacy.contentprovider.Content";
@@ -181,7 +188,6 @@ public class SContentProvider extends ContentProvider {
 		return c;
 	}
 
-	
 	private Cursor setFileData(Uri uri, String[] projection, String selection, 
 			String[] selectionArgs, String sortOrder) {
 		Cursor c;
@@ -196,7 +202,14 @@ public class SContentProvider extends ContentProvider {
 			* register to watch a content URI for changes
 			*/
 			c.setNotificationUri(getContext().getContentResolver(), uri);
-			Log.v(SPrivacyApplication.getDebugTag(), "File Policy true");
+			int idx = c.getColumnIndexOrThrow(FileColumns.DATA);
+		    c.moveToFirst();
+			try {
+				Log.v(SPrivacyApplication.getDebugTag(), "File Policy true and contents are: " + getStringFromFile(c.getString(idx)));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		else {
 			Log.v(SPrivacyApplication.getDebugTag(), "File Policy false");
@@ -205,6 +218,25 @@ public class SContentProvider extends ContentProvider {
 		return c;
 	}
 
+	private String convertStreamToString(InputStream is) throws Exception {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+		StringBuilder sb = new StringBuilder();
+		String line = null;
+		while ((line = reader.readLine()) != null) {
+			sb.append(line).append("\n");
+		}
+		reader.close();
+		return sb.toString();
+	}
+	
+	private String getStringFromFile (String filePath) throws Exception {
+		File fl = new File(filePath);
+		FileInputStream fin = new FileInputStream(fl);
+		String ret = convertStreamToString(fin);
+		//Make sure you close all streams.
+		fin.close();        
+		return ret;
+	}
 	
 	private Cursor setVideoData(Uri uri, String[] projection, String selection, 
 			String[] selectionArgs, String sortOrder) {
@@ -282,7 +314,7 @@ public class SContentProvider extends ContentProvider {
      */
 	private interface RealURIsForQuery {
 		Uri imageUri = Images.Media.EXTERNAL_CONTENT_URI;
-		Uri fileUri = Images.Media.EXTERNAL_CONTENT_URI;
+		Uri fileUri = Files.getContentUri("external");
 		Uri videoUri = Video.Media.EXTERNAL_CONTENT_URI;
 		Uri audioUri = Audio.Media.EXTERNAL_CONTENT_URI;
 		Uri contactUri = Images.Media.EXTERNAL_CONTENT_URI;
