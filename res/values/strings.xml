@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">SPrivacy</string>
 
-    <string name="permlabel_read_write_content">Read Write Cotnent</string>
+    <string name="permlabel_read_write_content">Read Write Content</string>
     <string name="permdesc_read_write_content">Read Write Content</string>
     
     <string name="permlabel_read_policy">Read Policy</string>
