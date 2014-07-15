@@ -16,6 +16,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.provider.ContactsContract.Contacts;
 import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.Files;
 import android.provider.MediaStore.Files.FileColumns;
@@ -317,7 +318,7 @@ public class SContentProvider extends ContentProvider {
 		Uri fileUri = Files.getContentUri("external");
 		Uri videoUri = Video.Media.EXTERNAL_CONTENT_URI;
 		Uri audioUri = Audio.Media.EXTERNAL_CONTENT_URI;
-		Uri contactUri = Images.Media.EXTERNAL_CONTENT_URI;
+		Uri contactUri = Contacts.CONTENT_URI;
     }
 
 	/**
