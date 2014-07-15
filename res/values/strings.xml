@@ -11,14 +11,13 @@
     <string name="permlabel_write_policy">Write Policy</string>
     <string name="permdesc_write_policy">Write Policy</string>
     
-    <string name="text_view_contacts_access_policy_text">Contacts Access Policy</string>
+    <string name="text_view_access_policy_text">Access Policy</string>
     <string name="action_settings">Settings</string>
-    <string name="toggle_button_contacts_access_text">Contacts Access Toggle Button</string>
+    <string name="toggle_button_access_text">Access Toggle Button</string>
     <string name="policy_chooser_activity_name">Policy Chooser</string>
     <string name="policy_provider_label">Policy Provider</string>
     <string name="content_provider_label">Content Provider</string>
     <string name="show">Show All Policies</string>
-    <string name="delete">Delete All Policies</string>
     <string name="defaultText">Default Text</string>
     
     <string name="sprivacy_read_permission_description">Permission to read the privacy policies stored by SPrivacy Control</string>

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,15 +12,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.prajitdas.sprivacy.SPrivacyApplication;
 import com.prajitdas.sprivacy.R;
+import com.prajitdas.sprivacy.SPrivacyApplication;
 import com.prajitdas.sprivacy.policyprovider.util.PolicyQuery;
 
 public class PolicyRuleChooserActivity extends Activity {
-	private TextView mLargeTextViewContactsAccessPolicy;
-	private ToggleButton mToggleButtonContactsAccessPolicy;
+	private TextView mLargeTextViewAccessPolicy;
+	private ToggleButton mToggleBtnAccessPolicy;
 	private Button mButtonShow;
-	private Button mButtonDelete;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -33,22 +31,20 @@ public class PolicyRuleChooserActivity extends Activity {
 	}
 
 	private void instantiateViews() {
-		mLargeTextViewContactsAccessPolicy = (TextView) findViewById(R.id.textViewContactsAccessPolicy);
-		mToggleButtonContactsAccessPolicy = (ToggleButton) findViewById(R.id.toggleButtonContactsAccessPolicy);
+		mLargeTextViewAccessPolicy = (TextView) findViewById(R.id.textViewAccessPolicy);
+		mToggleBtnAccessPolicy = (ToggleButton) findViewById(R.id.toggleBtnAccessPolicy);
 		mButtonShow = (Button) findViewById(R.id.btnShow);
-		mButtonDelete = (Button) findViewById(R.id.btnDelete);
 		
 		if(isDataAccessAllowed(1))
-			mToggleButtonContactsAccessPolicy.setChecked(true);
+			mToggleBtnAccessPolicy.setChecked(true);
 		else
-			mToggleButtonContactsAccessPolicy.setChecked(false);
+			mToggleBtnAccessPolicy.setChecked(false);
 
-		mButtonDelete.setVisibility(View.GONE);
-		mLargeTextViewContactsAccessPolicy.setText(R.string.text_view_contacts_access_policy_text);
+		mLargeTextViewAccessPolicy.setText(R.string.text_view_access_policy_text);
 	}
 
 	private void addOnClickListener() {
-		mToggleButtonContactsAccessPolicy.setOnClickListener(new OnClickListener() {
+		mToggleBtnAccessPolicy.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				//This is get(0) as there is only one application now
@@ -61,14 +57,6 @@ public class PolicyRuleChooserActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				showAllPolicies();			
-			}
-		});
-		
-		mButtonDelete.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				deleteAllPolicies();
 			}
 		});
 	}
@@ -92,14 +80,6 @@ public class PolicyRuleChooserActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	private void deleteAllPolicies() {
-		// delete all the records and the table of the database provider
-		int count = getContentResolver().delete(PolicyQuery.baseUri, null, null);
-		String display = "Policies deleted = "+ count;
-		Log.v(SPrivacyApplication.getDebugTag(), display);
-		SPrivacyApplication.makeToast(this, display);
-	}
-
 	private void showAllPolicies() {
 		// Show all the policies sorted by app name
 		Cursor c = getContentResolver().query(PolicyQuery.baseUri, 
