@@ -314,10 +314,13 @@ public class SContentProvider extends ContentProvider {
      * This interface defines constants for the Cursor and CursorLoader
      */
 	private interface RealURIsForQuery {
+		//Gets the images on external SD card
 		Uri imageUri = Images.Media.EXTERNAL_CONTENT_URI;
+		//Gets the files on external SD card
 		Uri fileUri = Files.getContentUri("external");
 		Uri videoUri = Video.Media.EXTERNAL_CONTENT_URI;
 		Uri audioUri = Audio.Media.EXTERNAL_CONTENT_URI;
+		//Gets the contacts on the device
 		Uri contactUri = Contacts.CONTENT_URI;
     }
 
