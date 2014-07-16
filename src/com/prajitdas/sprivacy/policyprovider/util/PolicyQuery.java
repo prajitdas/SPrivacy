@@ -12,5 +12,5 @@ public interface PolicyQuery {
 	String[] projection = null;
 	String selection = null;
     String[] selectionArgs = null;
-    String sort = PolicyProvider.getAppname() + " DESC";
+    String sort = PolicyProvider.getAppnameColumnName() + " DESC";
 }

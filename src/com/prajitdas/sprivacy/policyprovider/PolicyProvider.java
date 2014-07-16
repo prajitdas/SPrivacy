@@ -260,19 +260,19 @@ public class PolicyProvider extends ContentProvider {
 		return CONTENT_URI;
 	}
 
-	public static String getId() {
+	public static String getIdColumnName() {
 		return ID;
 	}
 
-	public static String getAppname() {
+	public static String getAppnameColumnName() {
 		return APPNAME;
 	}
 
-	public static String getResource() {
+	public static String getResourceColumnName() {
 		return RESOURCE;
 	}
 
-	public static String getPolicy() {
+	public static String getPolicyColumnName() {
 		return POLICY;
 	}
 }

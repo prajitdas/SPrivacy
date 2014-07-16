@@ -110,10 +110,10 @@ public class PolicyRuleChooserActivity extends Activity {
 		if (c.moveToFirst()) {
 			PolicyRule temp = new PolicyRule();
 			do {
-				temp.setId(Integer.parseInt(c.getString(c.getColumnIndex(PolicyProvider.getId()))));
-				temp.setAppName(c.getString(c.getColumnIndex(PolicyProvider.getAppname())));
-				temp.setResource(c.getString(c.getColumnIndex(PolicyProvider.getResource())));
-				if(c.getString(c.getColumnIndex(PolicyProvider.getPolicy())).equals("1"))
+				temp.setId(Integer.parseInt(c.getString(c.getColumnIndex(PolicyProvider.getIdColumnName()))));
+				temp.setAppName(c.getString(c.getColumnIndex(PolicyProvider.getAppnameColumnName())));
+				temp.setResource(c.getString(c.getColumnIndex(PolicyProvider.getResourceColumnName())));
+				if(c.getString(c.getColumnIndex(PolicyProvider.getPolicyColumnName())).equals("1"))
 					temp.setPolicyRule(true);
 				else
 					temp.setPolicyRule(false);
@@ -135,12 +135,12 @@ public class PolicyRuleChooserActivity extends Activity {
 		else {				
 			ContentValues values = new ContentValues();
 	
-			values.put(PolicyProvider.getAppname(), c.getString(c.getColumnIndex(PolicyProvider.getAppname())));
-		    values.put(PolicyProvider.getResource(), c.getString(c.getColumnIndex(PolicyProvider.getResource())));
-		    if(c.getString(c.getColumnIndex(PolicyProvider.getPolicy())).equals("1"))
-		    	values.put(PolicyProvider.getPolicy(), 0);
+			values.put(PolicyProvider.getAppnameColumnName(), c.getString(c.getColumnIndex(PolicyProvider.getAppnameColumnName())));
+		    values.put(PolicyProvider.getResourceColumnName(), c.getString(c.getColumnIndex(PolicyProvider.getResourceColumnName())));
+		    if(c.getString(c.getColumnIndex(PolicyProvider.getPolicyColumnName())).equals("1"))
+		    	values.put(PolicyProvider.getPolicyColumnName(), 0);
 		    else
-		    	values.put(PolicyProvider.getPolicy(), 1);
+		    	values.put(PolicyProvider.getPolicyColumnName(), 1);
 		    getContentResolver().update(PolicyQuery.baseUri, values, Integer.toString(idOfPolicy), null);	
 			SPrivacyApplication.makeToast(this, "Updated: "+values.toString());
 		}
@@ -158,7 +158,7 @@ public class PolicyRuleChooserActivity extends Activity {
 			return true;
 		}
 		c.moveToFirst();
-	    if(c.getString(c.getColumnIndex(PolicyProvider.getPolicy())).equals("1"))
+	    if(c.getString(c.getColumnIndex(PolicyProvider.getPolicyColumnName())).equals("1"))
 	    	return true;
 		return false;
 	}

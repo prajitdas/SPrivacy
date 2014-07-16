@@ -329,11 +329,11 @@ public class SContentProvider extends ContentProvider {
 	 * @return
 	 */
 	private boolean isDataAccessAllowed() {
-		String[] projection = { PolicyProvider.getPolicy() };
+		String[] projection = { PolicyProvider.getPolicyColumnName() };
 		// Show all the policies sorted by app name
 		Cursor c = getContext().getContentResolver().query(PolicyQuery.baseUri, 
 				projection, 
-				PolicyProvider.getId() + " = '1' ", 
+				PolicyProvider.getIdColumnName() + " = '1' ", 
 				PolicyQuery.selectionArgs, 
 				PolicyQuery.sort);
 		String result = "Results:";
@@ -345,7 +345,7 @@ public class SContentProvider extends ContentProvider {
 			if(c.getCount() > 1)
 				SPrivacyApplication.makeToast(getContext(), "Too many policies");
 			else {
-				if(c.getString(c.getColumnIndex(PolicyProvider.getPolicy())).equals("1"))
+				if(c.getString(c.getColumnIndex(PolicyProvider.getPolicyColumnName())).equals("1"))
 					return true;
 			}
 		}
