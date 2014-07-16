@@ -1,6 +1,6 @@
 package com.prajitdas.sprivacy.policyprovider.util;
 
-public class PolicyRules {
+public class PolicyRule {
 	private int id;
 	private String appName;
 	private String resource;

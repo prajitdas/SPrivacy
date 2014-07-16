@@ -1,62 +1,80 @@
 package com.prajitdas.sprivacy.policyprovider;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import com.prajitdas.sprivacy.R;
 import com.prajitdas.sprivacy.SPrivacyApplication;
 import com.prajitdas.sprivacy.policyprovider.util.PolicyQuery;
+import com.prajitdas.sprivacy.policyprovider.util.PolicyRule;
 
 public class PolicyRuleChooserActivity extends Activity {
-	private TextView mLargeTextViewAccessPolicy;
-	private ToggleButton mToggleBtnAccessPolicy;
+	private TableLayout mTableOfPolicies;
 	private Button mButtonShow;
+	private ArrayList<PolicyRule> listOfPolicyRules;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_policy_rule_chooser);
+		getAllPolicies();
 		
 		instantiateViews();
 		addOnClickListener();
 	}
 
 	private void instantiateViews() {
-		mLargeTextViewAccessPolicy = (TextView) findViewById(R.id.textViewAccessPolicy);
-		mToggleBtnAccessPolicy = (ToggleButton) findViewById(R.id.toggleBtnAccessPolicy);
 		mButtonShow = (Button) findViewById(R.id.btnShow);
-		
-		if(isDataAccessAllowed(1))
-			mToggleBtnAccessPolicy.setChecked(true);
-		else
-			mToggleBtnAccessPolicy.setChecked(false);
+		mTableOfPolicies = (TableLayout) findViewById(R.id.tableOfPolicies);
 
-		mLargeTextViewAccessPolicy.setText(R.string.text_view_access_policy_text);
+		TableRow tblRowHeader  = new TableRow(this);
+		TextView mTextViewPolicyStmtHeader = new TextView(this);
+		TextView mTextViewPolicyValueHeader = new TextView(this);
+		
+		mTextViewPolicyStmtHeader.setText(R.string.text_view_access_policy_text);
+		mTextViewPolicyStmtHeader.setTextAppearance(this, android.R.style.TextAppearance_Large);
+		mTextViewPolicyStmtHeader.setTypeface(Typeface.SERIF, Typeface.BOLD);
+		
+		mTextViewPolicyValueHeader.setText(R.string.text_view_policy_value_text);
+		mTextViewPolicyValueHeader.setTextAppearance(this, android.R.style.TextAppearance_Large);
+		mTextViewPolicyValueHeader.setTypeface(Typeface.SERIF, Typeface.BOLD);
+		
+		tblRowHeader.addView(mTextViewPolicyStmtHeader);
+		tblRowHeader.addView(mTextViewPolicyValueHeader);
+		mTableOfPolicies.addView(tblRowHeader);
+		
+//		for()
+//
+//		if(isDataAccessAllowed(1))
+//			mToggleBtnAccessPolicy.setChecked(true);
+//		else
+//			mToggleBtnAccessPolicy.setChecked(false);
+//
+//		mLargeTextViewAccessPolicy.setText(R.string.text_view_access_policy_text);
 	}
 
 	private void addOnClickListener() {
-		mToggleBtnAccessPolicy.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				//This is get(0) as there is only one application now
-				togglePolicy(1);
-			}
-		});
-		
 		mButtonShow.setOnClickListener(new OnClickListener() {
-			
+			//Button to show all the policies at the same time
 			@Override
 			public void onClick(View v) {
-				showAllPolicies();			
+				Intent intent = new Intent(v.getContext(), DisplayAllPoliciesActivity.class);
+				intent.putExtra("com.prajitdas.sprivacy.policyprovider", listOfPolicyRules);
+				startActivity(intent);
 			}
 		});
 	}
@@ -80,25 +98,27 @@ public class PolicyRuleChooserActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	private void showAllPolicies() {
-		// Show all the policies sorted by app name
+	private void getAllPolicies() {
+		listOfPolicyRules = new ArrayList<PolicyRule>(); 
+		// Get all the policies sorted by app name
 		Cursor c = getContentResolver().query(PolicyQuery.baseUri, 
 				PolicyQuery.projection, 
 				PolicyQuery.selection, 
 				PolicyQuery.selectionArgs, 
 				PolicyQuery.sort);
-		String result = "Results:";
-
-		if (!c.moveToFirst()) {
-			SPrivacyApplication.makeToast(this, result+" no content yet!");
-		}
-		else {
+		
+		if (c.moveToFirst()) {
+			PolicyRule temp = new PolicyRule();
 			do {
-				result = result + "\n" + c.getString(c.getColumnIndex(PolicyProvider.getAppname())) +
-						" trying to access resource " +  c.getString(c.getColumnIndex(PolicyProvider.getResource())) + 
-								" has policy set as : " + c.getString(c.getColumnIndex(PolicyProvider.getPolicy()));
+				temp.setId(Integer.parseInt(c.getString(c.getColumnIndex(PolicyProvider.getId()))));
+				temp.setAppName(c.getString(c.getColumnIndex(PolicyProvider.getAppname())));
+				temp.setResource(c.getString(c.getColumnIndex(PolicyProvider.getResource())));
+				if(c.getString(c.getColumnIndex(PolicyProvider.getPolicy())).equals("1"))
+					temp.setPolicyRule(true);
+				else
+					temp.setPolicyRule(false);
+				listOfPolicyRules.add(temp);
 			} while (c.moveToNext());
-			SPrivacyApplication.makeToast(this, result);
 		}
 	}
 	

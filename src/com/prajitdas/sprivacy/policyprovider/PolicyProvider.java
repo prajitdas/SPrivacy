@@ -1,8 +1,9 @@
 package com.prajitdas.sprivacy.policyprovider;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.prajitdas.sprivacy.policyprovider.util.PolicyRules;
+import com.prajitdas.sprivacy.policyprovider.util.PolicyRule;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -58,8 +59,6 @@ public class PolicyProvider extends ContentProvider {
 			APPNAME + " TEXT NOT NULL, " +
 			RESOURCE + " TEXT NOT NULL, " +
 			POLICY + " INTEGER DEFAULT 0);";
-//	POLICY + " INTEGER DEFAULT 0, "+
-//	"UNIQUE(" + APPNAME + ", " + RESOURCE + ") ON CONFLICT ROLLBACK);";
 	
 	// class that creates and manages the provider's database 
 	private static class DBHelper extends SQLiteOpenHelper {
@@ -85,7 +84,7 @@ public class PolicyProvider extends ContentProvider {
 	
 		private void loadDefaultPoliciesIntoDB(SQLiteDatabase db) {
 			DefaultPolicyLoader defaultPolicy = new DefaultPolicyLoader();
-			for (PolicyRules defaultPolicyRule : defaultPolicy.getDefaultPolicies()) {
+			for (PolicyRule defaultPolicyRule : defaultPolicy.getDefaultPolicies()) {
 				StringBuilder insertQuery = new StringBuilder("INSERT INTO " + TABLE_NAME +
 						"(" + APPNAME + 
 						", " + RESOURCE +
@@ -102,13 +101,41 @@ public class PolicyProvider extends ContentProvider {
 				insertQuery.append(");");
 				db.execSQL(insertQuery.toString());
 			}
-		}		
+		}
+		
+		/**
+		 * Class that loads the default policies into the database when it is created.
+		 * This class needs to be modified in order to fix how the default policies are loaded into the DB.
+		 */
+		private class DefaultPolicyLoader {			
+			private ArrayList<PolicyRule> defaultPolicies;
+			
+			public ArrayList<PolicyRule> getDefaultPolicies() {
+				return defaultPolicies;
+			}
+
+			public void setDefaultPolicies(ArrayList<PolicyRule> defaultPolicies) {
+				this.defaultPolicies = defaultPolicies;
+			}
+
+			public DefaultPolicyLoader() {
+				setDefaultPolicies(new ArrayList<PolicyRule>());
+				defaultPolicies.add(naiveWayToAddPolicy());
+			}
+
+			/**
+			 * At the moment the default policy is being loaded in a naive way have to work on this to improve it
+			 */
+			private PolicyRule naiveWayToAddPolicy() { 
+				PolicyRule temp = new PolicyRule();
+				temp.setId(0);
+				temp.setAppName("com.prajitdas.parserapp");	    
+			    temp.setResource("Images");
+			    temp.setPolicyRule(true);
+			    return temp;
+			}
+		}
 	}
-	
-//	private boolean doesDatabaseExist() {
-//	    File dbFile = getContext().getDatabasePath(DATABASE_NAME);
-//	    return dbFile.exists();
-//	}
 	
 	@Override
 	public boolean onCreate() {

@@ -4,22 +4,23 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-	<permission android:name="android.permission.sprivacy.READ_WRITE_CONTENT"
-        android:label="@string/permlabel_read_write_content"
+    <permission
+        android:name="android.permission.sprivacy.READ_WRITE_CONTENT"
         android:description="@string/permdesc_read_write_content"
+        android:label="@string/permlabel_read_write_content"
         android:protectionLevel="normal" />
-    
-	<permission android:name="android.permission.sprivacy.READ_POLICIES"
-        android:label="@string/permlabel_read_policy"
+    <permission
+        android:name="android.permission.sprivacy.READ_POLICIES"
         android:description="@string/permdesc_read_policy"
+        android:label="@string/permlabel_read_policy"
         android:protectionLevel="normal" />
-	
-	<permission android:name="android.permission.sprivacy.WRITE_POLICIES"
-        android:label="@string/permlabel_write_policy"
+    <permission
+        android:name="android.permission.sprivacy.WRITE_POLICIES"
         android:description="@string/permdesc_write_policy"
+        android:label="@string/permlabel_write_policy"
         android:protectionLevel="normal" />
-	
-	<uses-sdk
+
+    <uses-sdk
         android:minSdkVersion="16"
         android:targetSdkVersion="21" />
 
@@ -27,15 +28,14 @@
     <!-- Required permission not required at or below Android 4.3 API level -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <!-- Unusual but true! -->
-    
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        
         <activity
-            android:name="com.prajitdas.sprivacy.policyprovider.PolicyRuleChooserActivity"
+            android:name=".policyprovider.PolicyRuleChooserActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -43,21 +43,27 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
-		<provider android:name="com.prajitdas.sprivacy.policyprovider.PolicyProvider" 
-			android:authorities="com.prajitdas.sprivacy.policyprovider.Policy"
-            android:label="@string/policy_provider_label"
+
+        <provider
+            android:name=".policyprovider.PolicyProvider"
+            android:authorities="com.prajitdas.sprivacy.policyprovider.Policy"
             android:exported="true"
-			android:readPermission="android.permission.sprivacy.READ_POLICIES"
+            android:label="@string/policy_provider_label"
+            android:readPermission="android.permission.sprivacy.READ_POLICIES"
             android:writePermission="android.permission.sprivacy.WRITE_POLICIES" >
-		</provider>
-		
-		<provider android:name="com.prajitdas.sprivacy.contentprovider.SContentProvider" 
-			android:authorities="com.prajitdas.sprivacy.contentprovider.Content"
+        </provider>
+        <provider
+            android:name=".contentprovider.SContentProvider"
+            android:authorities="com.prajitdas.sprivacy.contentprovider.Content"
+            android:exported="true"
             android:label="@string/content_provider_label"
-			android:exported="true" 
-			android:permission="android.permission.sprivacy.READ_WRITE_CONTENT" >
-		</provider>
+            android:permission="android.permission.sprivacy.READ_WRITE_CONTENT" >
+        </provider>
+
+        <activity
+            android:name="com.prajitdas.sprivacy.policyprovider.DisplayAllPoliciesActivity"
+            android:label="@string/title_activity_display_all_policies" >
+        </activity>
     </application>
 
 </manifest>
