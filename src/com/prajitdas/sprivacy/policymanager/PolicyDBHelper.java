@@ -29,10 +29,11 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	// database declarations
 	private final static String DATABASE_NAME = "PrivacyPolicies";
 	private final static int DATABASE_VERSION = 1;
+	
 	private final static String APPLICATION_TABLE_NAME = "applications";
-
 	private final static String RESOURCE_TABLE_NAME = "resources";
 	private final static String POLICY_TABLE_NAME = "policies";
+
 	private final static String CREATE_APPLICATION_TABLE = " CREATE TABLE " + APPLICATION_TABLE_NAME + " (" + 
 			APPID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
 			APPNAME + " TEXT NOT NULL UNIQUE);";
@@ -227,16 +228,16 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 		ArrayList<PolicyRule> policyRules = new ArrayList<PolicyRule>();
 		// Select All Query
 		String selectQuery = "SELECT "+
-					" policies.id AS id," +
-					" applications.id AS appId," +
-					" applications.name AS appName," +
-					" resources.id AS resId," +
-					" resources.name AS resname," +
-					" policies.policy AS policyRule" +
+					" policies.id," +
+					" applications.id," +
+					" applications.name," +
+					" resources.id," +
+					" resources.name," +
+					" policies.policy" +
 					" FROM " + 
 					POLICY_TABLE_NAME +
-					" JOIN " + APPLICATION_TABLE_NAME + " ON polcies.appid = applications.id" +
-					" JOIN " + RESOURCE_TABLE_NAME + " ON polcies.appid = resources.id";
+					" LEFT JOIN " + APPLICATION_TABLE_NAME + " ON polcies.appid = applications.id" +
+					" LEFT JOIN " + RESOURCE_TABLE_NAME + " ON polcies.resid = resources.id";
 
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, null);
