@@ -19,6 +19,6 @@
     <string name="sprivacy_read_permission_label">SPrivacy Read Permission</string>
     <string name="sprivacy_write_permission_description">Permission to write the privacy policies stored by SPrivacy Control</string>
     <string name="sprivacy_write_permission_label">SPrivacy Write Permission</string>
-    <string name="title_activity_display_all_policies">DisplayAllPoliciesActivity</string>
+    <string name="title_activity_display_all_policies">All Device Policies</string>
 
 </resources>
