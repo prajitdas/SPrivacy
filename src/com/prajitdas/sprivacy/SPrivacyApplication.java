@@ -7,24 +7,61 @@ import android.widget.Toast;
 
 public class SPrivacyApplication extends Application {
 	private static final String DEBUG_TAG = "SPrivacyApplicationDebugTag";
-	private static SPrivacyApplication singleton;
 
+	private static final String CONST_IMAGES = "images";
+
+	private static final String CONST_FILES = "files";
+
+	private static final String CONST_VIDEOS = "videos";
+
+	private static final String CONST_AUDIOS = "audios";
+
+	private static final String CONST_CONTACTS = "contacts";
+	
+	private static final String CONST_SLASH = "/";
+
+	private static SPrivacyApplication singleton;
+	
 	public static String getDebugTag() {
 		return DEBUG_TAG;
+	}
+
+	public static String getConstImages() {
+		return CONST_IMAGES;
+	}
+
+	public static String getConstFiles() {
+		return CONST_FILES;
+	}
+
+	public static String getConstVideos() {
+		return CONST_VIDEOS;
+	}
+
+	public static String getConstAudios() {
+		return CONST_AUDIOS;
+	}
+
+	public static String getConstContacts() {
+		return CONST_CONTACTS;
+	}
+
+	public static String getConstSlash() {
+		return CONST_SLASH;
 	}
 
 	public static SPrivacyApplication getSingleton() {
 		return singleton;
 	}
 
+	public static void makeToast(Context context, String someString) {
+		Toast.makeText(context, someString, Toast.LENGTH_LONG).show();
+	}
+
 	public static void setSingleton(SPrivacyApplication singleton) {
 		SPrivacyApplication.singleton = singleton;
 	}
 
-	public static void makeToast(Context context, String someString) {
-		Toast.makeText(context, someString, Toast.LENGTH_LONG).show();
-	}
-	
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);

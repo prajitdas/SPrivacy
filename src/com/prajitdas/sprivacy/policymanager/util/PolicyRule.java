@@ -43,4 +43,10 @@ public class PolicyRule {
 	public void setResName(String resName) {
 		this.resName = resName;
 	}
+	@Override
+	public String toString() {
+		return 	appName + " | " + 
+				resName + " | " +
+				policyRule;
+	}
 }

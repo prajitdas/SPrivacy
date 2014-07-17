@@ -226,7 +226,7 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 					" ON " + POLICY_TABLE_NAME + "." + POLAPPID + 
 					" = " +  APPLICATION_TABLE_NAME + "." + APPID +
 					" LEFT JOIN " + RESOURCE_TABLE_NAME + 
-					" ON " + POLICY_TABLE_NAME + "." + POLAPPID + 
+					" ON " + POLICY_TABLE_NAME + "." + POLRESID + 
 					" = " +  RESOURCE_TABLE_NAME + "." + RESID + ";";
 
 		SQLiteDatabase db = this.getWritableDatabase();
