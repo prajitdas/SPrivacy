@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.prajitdas.sprivacy.SPrivacyApplication;
 import com.prajitdas.sprivacy.policymanager.util.AppInfo;
 import com.prajitdas.sprivacy.policymanager.util.PolicyRule;
 import com.prajitdas.sprivacy.policymanager.util.Resource;
@@ -260,11 +261,6 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	 */
 	class DefaultDataLoader {			
 		private final String APPNAME = "com.prajitdas.parserapp";
-		private final String IMAGES = "Images";
-		private final String FILES = "Files";
-		private final String VIDEOS = "Videos";
-		private final String AUDIOS = "Audios";
-		private final String CONTACTS = "Contacts";
 		
 		private ArrayList<AppInfo> applications;
 
@@ -301,15 +297,15 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 			applications.add(tempAppInfo);
 			
 			int count = 1;
-			setValues(count, IMAGES, tempAppInfo);
+			setValues(count, SPrivacyApplication.getConstImages(), tempAppInfo);
 			count++;
-			setValues(count, FILES, tempAppInfo);
+			setValues(count, SPrivacyApplication.getConstFiles(), tempAppInfo);
 			count++;
-			setValues(count, VIDEOS, tempAppInfo);
+			setValues(count, SPrivacyApplication.getConstVideos(), tempAppInfo);
 			count++;
-			setValues(count, AUDIOS, tempAppInfo);
+			setValues(count, SPrivacyApplication.getConstAudios(), tempAppInfo);
 			count++;
-			setValues(count, CONTACTS, tempAppInfo);
+			setValues(count, SPrivacyApplication.getConstContacts(), tempAppInfo);
 			count++;
 		}
 		public void setApplications(ArrayList<AppInfo> applications) {

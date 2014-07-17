@@ -1,8 +1,8 @@
 package com.prajitdas.sprivacy.policymanager.util;
 
 public class Resource {
-	int id;
-	String name;
+	private int id;
+	private String name;
 	public int getId() {
 		return id;
 	}
