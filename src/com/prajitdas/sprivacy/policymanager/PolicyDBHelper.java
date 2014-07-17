@@ -254,13 +254,35 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 		return policyRules;
 	}
 	
+	public boolean findPolicy(SQLiteDatabase db, String appName, String resName) {
+		// Select Policy Query
+		String selectQuery = "SELECT "+
+					POLICY_TABLE_NAME + "." + POLICY +
+					" FROM " + 
+					POLICY_TABLE_NAME +
+					" LEFT JOIN " + APPLICATION_TABLE_NAME + 
+					" ON " + POLICY_TABLE_NAME + "." + POLAPPID + 
+					" = " +  APPLICATION_TABLE_NAME + "." + APPID +
+					" LEFT JOIN " + RESOURCE_TABLE_NAME + 
+					" ON " + POLICY_TABLE_NAME + "." + POLRESID + 
+					" = " +  RESOURCE_TABLE_NAME + "." + RESID + 
+					" WHERE "  +  
+					APPLICATION_TABLE_NAME + "." + APPNAME + " = '" + appName + "' AND " +
+					RESOURCE_TABLE_NAME + "." + RESNAME + " = '" + resName + 
+					"';";
+
+		Cursor cursor = db.rawQuery(selectQuery, null);
+		cursor.moveToFirst();
+		if(cursor.getString(0).equals("1"))
+			return true;
+		return false;
+	}
+	
 	/**
 	 * Class that loads the default policies from network or other sources into an ArrayList of PolicyRule
 	 * @TODO This class needs to be modified in order to fix how the default policies are loaded.
 	 */
 	class DefaultDataLoader {			
-		private final String APPNAME = "com.prajitdas.parserapp";
-		
 		private ArrayList<AppInfo> applications;
 
 		private ArrayList<Resource> resources;
@@ -292,7 +314,7 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 			AppInfo tempAppInfo = new AppInfo();
 
 			tempAppInfo.setId(1);
-			tempAppInfo.setName(APPNAME);
+			tempAppInfo.setName(SPrivacyApplication.getConstAppname());
 			applications.add(tempAppInfo);
 			
 			int count = 1;

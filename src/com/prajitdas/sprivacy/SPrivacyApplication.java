@@ -8,6 +8,8 @@ import android.widget.Toast;
 public class SPrivacyApplication extends Application {
 	private static final String DEBUG_TAG = "SPrivacyApplicationDebugTag";
 
+	private static final String CONST_APPNAME = "com.prajitdas.parserapp";
+
 	private static final String CONST_IMAGES = "images";
 
 	private static final String CONST_FILES = "files";
@@ -81,5 +83,9 @@ public class SPrivacyApplication extends Application {
 	@Override
 	public void onTerminate() {
 		super.onTerminate();
+	}
+
+	public static String getConstAppname() {
+		return CONST_APPNAME;
 	}
 }

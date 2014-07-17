@@ -33,7 +33,6 @@ public class PolicyRuleChooserActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_policy_rule_chooser);
-		listOfPoliciesInStringForm = new ArrayList<String>();
 		mToggleButtons = new ArrayList<ToggleButton>();
 		db = new PolicyDBHelper(this);
 		database = db.getWritableDatabase();
@@ -46,7 +45,7 @@ public class PolicyRuleChooserActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		db.getWritableDatabase();
+		database = db.getWritableDatabase();
 	}
 	
 	@Override
@@ -58,10 +57,8 @@ public class PolicyRuleChooserActivity extends Activity {
 	private void instantiateViews() {
 		mBtnShowAllPolicies = (Button) findViewById(R.id.btnShow);
 		mTableOfPolicies = (TableLayout) findViewById(R.id.tableOfPolicies);
-		for(PolicyRule aPolicyRule : listOfPolicyRules) {
-			listOfPoliciesInStringForm.add(aPolicyRule.getPolicy());
+		for(PolicyRule aPolicyRule : listOfPolicyRules)
 			addTableRow(aPolicyRule.toString(), aPolicyRule.isPolicyRule());
-		}
 	}
 
 	private void addTableRow(String policyText, boolean policyValue) {
@@ -85,6 +82,9 @@ public class PolicyRuleChooserActivity extends Activity {
 			//Button to show all the policies at the same time
 			@Override
 			public void onClick(View v) {
+				listOfPoliciesInStringForm = new ArrayList<String>();
+				for(PolicyRule aPolicyRule : listOfPolicyRules)
+					listOfPoliciesInStringForm.add(aPolicyRule.getPolicy());
 				Intent intent = new Intent(v.getContext(), DisplayAllPoliciesActivity.class);
 				intent.putStringArrayListExtra("PolicyRuleChooserActivity", listOfPoliciesInStringForm);
 				startActivity(intent);

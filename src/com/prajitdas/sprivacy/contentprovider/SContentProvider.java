@@ -16,6 +16,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.ContactsContract.Contacts;
 import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.Files;
@@ -25,6 +26,7 @@ import android.provider.MediaStore.Video;
 import android.util.Log;
 
 import com.prajitdas.sprivacy.SPrivacyApplication;
+import com.prajitdas.sprivacy.policymanager.PolicyDBHelper;
 
 public class SContentProvider extends ContentProvider {
 	static final String PROVIDER_NAME = "com.prajitdas.sprivacy.contentprovider.Content";
@@ -172,7 +174,7 @@ public class SContentProvider extends ContentProvider {
 	private Cursor setImageData(Uri uri, String[] projection, String selection, 
 			String[] selectionArgs, String sortOrder) {
 		Cursor c;
-		if(isDataAccessAllowed()) {
+		if(isDataAccessAllowed(SPrivacyApplication.getConstImages())) {
 			c = getContext().getContentResolver()
 					.query(RealURIsForQuery.imageUri,
 					projection, 
@@ -195,7 +197,7 @@ public class SContentProvider extends ContentProvider {
 	private Cursor setFileData(Uri uri, String[] projection, String selection, 
 			String[] selectionArgs, String sortOrder) {
 		Cursor c;
-		if(isDataAccessAllowed()) {
+		if(isDataAccessAllowed(SPrivacyApplication.getConstFiles())) {
 			c = getContext().getContentResolver()
 					.query(RealURIsForQuery.fileUri,
 					projection, 
@@ -245,7 +247,7 @@ public class SContentProvider extends ContentProvider {
 	private Cursor setVideoData(Uri uri, String[] projection, String selection, 
 			String[] selectionArgs, String sortOrder) {
 		Cursor c;
-		if(isDataAccessAllowed()) {
+		if(isDataAccessAllowed(SPrivacyApplication.getConstVideos())) {
 			c = getContext().getContentResolver()
 					.query(RealURIsForQuery.videoUri,
 					projection, 
@@ -269,7 +271,7 @@ public class SContentProvider extends ContentProvider {
 	private Cursor setAudioData(Uri uri, String[] projection, String selection, 
 			String[] selectionArgs, String sortOrder) {
 		Cursor c;
-		if(isDataAccessAllowed()) {
+		if(isDataAccessAllowed(SPrivacyApplication.getConstAudios())) {
 			c = getContext().getContentResolver()
 					.query(RealURIsForQuery.audioUri,
 					projection, 
@@ -293,7 +295,7 @@ public class SContentProvider extends ContentProvider {
 	private Cursor setContactData(Uri uri, String[] projection, String selection, 
 			String[] selectionArgs, String sortOrder) {
 		Cursor c;
-		if(isDataAccessAllowed()) {
+		if(isDataAccessAllowed(SPrivacyApplication.getConstContacts())) {
 			c = getContext().getContentResolver()
 					.query(RealURIsForQuery.contactUri,
 					projection, 
@@ -326,33 +328,20 @@ public class SContentProvider extends ContentProvider {
 		//Gets the contacts on the device
 		Uri contactUri = Contacts.CONTENT_URI;
     }
+	
+	@Override
+	public Bundle call(String method, String arg, Bundle extras) {
+		return extras;
+	}
 
 	/**
 	 * This code should be able to find what policies are there to protect what content.
 	 * @return
 	 */
-	private boolean isDataAccessAllowed() {
-//		String[] projection = { PolicyDBHelper.getPolicyColumnName() };
-//		// Show all the policies sorted by app name
-//		Cursor c = getContext().getContentResolver().query(PolicyQuery.baseUri, 
-//				projection, 
-//				PolicyDBHelper.getIdColumnName() + " = '1' ", 
-//				PolicyQuery.selectionArgs, 
-//				PolicyQuery.sort);
-//		String result = "Results:";
-//
-//		if (!c.moveToFirst()) {
-//			SPrivacyApplication.makeToast(getContext(), result+" no content yet!");
-//		}
-//		else {
-//			if(c.getCount() > 1)
-//				SPrivacyApplication.makeToast(getContext(), "Too many policies");
-//			else {
-//				if(c.getString(c.getColumnIndex(PolicyDBHelper.getPolicyColumnName())).equals("1"))
-//					return true;
-//			}
-//		}
-		return false;
+	private boolean isDataAccessAllowed(String resource) {
+		PolicyDBHelper policyDBHelper = new PolicyDBHelper(getContext());
+		SQLiteDatabase policyDB = policyDBHelper.getWritableDatabase();
+		return policyDBHelper.findPolicy(policyDB, SPrivacyApplication.getConstAppname(), resource);
 	}
 
 	@Override
