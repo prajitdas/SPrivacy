@@ -25,18 +25,21 @@ import android.provider.MediaStore.Video;
 import android.util.Log;
 
 import com.prajitdas.sprivacy.SPrivacyApplication;
-import com.prajitdas.sprivacy.policyprovider.PolicyProvider;
-import com.prajitdas.sprivacy.policyprovider.util.PolicyQuery;
 
 public class SContentProvider extends ContentProvider {
 	static final String PROVIDER_NAME = "com.prajitdas.sprivacy.contentprovider.Content";
 	static final String URL = "content://" + PROVIDER_NAME;
 
-	static final Uri IMAGES_CONTENT_URI = Uri.parse(URL + "/images");
-	static final Uri FILES_CONTENT_URI = Uri.parse(URL + "/files");
-	static final Uri VIDEOS_CONTENT_URI = Uri.parse(URL + "/videos");
-	static final Uri AUDIOS_CONTENT_URI = Uri.parse(URL + "/audios");
-	static final Uri CONTACTS_CONTENT_URI = Uri.parse(URL + "/contacts");
+	static final Uri IMAGES_CONTENT_URI = Uri.parse(URL 
+			+ SPrivacyApplication.getConstSlash() + SPrivacyApplication.getConstImages());
+	static final Uri FILES_CONTENT_URI = Uri.parse(URL 
+			+ SPrivacyApplication.getConstSlash() + SPrivacyApplication.getConstFiles());
+	static final Uri VIDEOS_CONTENT_URI = Uri.parse(URL 
+			+ SPrivacyApplication.getConstSlash() + SPrivacyApplication.getConstVideos());
+	static final Uri AUDIOS_CONTENT_URI = Uri.parse(URL 
+			+ SPrivacyApplication.getConstSlash() + SPrivacyApplication.getConstAudios());
+	static final Uri CONTACTS_CONTENT_URI = Uri.parse(URL 
+			+ SPrivacyApplication.getConstSlash() + SPrivacyApplication.getConstContacts());
 	
 	static final String _ID = "_id";
 	static final String NAME = "name";
@@ -50,11 +53,11 @@ public class SContentProvider extends ContentProvider {
 	static final UriMatcher uriMatcher;
 	static{
 		uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-		uriMatcher.addURI(PROVIDER_NAME, "images", IMAGES);
-		uriMatcher.addURI(PROVIDER_NAME, "files", FILES);
-		uriMatcher.addURI(PROVIDER_NAME, "videos", VIDEOS);
-		uriMatcher.addURI(PROVIDER_NAME, "audios", AUDIOS);
-		uriMatcher.addURI(PROVIDER_NAME, "contacts", CONTACTS);
+		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstImages(), IMAGES);
+		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstFiles(), FILES);
+		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstVideos(), VIDEOS);
+		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstAudios(), AUDIOS);
+		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts(), CONTACTS);
 	}
 	
 	private static HashMap<String, String> PROJECTION_MAP;
@@ -329,26 +332,26 @@ public class SContentProvider extends ContentProvider {
 	 * @return
 	 */
 	private boolean isDataAccessAllowed() {
-		String[] projection = { PolicyProvider.getPolicy() };
-		// Show all the policies sorted by app name
-		Cursor c = getContext().getContentResolver().query(PolicyQuery.baseUri, 
-				projection, 
-				PolicyProvider.getId() + " = '1' ", 
-				PolicyQuery.selectionArgs, 
-				PolicyQuery.sort);
-		String result = "Results:";
-
-		if (!c.moveToFirst()) {
-			SPrivacyApplication.makeToast(getContext(), result+" no content yet!");
-		}
-		else {
-			if(c.getCount() > 1)
-				SPrivacyApplication.makeToast(getContext(), "Too many policies");
-			else {
-				if(c.getString(c.getColumnIndex(PolicyProvider.getPolicy())).equals("1"))
-					return true;
-			}
-		}
+//		String[] projection = { PolicyDBHelper.getPolicyColumnName() };
+//		// Show all the policies sorted by app name
+//		Cursor c = getContext().getContentResolver().query(PolicyQuery.baseUri, 
+//				projection, 
+//				PolicyDBHelper.getIdColumnName() + " = '1' ", 
+//				PolicyQuery.selectionArgs, 
+//				PolicyQuery.sort);
+//		String result = "Results:";
+//
+//		if (!c.moveToFirst()) {
+//			SPrivacyApplication.makeToast(getContext(), result+" no content yet!");
+//		}
+//		else {
+//			if(c.getCount() > 1)
+//				SPrivacyApplication.makeToast(getContext(), "Too many policies");
+//			else {
+//				if(c.getString(c.getColumnIndex(PolicyDBHelper.getPolicyColumnName())).equals("1"))
+//					return true;
+//			}
+//		}
 		return false;
 	}
 

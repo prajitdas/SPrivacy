@@ -1,40 +1,24 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+	android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/textViewAccessPolicy"
+    <TableLayout
+        android:id="@+id/tableOfPolicies"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/toggleBtnAccessPolicy"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="20dp"
-        android:gravity="center"
-        android:text="@string/defaultText"
-        android:layout_toLeftOf="@+id/toggleBtnAccessPolicy"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <ToggleButton
-        android:id="@+id/toggleBtnAccessPolicy"
-        android:layout_width="90dp"
-        android:layout_height="55dp"
-        android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
-        android:text="@string/toggle_button_access_text"
-        android:textOff="Access Prohibited"
-        android:textOn="Access Permitted" 
-        android:checked="true" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_above="@+id/btnShow" />
 
-     <Button
-         android:id="@+id/btnShow"
-         android:layout_width="fill_parent"
-         android:layout_height="wrap_content"
-         android:layout_alignParentBottom="true"
-         android:layout_alignParentLeft="true"
-         android:layout_alignParentRight="true"
-         android:text="@string/show" />
+	<Button
+        android:id="@+id/btnShow"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/show" />
 
 </RelativeLayout>
