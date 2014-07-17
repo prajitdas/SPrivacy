@@ -1,5 +1,7 @@
 package com.prajitdas.sprivacy.policymanager;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -14,31 +16,56 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.prajitdas.sprivacy.R;
+import com.prajitdas.sprivacy.policymanager.util.PolicyRule;
 
 public class PolicyRuleChooserActivity extends Activity {
 	private TableLayout mTableOfPolicies;
-	private Button mButtonShow;
+	private Button mBtnShowAllPolicies;
+	private PolicyDBHelper db;
+	private ArrayList<PolicyRule> listOfPolicyRules;
+	private ArrayList<String> listOfPoliciesInStringForm;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_policy_rule_chooser);
+		db = new PolicyDBHelper(this);
+		db.getWritableDatabase();
+		listOfPolicyRules = db.getAllPolicies();
+		listOfPoliciesInStringForm = new ArrayList<String>();
 		
 		instantiateViews();
 		addOnClickListener();
-		Intent intent = new Intent(this, DisplayAllPoliciesActivity.class);
-		startActivity(intent);
+	}
+	
+	@Override
+	protected void onPause() {
+		db.close();
 	}
 
 	private void instantiateViews() {
-		mButtonShow = (Button) findViewById(R.id.btnShow);
+		mBtnShowAllPolicies = (Button) findViewById(R.id.btnShow);
 		mTableOfPolicies = (TableLayout) findViewById(R.id.tableOfPolicies);
+		addHeader();
+		for(PolicyRule aPolicyRule : listOfPolicyRules) {
+			listOfPoliciesInStringForm.add(aPolicyRule.toString());
+//
+//		if(isDataAccessAllowed(1))
+//			mToggleBtnAccessPolicy.setChecked(true);
+//		else
+//			mToggleBtnAccessPolicy.setChecked(false);
+//
+//		mLargeTextViewAccessPolicy.setText(R.string.text_view_access_policy_text);
+		}
+	}
 
+	private void addHeader() {
 		TableRow tblRowHeader  = new TableRow(this);
 		TextView mTextViewPolicyStmtHeader = new TextView(this);
 		TextView mTextViewPolicyValueHeader = new TextView(this);
 		
 		mTextViewPolicyStmtHeader.setText(R.string.text_view_access_policy_text);
+		
 		mTextViewPolicyStmtHeader.setTextAppearance(this, android.R.style.TextAppearance_Large);
 		mTextViewPolicyStmtHeader.setTypeface(Typeface.SERIF, Typeface.BOLD);
 		
@@ -49,23 +76,15 @@ public class PolicyRuleChooserActivity extends Activity {
 		tblRowHeader.addView(mTextViewPolicyStmtHeader);
 		tblRowHeader.addView(mTextViewPolicyValueHeader);
 		mTableOfPolicies.addView(tblRowHeader);
-		
-//		for()
-//
-//		if(isDataAccessAllowed(1))
-//			mToggleBtnAccessPolicy.setChecked(true);
-//		else
-//			mToggleBtnAccessPolicy.setChecked(false);
-//
-//		mLargeTextViewAccessPolicy.setText(R.string.text_view_access_policy_text);
 	}
 
 	private void addOnClickListener() {
-		mButtonShow.setOnClickListener(new OnClickListener() {
+		mBtnShowAllPolicies.setOnClickListener(new OnClickListener() {
 			//Button to show all the policies at the same time
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(v.getContext(), DisplayAllPoliciesActivity.class);
+				intent.putStringArrayListExtra("allPolicies", listOfPoliciesInStringForm);
 				startActivity(intent);
 			}
 		});

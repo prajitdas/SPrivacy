@@ -2,9 +2,6 @@ package com.prajitdas.sprivacy.policymanager;
 
 import java.util.ArrayList;
 
-import com.prajitdas.sprivacy.R;
-import com.prajitdas.sprivacy.policymanager.util.PolicyRule;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,23 +9,21 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.prajitdas.sprivacy.R;
+
 public class DisplayAllPoliciesActivity extends Activity {
-	private ArrayList<PolicyRule> listOfPolicyRules;
+	private ArrayList<String> listOfPoliciesInStringForm;
 	private ListView mListViewPolicies;
-	private ArrayAdapter<PolicyRule> mAdapter;
+	private ArrayAdapter<String> mAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display_all_policies);
-		PolicyDBHelper db = new PolicyDBHelper(this);
-		db.getWritableDatabase();
-		listOfPolicyRules = new ArrayList<PolicyRule>();
-		listOfPolicyRules = db.getAllPolicies();
+		listOfPoliciesInStringForm = new ArrayList<String>();
 		mListViewPolicies = (ListView) findViewById(R.id.listViewPolicies);
-		mAdapter = new ArrayAdapter<PolicyRule>(this, android.R.layout.simple_list_item_1, listOfPolicyRules);;
+		mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listOfPoliciesInStringForm);
 		mListViewPolicies.setAdapter(mAdapter);
-		db.close();
 	}
 
 	@Override
