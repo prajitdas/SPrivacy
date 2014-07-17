@@ -8,8 +8,6 @@
     <string name="permdesc_read_policy">Read Policy</string>
     <string name="permlabel_write_policy">Write Policy</string>
     <string name="permdesc_write_policy">Write Policy</string>
-    <string name="text_view_access_policy_text">Access Policy</string>
-    <string name="text_view_policy_value_text">Policy Value</string>
     <string name="action_settings">Settings</string>
     <string name="toggle_button_access_text">Access Toggle Button</string>
     <string name="policy_chooser_activity_name">Policy Chooser</string>

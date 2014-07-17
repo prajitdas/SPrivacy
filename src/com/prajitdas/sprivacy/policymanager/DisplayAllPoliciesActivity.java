@@ -21,6 +21,7 @@ public class DisplayAllPoliciesActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display_all_policies);
 		listOfPoliciesInStringForm = new ArrayList<String>();
+		listOfPoliciesInStringForm.addAll(getIntent().getExtras().getStringArrayList("PolicyRuleChooserActivity"));
 		mListViewPolicies = (ListView) findViewById(R.id.listViewPolicies);
 		mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listOfPoliciesInStringForm);
 		mListViewPolicies.setAdapter(mAdapter);
