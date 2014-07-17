@@ -25,8 +25,6 @@ import android.provider.MediaStore.Video;
 import android.util.Log;
 
 import com.prajitdas.sprivacy.SPrivacyApplication;
-import com.prajitdas.sprivacy.policyprovider.PolicyProvider;
-import com.prajitdas.sprivacy.policyprovider.util.PolicyQuery;
 
 public class SContentProvider extends ContentProvider {
 	static final String PROVIDER_NAME = "com.prajitdas.sprivacy.contentprovider.Content";
@@ -329,26 +327,26 @@ public class SContentProvider extends ContentProvider {
 	 * @return
 	 */
 	private boolean isDataAccessAllowed() {
-		String[] projection = { PolicyProvider.getPolicyColumnName() };
-		// Show all the policies sorted by app name
-		Cursor c = getContext().getContentResolver().query(PolicyQuery.baseUri, 
-				projection, 
-				PolicyProvider.getIdColumnName() + " = '1' ", 
-				PolicyQuery.selectionArgs, 
-				PolicyQuery.sort);
-		String result = "Results:";
-
-		if (!c.moveToFirst()) {
-			SPrivacyApplication.makeToast(getContext(), result+" no content yet!");
-		}
-		else {
-			if(c.getCount() > 1)
-				SPrivacyApplication.makeToast(getContext(), "Too many policies");
-			else {
-				if(c.getString(c.getColumnIndex(PolicyProvider.getPolicyColumnName())).equals("1"))
-					return true;
-			}
-		}
+//		String[] projection = { PolicyDBHelper.getPolicyColumnName() };
+//		// Show all the policies sorted by app name
+//		Cursor c = getContext().getContentResolver().query(PolicyQuery.baseUri, 
+//				projection, 
+//				PolicyDBHelper.getIdColumnName() + " = '1' ", 
+//				PolicyQuery.selectionArgs, 
+//				PolicyQuery.sort);
+//		String result = "Results:";
+//
+//		if (!c.moveToFirst()) {
+//			SPrivacyApplication.makeToast(getContext(), result+" no content yet!");
+//		}
+//		else {
+//			if(c.getCount() > 1)
+//				SPrivacyApplication.makeToast(getContext(), "Too many policies");
+//			else {
+//				if(c.getString(c.getColumnIndex(PolicyDBHelper.getPolicyColumnName())).equals("1"))
+//					return true;
+//			}
+//		}
 		return false;
 	}
 

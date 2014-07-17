@@ -35,7 +35,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".policyprovider.PolicyRuleChooserActivity"
+            android:name="com.prajitdas.sprivacy.policymanager.PolicyRuleChooserActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -45,7 +45,7 @@
         </activity>
 
         <provider
-            android:name=".policyprovider.PolicyProvider"
+            android:name="com.prajitdas.sprivacy.policymanager.PolicyDBHelper"
             android:authorities="com.prajitdas.sprivacy.policyprovider.Policy"
             android:exported="true"
             android:label="@string/policy_provider_label"
@@ -61,7 +61,7 @@
         </provider>
 
         <activity
-            android:name="com.prajitdas.sprivacy.policyprovider.DisplayAllPoliciesActivity"
+            android:name="com.prajitdas.sprivacy.policymanager.DisplayAllPoliciesActivity"
             android:label="@string/title_activity_display_all_policies" >
         </activity>
     </application>

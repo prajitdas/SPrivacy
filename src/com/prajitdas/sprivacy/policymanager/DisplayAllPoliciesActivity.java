@@ -1,17 +1,32 @@
-package com.prajitdas.sprivacy.policyprovider;
+package com.prajitdas.sprivacy.policymanager;
+
+import java.util.ArrayList;
 
 import com.prajitdas.sprivacy.R;
+import com.prajitdas.sprivacy.policymanager.util.PolicyRule;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 public class DisplayAllPoliciesActivity extends Activity {
+	private ArrayList<PolicyRule> listOfPolicyRules;
+	private ListView mListViewPolicies;
+	private ArrayAdapter<PolicyRule> mAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display_all_policies);
+		PolicyDBHelper db = new PolicyDBHelper(this);
+		listOfPolicyRules = new ArrayList<PolicyRule>();
+		listOfPolicyRules = db.getAllPolicies();
+		mListViewPolicies = (ListView) findViewById(R.id.listViewPolicies);
+		mAdapter = new ArrayAdapter<PolicyRule>(this, android.R.layout.simple_list_item_1, listOfPolicyRules);;
+		mListViewPolicies.setAdapter(mAdapter);
 	}
 
 	@Override
