@@ -63,12 +63,10 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	 * method to insert into application table the application
 	 * @param value the name of the application
 	 */
-	public void addApplication(AppInfo anAppInfo) {
-		SQLiteDatabase db = this.getWritableDatabase();
+	public void addApplication(SQLiteDatabase db, AppInfo anAppInfo) {
 		ContentValues values = new ContentValues();
 		values.put(APPNAME, anAppInfo.getName());
 		db.insert(APPLICATION_TABLE_NAME, null, values);
-		db.close();
 	}
 	
 	/**
@@ -81,8 +79,7 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	 * @param resId the resource id
 	 * @param policy the policy value
 	 */
-	public void addPolicy(PolicyRule aPolicyRule) {
-		SQLiteDatabase db = this.getWritableDatabase();
+	public void addPolicy(SQLiteDatabase db, PolicyRule aPolicyRule) {
 		ContentValues values = new ContentValues();
 		values.put(POLAPPID, aPolicyRule.getAppId());
 		values.put(POLRESID, aPolicyRule.getResId());
@@ -91,19 +88,16 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 		else
 			values.put(POLICY, 0);
 		db.insert(POLICY_TABLE_NAME, null, values);
-		db.close();
 	}
 
 	/**
 	 * method to insert into resource table the resource
 	 * @param value the name of the resource
 	 */
-	public void addResource(Resource aResource) {
-		SQLiteDatabase db = this.getWritableDatabase();
+	public void addResource(SQLiteDatabase db, Resource aResource) {
 		ContentValues values = new ContentValues();
 		values.put(RESNAME, aResource.getName());
 		db.insert(RESOURCE_TABLE_NAME, null, values);
-		db.close();
 	}
 	
 	/**
@@ -112,11 +106,9 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	 * @param id identifier of the row to delete
 	 * @param tableName table from which to delete data
 	 */
-	public void deleteApplication(AppInfo anAppInfo) {
-		SQLiteDatabase db = this.getWritableDatabase();
+	public void deleteApplication(SQLiteDatabase db, AppInfo anAppInfo) {
 		db.delete(APPLICATION_TABLE_NAME, APPID + " = ?",
 				new String[] { String.valueOf(anAppInfo.getId()) });
-		db.close();
 	}
 	
 	/**
@@ -125,11 +117,10 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	 * @param id identifier of the row to delete
 	 * @param tableName table from which to delete data
 	 */
-	public void deletePolicy(PolicyRule aPolicyRule) {
-		SQLiteDatabase db = this.getWritableDatabase();
+	public void deletePolicy(SQLiteDatabase db, PolicyRule aPolicyRule) {
 		db.delete(POLICY_TABLE_NAME, POLID + " = ?",
 				new String[] { String.valueOf(aPolicyRule.getId()) });
-		db.close();	}
+	}
 	
 	/**
 	 * method to delete a row from a table based on the identifier 
@@ -137,24 +128,22 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	 * @param id identifier of the row to delete
 	 * @param tableName table from which to delete data
 	 */
-	public void deleteResource(Resource aResource) {
-		SQLiteDatabase db = this.getWritableDatabase();
+	public void deleteResource(SQLiteDatabase db, Resource aResource) {
 		db.delete(RESOURCE_TABLE_NAME, RESID + " = ?",
 				new String[] { String.valueOf(aResource.getId()) });
-		db.close();
 	}
 	
 	/**
 	 * method to load the default set of policies into the database
 	 * @param db reference to the db instance
 	 */
-	private void loadDefaultPoliciesIntoDB() {
+	private void loadDefaultPoliciesIntoDB(SQLiteDatabase db) {
 		for(AppInfo anAppInfo : defaultDataLoader.getApplications())
-			addApplication(anAppInfo);
+			addApplication(db, anAppInfo);
 		for(Resource aResource : defaultDataLoader.getResources())
-			addResource(aResource);
+			addResource(db, aResource);
 		for(PolicyRule aPolicyRule : defaultDataLoader.getPolicies())
-			addPolicy(aPolicyRule);
+			addPolicy(db, aPolicyRule);
 	}
 	
 	/**
@@ -165,7 +154,7 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 		db.execSQL(CREATE_APPLICATION_TABLE);
 		db.execSQL(CREATE_RESOURCE_TABLE);
 		db.execSQL(CREATE_POLICY_TABLE);
-		loadDefaultPoliciesIntoDB();
+		loadDefaultPoliciesIntoDB(db);
 	}
 	
 	@Override
@@ -183,8 +172,7 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	 * method to update single application
 	 * @param appName
 	 */
-	public int updateApplication(AppInfo anAppInfo) {
-		SQLiteDatabase db = this.getWritableDatabase();
+	public int updateApplication(SQLiteDatabase db, AppInfo anAppInfo) {
 		ContentValues values = new ContentValues();
 		values.put(APPNAME, anAppInfo.getName());
 		return db.update(APPLICATION_TABLE_NAME, values, APPID + " = ?", 
@@ -195,8 +183,7 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	 * method to update single policy
 	 * @param aPolicyRule update the policy value
 	 */
-	public int updatePolicyRule(PolicyRule aPolicyRule) {
-		SQLiteDatabase db = this.getWritableDatabase();
+	public int updatePolicyRule(SQLiteDatabase db, PolicyRule aPolicyRule) {
 		ContentValues values = new ContentValues();
 		values.put(POLAPPID, aPolicyRule.getAppId());
 		values.put(POLRESID, aPolicyRule.getResId());
@@ -212,8 +199,7 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	 * method to update single resource
 	 * @param resName
 	 */
-	public int updateResource(Resource aResource) {
-		SQLiteDatabase db = this.getWritableDatabase();
+	public int updateResource(SQLiteDatabase db, Resource aResource) {
 		ContentValues values = new ContentValues();
 		values.put(RESNAME, aResource.getName());
 		return db.update(RESOURCE_TABLE_NAME, values, RESID + " = ?", 
@@ -228,16 +214,20 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 		ArrayList<PolicyRule> policyRules = new ArrayList<PolicyRule>();
 		// Select All Query
 		String selectQuery = "SELECT "+
-					" policies.id," +
-					" applications.id," +
-					" applications.name," +
-					" resources.id," +
-					" resources.name," +
-					" policies.policy" +
+					POLICY_TABLE_NAME + "." + POLID + "," +
+					APPLICATION_TABLE_NAME + "." + APPID + "," +
+					APPLICATION_TABLE_NAME + "." + APPNAME + "," +
+					RESOURCE_TABLE_NAME + "." + RESID + "," +
+					RESOURCE_TABLE_NAME + "." + RESNAME + "," +
+					POLICY_TABLE_NAME + "." + POLICY +
 					" FROM " + 
 					POLICY_TABLE_NAME +
-					" LEFT JOIN " + APPLICATION_TABLE_NAME + " ON polcies.appid = applications.id" +
-					" LEFT JOIN " + RESOURCE_TABLE_NAME + " ON polcies.resid = resources.id";
+					" LEFT JOIN " + APPLICATION_TABLE_NAME + 
+					" ON " + POLICY_TABLE_NAME + "." + POLAPPID + 
+					" = " +  APPLICATION_TABLE_NAME + "." + APPID +
+					" LEFT JOIN " + RESOURCE_TABLE_NAME + 
+					" ON " + POLICY_TABLE_NAME + "." + POLAPPID + 
+					" = " +  RESOURCE_TABLE_NAME + "." + RESID + ";";
 
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, null);

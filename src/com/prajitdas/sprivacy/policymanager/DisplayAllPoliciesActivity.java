@@ -22,11 +22,13 @@ public class DisplayAllPoliciesActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display_all_policies);
 		PolicyDBHelper db = new PolicyDBHelper(this);
+		db.getWritableDatabase();
 		listOfPolicyRules = new ArrayList<PolicyRule>();
 		listOfPolicyRules = db.getAllPolicies();
 		mListViewPolicies = (ListView) findViewById(R.id.listViewPolicies);
 		mAdapter = new ArrayAdapter<PolicyRule>(this, android.R.layout.simple_list_item_1, listOfPolicyRules);;
 		mListViewPolicies.setAdapter(mAdapter);
+		db.close();
 	}
 
 	@Override
