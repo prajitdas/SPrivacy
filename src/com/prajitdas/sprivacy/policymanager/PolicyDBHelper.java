@@ -282,6 +282,9 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 		private ArrayList<PolicyRule> policies;
 
 		public DefaultDataLoader() {
+			applications = new ArrayList<AppInfo>();
+			resources = new ArrayList<Resource>();
+			policies = new ArrayList<PolicyRule>();
 			naiveWayToLoadData();
 		}
 

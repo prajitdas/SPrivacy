@@ -9,16 +9,6 @@
         android:description="@string/permdesc_read_write_content"
         android:label="@string/permlabel_read_write_content"
         android:protectionLevel="normal" />
-    <permission
-        android:name="android.permission.sprivacy.READ_POLICIES"
-        android:description="@string/permdesc_read_policy"
-        android:label="@string/permlabel_read_policy"
-        android:protectionLevel="normal" />
-    <permission
-        android:name="android.permission.sprivacy.WRITE_POLICIES"
-        android:description="@string/permdesc_write_policy"
-        android:label="@string/permlabel_write_policy"
-        android:protectionLevel="normal" />
 
     <uses-sdk
         android:minSdkVersion="16"
@@ -44,14 +34,6 @@
             </intent-filter>
         </activity>
 
-        <provider
-            android:name="com.prajitdas.sprivacy.policymanager.PolicyDBHelper"
-            android:authorities="com.prajitdas.sprivacy.policyprovider.Policy"
-            android:exported="true"
-            android:label="@string/policy_provider_label"
-            android:readPermission="android.permission.sprivacy.READ_POLICIES"
-            android:writePermission="android.permission.sprivacy.WRITE_POLICIES" >
-        </provider>
         <provider
             android:name=".contentprovider.SContentProvider"
             android:authorities="com.prajitdas.sprivacy.contentprovider.Content"
