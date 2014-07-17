@@ -1,6 +1,7 @@
 package com.prajitdas.sprivacy.policymanager;
 
 import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -17,7 +18,6 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.prajitdas.sprivacy.R;
-import com.prajitdas.sprivacy.SPrivacyApplication;
 import com.prajitdas.sprivacy.policymanager.util.PolicyRule;
 
 public class PolicyRuleChooserActivity extends Activity {
@@ -97,7 +97,7 @@ public class PolicyRuleChooserActivity extends Activity {
 				//Toggle Button to identify which policy was modified
 				@Override
 				public void onClick(View v) {
-					SPrivacyApplication.makeToast(v.getContext(), "clicked on " + listOfPolicyRules.get(index).toString());
+//					SPrivacyApplication.makeToast(v.getContext(), "clicked on " + listOfPolicyRules.get(index).toString());
 					togglePolicy(index);
 				}
 			});
