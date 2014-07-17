@@ -1,11 +1,10 @@
 package com.prajitdas.sprivacy.policymanager;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 import android.app.Activity;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,21 +24,20 @@ public class PolicyRuleChooserActivity extends Activity {
 	private TableLayout mTableOfPolicies;
 	private Button mBtnShowAllPolicies;
 	private PolicyDBHelper db;
+	private SQLiteDatabase database;
 	private ArrayList<PolicyRule> listOfPolicyRules;
 	private ArrayList<String> listOfPoliciesInStringForm;
-	private Map<Integer, ToggleButton> mToggleButtons;
+	private ArrayList<ToggleButton> mToggleButtons;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_policy_rule_chooser);
 		listOfPoliciesInStringForm = new ArrayList<String>();
-		mToggleButtons = new HashMap<Integer, ToggleButton>();
+		mToggleButtons = new ArrayList<ToggleButton>();
 		db = new PolicyDBHelper(this);
-		db.getWritableDatabase();
-		listOfPolicyRules = db.getAllPolicies();
-		for(PolicyRule aPolicyRule : listOfPolicyRules)
-			listOfPoliciesInStringForm.add(aPolicyRule.toString());
+		database = db.getWritableDatabase();
+		listOfPolicyRules = db.getAllPolicies(database);
 		
 		instantiateViews();
 		addOnClickListener();
@@ -60,16 +58,21 @@ public class PolicyRuleChooserActivity extends Activity {
 	private void instantiateViews() {
 		mBtnShowAllPolicies = (Button) findViewById(R.id.btnShow);
 		mTableOfPolicies = (TableLayout) findViewById(R.id.tableOfPolicies);
-		for(PolicyRule aPolicyRule : listOfPolicyRules)
+		for(PolicyRule aPolicyRule : listOfPolicyRules) {
+			listOfPoliciesInStringForm.add(aPolicyRule.getPolicy());
 			addTableRow(aPolicyRule.toString(), aPolicyRule.isPolicyRule());
+		}
 	}
 
 	private void addTableRow(String policyText, boolean policyValue) {
 		TableRow tblRow = new TableRow(this);
 		TextView mTextViewPolicyStmt = new TextView(this);
-		mToggleButtons.put(mToggleButtons.size(), new ToggleButton(this));
+		mToggleButtons.add(new ToggleButton(this));
 		
 		mTextViewPolicyStmt.setText(policyText);
+		mTextViewPolicyStmt.setTextAppearance(this, android.R.style.TextAppearance_DeviceDefault_Small);
+		mTextViewPolicyStmt.setTypeface(Typeface.SERIF, Typeface.BOLD_ITALIC);
+		
 		mToggleButtons.get(mToggleButtons.size()-1).setChecked(policyValue);
 		
 		tblRow.addView(mTextViewPolicyStmt);
@@ -89,11 +92,13 @@ public class PolicyRuleChooserActivity extends Activity {
 		});
 		
 		for(int i = 0; i < mToggleButtons.size(); i++) {
-			mToggleButtons.get(i).setOnClickListener(new OnClickListener() {
+			final int index = i;
+			mToggleButtons.get(index).setOnClickListener(new OnClickListener() {
 				//Toggle Button to identify which policy was modified
 				@Override
 				public void onClick(View v) {
-					SPrivacyApplication.makeToast(v.getContext(), "clicked on" + mToggleButtons);
+					SPrivacyApplication.makeToast(v.getContext(), "clicked on " + listOfPolicyRules.get(index).toString());
+					togglePolicy(index);
 				}
 			});
 		}
@@ -119,27 +124,7 @@ public class PolicyRuleChooserActivity extends Activity {
 	}
 	
 	private void togglePolicy(int idOfPolicy) {
-//		//Get a single policy to modify		
-//		Cursor c = getContentResolver().query(PolicyQuery.baseUri, 
-//				PolicyQuery.projection, 
-//				Integer.toString(idOfPolicy), 
-//				PolicyQuery.selectionArgs, 
-//				PolicyQuery.sort);
-//		if (!c.moveToFirst()) {
-//			SPrivacyApplication.makeToast(this, "Well, could not find the particular id!");
-//		}
-//		else {				
-//			ContentValues values = new ContentValues();
-//	
-//			values.put(PolicyDBHelper.getAppnameColumnName(), c.getString(c.getColumnIndex(PolicyDBHelper.getAppnameColumnName())));
-//		    values.put(PolicyDBHelper.getResourceColumnName(), c.getString(c.getColumnIndex(PolicyDBHelper.getResourceColumnName())));
-//		    if(c.getString(c.getColumnIndex(PolicyDBHelper.getPolicyColumnName())).equals("1"))
-//		    	values.put(PolicyDBHelper.getPolicyColumnName(), 0);
-//		    else
-//		    	values.put(PolicyDBHelper.getPolicyColumnName(), 1);
-//		    getContentResolver().update(PolicyQuery.baseUri, values, Integer.toString(idOfPolicy), null);	
-//			SPrivacyApplication.makeToast(this, "Updated: "+values.toString());
-//		}
+		listOfPolicyRules.get(idOfPolicy).togglePolicyRule();
+		db.updatePolicyRule(database, listOfPolicyRules.get(idOfPolicy));
 	}
-	
 }

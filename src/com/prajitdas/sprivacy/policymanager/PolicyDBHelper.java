@@ -211,7 +211,7 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	 * Getting all policies
 	 * @return returns a list of policies
 	 */
-	public ArrayList<PolicyRule> getAllPolicies() {
+	public ArrayList<PolicyRule> getAllPolicies(SQLiteDatabase db) {
 		ArrayList<PolicyRule> policyRules = new ArrayList<PolicyRule>();
 		// Select All Query
 		String selectQuery = "SELECT "+
@@ -230,7 +230,6 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 					" ON " + POLICY_TABLE_NAME + "." + POLRESID + 
 					" = " +  RESOURCE_TABLE_NAME + "." + RESID + ";";
 
-		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, null);
 
 		// looping through all rows and adding to list

@@ -45,8 +45,17 @@ public class PolicyRule {
 	}
 	@Override
 	public String toString() {
-		return 	appName + " | " + 
-				resName + " | " +
+		return 	appName + " | " + resName;
+	}
+	public String getPolicy() {
+		return 	appName + ", " + 
+				resName + ", " +
 				policyRule;
+	}
+	public void togglePolicyRule() {
+		if(isPolicyRule())
+			setPolicyRule(false);
+		else
+			setPolicyRule(true);
 	}
 }
