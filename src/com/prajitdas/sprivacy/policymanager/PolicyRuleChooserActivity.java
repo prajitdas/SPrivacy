@@ -121,8 +121,8 @@ public class PolicyRuleChooserActivity extends Activity {
 	}
 	
 	private void togglePolicy(int idOfPolicy) {
-		PolicyRule temppolicyRule = db.findPolicyByID(database, idOfPolicy);
-		temppolicyRule.togglePolicyRule();
-		db.updatePolicyRule(database, temppolicyRule);
+		PolicyRule tempPolicyRule = db.findPolicyByID(database, idOfPolicy);
+		tempPolicyRule.togglePolicyRule();
+		db.updatePolicyRule(database, tempPolicyRule);
 	}
 }
