@@ -10,7 +10,14 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_above="@+id/btnShow" />
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:gravity="center_horizontal"
+        android:layout_above="@+id/btnShow"
+        android:stretchColumns="*"
+ 		android:shrinkColumns="*" />
 
 	<Button
         android:id="@+id/btnShow"

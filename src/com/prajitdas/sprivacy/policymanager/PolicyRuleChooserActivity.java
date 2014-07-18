@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -55,6 +56,7 @@ public class PolicyRuleChooserActivity extends Activity {
 	private void instantiateViews() {
 		mBtnShowAllPolicies = (Button) findViewById(R.id.btnShow);
 		mTableOfPolicies = (TableLayout) findViewById(R.id.tableOfPolicies);
+		addTableRow();
 		addTableRow(db.findPolicy(database, SPrivacyApplication.getConstAppname(), SPrivacyApplication.getConstImages()));
 		addTableRow(db.findPolicy(database, SPrivacyApplication.getConstAppname(), SPrivacyApplication.getConstFiles()));
 		addTableRow(db.findPolicy(database, SPrivacyApplication.getConstAppname(), SPrivacyApplication.getConstContacts()));
@@ -64,10 +66,10 @@ public class PolicyRuleChooserActivity extends Activity {
 		TableRow tblRow = new TableRow(this);
 		TextView mTextViewPolicyStmt = new TextView(this);
 		ToggleButton tempToggleButton = new ToggleButton(this);
+		tempToggleButton.setTextOn(SPrivacyApplication.getConstAccessGranted());
+		tempToggleButton.setTextOff(SPrivacyApplication.getConstAccessDenied());
 		
 		mTextViewPolicyStmt.setText(aPolicyRule.toString());
-		mTextViewPolicyStmt.setTextAppearance(this, android.R.style.TextAppearance_DeviceDefault_Small);
-		mTextViewPolicyStmt.setTypeface(Typeface.SERIF, Typeface.BOLD_ITALIC);
 		
 		tempToggleButton.setChecked(aPolicyRule.isPolicyRule());
 		tempToggleButton.setId(aPolicyRule.getId());
@@ -77,6 +79,27 @@ public class PolicyRuleChooserActivity extends Activity {
 		mTableOfPolicies.addView(tblRow);
 		
 		mToggleButtons.add(tempToggleButton);
+	}
+
+	private void addTableRow() {
+		TableRow tblRow = new TableRow(this);
+		TextView mTextViewPolicyStmt = new TextView(this);
+		TextView mTextViewPolicyValu = new TextView(this);
+		
+		mTextViewPolicyStmt.setText(R.string.text_view_policy_conditions);
+		mTextViewPolicyStmt.setTextAppearance(this, android.R.style.TextAppearance_DeviceDefault_Small);
+		mTextViewPolicyStmt.setTypeface(Typeface.SERIF, Typeface.BOLD);
+		mTextViewPolicyStmt.setGravity(Gravity.CENTER);
+		
+		mTextViewPolicyValu.setText(R.string.text_view_policy_setting);
+		mTextViewPolicyValu.setTextAppearance(this, android.R.style.TextAppearance_DeviceDefault_Small);
+		mTextViewPolicyValu.setTypeface(Typeface.SERIF, Typeface.BOLD);
+		mTextViewPolicyValu.setGravity(Gravity.CENTER);
+		
+		tblRow.addView(mTextViewPolicyStmt);
+		tblRow.addView(mTextViewPolicyValu);
+		mTableOfPolicies.addView(tblRow);
+		
 	}
 
 	private void addOnClickListener() {

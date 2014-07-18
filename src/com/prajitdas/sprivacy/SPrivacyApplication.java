@@ -21,6 +21,10 @@ public class SPrivacyApplication extends Application {
 	private static final String CONST_CONTACTS = "contacts";
 	
 	private static final String CONST_SLASH = "/";
+	
+	private static final String CONST_ACCESS_GRANTED = "Granted";
+	
+	private static final String CONST_ACCESS_DENIED = "Denied";
 
 	private static SPrivacyApplication singleton;
 	
@@ -87,5 +91,13 @@ public class SPrivacyApplication extends Application {
 
 	public static String getConstAppname() {
 		return CONST_APPNAME;
+	}
+
+	public static String getConstAccessDenied() {
+		return CONST_ACCESS_DENIED;
+	}
+
+	public static String getConstAccessGranted() {
+		return CONST_ACCESS_GRANTED;
 	}
 }

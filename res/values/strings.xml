@@ -20,5 +20,7 @@
     <string name="sprivacy_write_permission_description">Permission to write the privacy policies stored by SPrivacy Control</string>
     <string name="sprivacy_write_permission_label">SPrivacy Write Permission</string>
     <string name="title_activity_display_all_policies">All Device Policies</string>
-
+    <string name="text_view_policy_conditions">Policy Conditions</string>
+    <string name="text_view_policy_setting">Policy Setting</string>
+    
 </resources>
