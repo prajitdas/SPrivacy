@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.prajitdas.sprivacy.R;
+import com.prajitdas.sprivacy.SPrivacyApplication;
 import com.prajitdas.sprivacy.policymanager.util.PolicyRule;
 
 public class PolicyRuleChooserActivity extends Activity {
@@ -25,8 +26,6 @@ public class PolicyRuleChooserActivity extends Activity {
 	private Button mBtnShowAllPolicies;
 	private PolicyDBHelper db;
 	private SQLiteDatabase database;
-	private ArrayList<PolicyRule> listOfPolicyRules;
-	private ArrayList<String> listOfPoliciesInStringForm;
 	private ArrayList<ToggleButton> mToggleButtons;
 
 	@Override
@@ -36,7 +35,6 @@ public class PolicyRuleChooserActivity extends Activity {
 		mToggleButtons = new ArrayList<ToggleButton>();
 		db = new PolicyDBHelper(this);
 		database = db.getWritableDatabase();
-		listOfPolicyRules = db.getAllPolicies(database);
 		
 		instantiateViews();
 		addOnClickListener();
@@ -57,24 +55,28 @@ public class PolicyRuleChooserActivity extends Activity {
 	private void instantiateViews() {
 		mBtnShowAllPolicies = (Button) findViewById(R.id.btnShow);
 		mTableOfPolicies = (TableLayout) findViewById(R.id.tableOfPolicies);
-		for(PolicyRule aPolicyRule : listOfPolicyRules)
-			addTableRow(aPolicyRule.toString(), aPolicyRule.isPolicyRule());
+		addTableRow(db.findPolicy(database, SPrivacyApplication.getConstAppname(), SPrivacyApplication.getConstImages()));
+		addTableRow(db.findPolicy(database, SPrivacyApplication.getConstAppname(), SPrivacyApplication.getConstFiles()));
+		addTableRow(db.findPolicy(database, SPrivacyApplication.getConstAppname(), SPrivacyApplication.getConstContacts()));
 	}
 
-	private void addTableRow(String policyText, boolean policyValue) {
+	private void addTableRow(PolicyRule aPolicyRule) {
 		TableRow tblRow = new TableRow(this);
 		TextView mTextViewPolicyStmt = new TextView(this);
-		mToggleButtons.add(new ToggleButton(this));
+		ToggleButton tempToggleButton = new ToggleButton(this);
 		
-		mTextViewPolicyStmt.setText(policyText);
+		mTextViewPolicyStmt.setText(aPolicyRule.toString());
 		mTextViewPolicyStmt.setTextAppearance(this, android.R.style.TextAppearance_DeviceDefault_Small);
 		mTextViewPolicyStmt.setTypeface(Typeface.SERIF, Typeface.BOLD_ITALIC);
 		
-		mToggleButtons.get(mToggleButtons.size()-1).setChecked(policyValue);
+		tempToggleButton.setChecked(aPolicyRule.isPolicyRule());
+		tempToggleButton.setId(aPolicyRule.getId());
 		
 		tblRow.addView(mTextViewPolicyStmt);
-		tblRow.addView(mToggleButtons.get(mToggleButtons.size()-1));
+		tblRow.addView(tempToggleButton);
 		mTableOfPolicies.addView(tblRow);
+		
+		mToggleButtons.add(tempToggleButton);
 	}
 
 	private void addOnClickListener() {
@@ -82,23 +84,18 @@ public class PolicyRuleChooserActivity extends Activity {
 			//Button to show all the policies at the same time
 			@Override
 			public void onClick(View v) {
-				listOfPoliciesInStringForm = new ArrayList<String>();
-				for(PolicyRule aPolicyRule : listOfPolicyRules)
-					listOfPoliciesInStringForm.add(aPolicyRule.getPolicy());
 				Intent intent = new Intent(v.getContext(), DisplayAllPoliciesActivity.class);
-				intent.putStringArrayListExtra("PolicyRuleChooserActivity", listOfPoliciesInStringForm);
 				startActivity(intent);
 			}
 		});
 		
 		for(int i = 0; i < mToggleButtons.size(); i++) {
-			final int index = i;
-			mToggleButtons.get(index).setOnClickListener(new OnClickListener() {
+			mToggleButtons.get(i).setOnClickListener(new OnClickListener() {
 				//Toggle Button to identify which policy was modified
 				@Override
 				public void onClick(View v) {
 //					SPrivacyApplication.makeToast(v.getContext(), "clicked on " + listOfPolicyRules.get(index).toString());
-					togglePolicy(index);
+					togglePolicy(v.getId());
 				}
 			});
 		}
@@ -124,7 +121,8 @@ public class PolicyRuleChooserActivity extends Activity {
 	}
 	
 	private void togglePolicy(int idOfPolicy) {
-		listOfPolicyRules.get(idOfPolicy).togglePolicyRule();
-		db.updatePolicyRule(database, listOfPolicyRules.get(idOfPolicy));
+		PolicyRule temppolicyRule = db.findPolicyByID(database, idOfPolicy);
+		temppolicyRule.togglePolicyRule();
+		db.updatePolicyRule(database, temppolicyRule);
 	}
 }

@@ -254,9 +254,21 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 		return policyRules;
 	}
 	
-	public boolean findPolicy(SQLiteDatabase db, String appName, String resName) {
+	/**
+	 * Finds a policy based on the application and the resource being accessed
+	 * @param db
+	 * @param appName
+	 * @param resName
+	 * @return the policy
+	 */
+	public PolicyRule findPolicy(SQLiteDatabase db, String appName, String resName) {
 		// Select Policy Query
 		String selectQuery = "SELECT "+
+					POLICY_TABLE_NAME + "." + POLID + "," +
+					APPLICATION_TABLE_NAME + "." + APPID + "," +
+					APPLICATION_TABLE_NAME + "." + APPNAME + "," +
+					RESOURCE_TABLE_NAME + "." + RESID + "," +
+					RESOURCE_TABLE_NAME + "." + RESNAME + "," +
 					POLICY_TABLE_NAME + "." + POLICY +
 					" FROM " + 
 					POLICY_TABLE_NAME +
@@ -273,9 +285,59 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 
 		Cursor cursor = db.rawQuery(selectQuery, null);
 		cursor.moveToFirst();
-		if(cursor.getString(0).equals("1"))
-			return true;
-		return false;
+		PolicyRule policyRule = new PolicyRule();
+		policyRule.setId(Integer.parseInt(cursor.getString(0)));
+		policyRule.setAppId(Integer.parseInt(cursor.getString(1)));
+		policyRule.setAppName(cursor.getString(2));
+		policyRule.setResId(Integer.parseInt(cursor.getString(3)));
+		policyRule.setResName(cursor.getString(4));
+		if(Integer.parseInt(cursor.getString(5)) == 1)
+			policyRule.setPolicyRule(true);
+		else
+			policyRule.setPolicyRule(false);
+		return policyRule;
+	}
+	
+	/**
+	 * Finds a policy based on the policy id
+	 * @param db
+	 * @param appName
+	 * @param resName
+	 * @return the policy
+	 */
+	public PolicyRule findPolicyByID(SQLiteDatabase db, int id) {
+		// Select Policy Query
+		String selectQuery = "SELECT "+
+					POLICY_TABLE_NAME + "." + POLID + "," +
+					APPLICATION_TABLE_NAME + "." + APPID + "," +
+					APPLICATION_TABLE_NAME + "." + APPNAME + "," +
+					RESOURCE_TABLE_NAME + "." + RESID + "," +
+					RESOURCE_TABLE_NAME + "." + RESNAME + "," +
+					POLICY_TABLE_NAME + "." + POLICY +
+					" FROM " + 
+					POLICY_TABLE_NAME +
+					" LEFT JOIN " + APPLICATION_TABLE_NAME + 
+					" ON " + POLICY_TABLE_NAME + "." + POLAPPID + 
+					" = " +  APPLICATION_TABLE_NAME + "." + APPID +
+					" LEFT JOIN " + RESOURCE_TABLE_NAME + 
+					" ON " + POLICY_TABLE_NAME + "." + POLRESID + 
+					" = " +  RESOURCE_TABLE_NAME + "." + RESID + 
+					" WHERE "  +  
+					POLICY_TABLE_NAME + "." + POLID + " = " + id + ";";
+
+		Cursor cursor = db.rawQuery(selectQuery, null);
+		cursor.moveToFirst();
+		PolicyRule policyRule = new PolicyRule();
+		policyRule.setId(Integer.parseInt(cursor.getString(0)));
+		policyRule.setAppId(Integer.parseInt(cursor.getString(1)));
+		policyRule.setAppName(cursor.getString(2));
+		policyRule.setResId(Integer.parseInt(cursor.getString(3)));
+		policyRule.setResName(cursor.getString(4));
+		if(Integer.parseInt(cursor.getString(5)) == 1)
+			policyRule.setPolicyRule(true);
+		else
+			policyRule.setPolicyRule(false);
+		return policyRule;
 	}
 	
 	/**

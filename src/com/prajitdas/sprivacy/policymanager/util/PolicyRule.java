@@ -16,6 +16,11 @@ public class PolicyRule {
 	public int getId() {
 		return id;
 	}
+	public String getPolicyText() {
+		return 	appName + ", " + 
+				resName + ", " +
+				policyRule;
+	}
 	public int getResId() {
 		return resId;
 	}
@@ -43,19 +48,14 @@ public class PolicyRule {
 	public void setResName(String resName) {
 		this.resName = resName;
 	}
-	@Override
-	public String toString() {
-		return 	appName + " | " + resName;
-	}
-	public String getPolicy() {
-		return 	appName + ", " + 
-				resName + ", " +
-				policyRule;
-	}
 	public void togglePolicyRule() {
 		if(isPolicyRule())
 			setPolicyRule(false);
 		else
 			setPolicyRule(true);
+	}
+	@Override
+	public String toString() {
+		return 	appName + " | " + resName;
 	}
 }

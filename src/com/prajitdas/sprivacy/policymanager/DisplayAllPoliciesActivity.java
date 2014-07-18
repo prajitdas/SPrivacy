@@ -3,6 +3,7 @@ package com.prajitdas.sprivacy.policymanager;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.prajitdas.sprivacy.R;
+import com.prajitdas.sprivacy.policymanager.util.PolicyRule;
 
 public class DisplayAllPoliciesActivity extends Activity {
 	private ArrayList<String> listOfPoliciesInStringForm;
@@ -20,8 +22,11 @@ public class DisplayAllPoliciesActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display_all_policies);
+		PolicyDBHelper db = new PolicyDBHelper(this);
+		SQLiteDatabase database = db.getWritableDatabase();
 		listOfPoliciesInStringForm = new ArrayList<String>();
-		listOfPoliciesInStringForm.addAll(getIntent().getExtras().getStringArrayList("PolicyRuleChooserActivity"));
+		for(PolicyRule aPolicyRule : db.getAllPolicies(database))
+			listOfPoliciesInStringForm.add(aPolicyRule.getPolicyText());
 		mListViewPolicies = (ListView) findViewById(R.id.listViewPolicies);
 		mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listOfPoliciesInStringForm);
 		mListViewPolicies.setAdapter(mAdapter);
