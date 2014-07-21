@@ -76,7 +76,7 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	
 	/**
 	 * method to insert into policy table the policy
-	 * @param appId the applcation id
+	 * @param appId the application id
 	 * @param resId the resource id
 	 * @param policy the policy value
 	 */
