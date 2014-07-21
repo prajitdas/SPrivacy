@@ -48,6 +48,14 @@ public class DefaultDataLoader {
 	 * Finds all the applications on the phone and stores them in a database accessible to the whole app 
 	 */
 	private void setApplicationsList() {
+		int appCount = applications.size();
+	    for(PackageInfo pack : getContext().getPackageManager().getInstalledPackages(PackageManager.GET_SIGNATURES))
+	    	applications.add(new AppInfo(appCount++,
+	    			pack.applicationInfo.name, 
+	    			pack.packageName, 
+	    			pack.versionName, 
+	    			pack.versionCode, 
+	    			pack.applicationInfo.loadIcon(getContext().getPackageManager())));
 	}
 
 	/**
@@ -56,7 +64,7 @@ public class DefaultDataLoader {
 	public void setProviderList() {
 		ProviderInfo[] providers;
 		int providerCount = resources.size();
-		for (PackageInfo pack : getContext().getPackageManager().getInstalledPackages(PackageManager.GET_PROVIDERS)) {
+		for(PackageInfo pack : getContext().getPackageManager().getInstalledPackages(PackageManager.GET_PROVIDERS)) {
 			providers = pack.providers;
 			if (providers != null)
 				for (ProviderInfo provider : providers)
@@ -79,10 +87,12 @@ public class DefaultDataLoader {
 	 * At the moment the default policy is being loaded in a naive way have to work on this to improve it
 	 */
 	private void naiveWayToLoadData() {
-		AppInfo tempAppInfo = new AppInfo();
-
-		tempAppInfo.setId(1);
-		tempAppInfo.setName(SPrivacyApplication.getConstAppname());
+		AppInfo tempAppInfo = new AppInfo(1, 
+										SPrivacyApplication.getConstAppname(),
+										SPrivacyApplication.getConstAppname(),
+										SPrivacyApplication.getConstAppname(),
+										1,
+										SPrivacyApplication.getConstIcon());
 		applications.add(tempAppInfo);
 		
 		int count = 1;

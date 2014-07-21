@@ -3,6 +3,7 @@ package com.prajitdas.sprivacy;
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
 import android.widget.Toast;
 
 public class SPrivacyApplication extends Application {
@@ -25,6 +26,8 @@ public class SPrivacyApplication extends Application {
 	private static final String CONST_ACCESS_GRANTED = "Granted";
 	
 	private static final String CONST_ACCESS_DENIED = "Denied";
+	
+	private static final Drawable CONST_ICON = getSingleton().getApplicationContext().getResources().getDrawable(R.drawable.android);
 
 	private static SPrivacyApplication singleton;
 	
@@ -99,5 +102,9 @@ public class SPrivacyApplication extends Application {
 
 	public static String getConstAccessGranted() {
 		return CONST_ACCESS_GRANTED;
+	}
+
+	public static Drawable getConstIcon() {
+		return CONST_ICON;
 	}
 }
