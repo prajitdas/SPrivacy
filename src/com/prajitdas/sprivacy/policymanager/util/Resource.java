@@ -3,6 +3,10 @@ package com.prajitdas.sprivacy.policymanager.util;
 public class Resource {
 	private int id;
 	private String name;
+	public Resource(int id, String resName) {
+		setId(id);
+		setName(resName);
+	}
 	public int getId() {
 		return id;
 	}

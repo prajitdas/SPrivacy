@@ -9,8 +9,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.prajitdas.sprivacy.SPrivacyApplication;
 import com.prajitdas.sprivacy.policymanager.util.AppInfo;
+import com.prajitdas.sprivacy.policymanager.util.DefaultDataLoader;
 import com.prajitdas.sprivacy.policymanager.util.PolicyRule;
 import com.prajitdas.sprivacy.policymanager.util.Resource;
 
@@ -36,13 +36,20 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	private final static String RESOURCE_TABLE_NAME = "resources";
 	private final static String POLICY_TABLE_NAME = "policies";
 
+	/**
+	 * The applications installed on the phone
+	 */
 	private final static String CREATE_APPLICATION_TABLE = " CREATE TABLE " + APPLICATION_TABLE_NAME + " (" + 
 			APPID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
 			APPNAME + " TEXT NOT NULL UNIQUE);";
 	
+	/**
+	 * The resources that are accessible on the phone
+	 */
 	private final static String CREATE_RESOURCE_TABLE =  " CREATE TABLE " + RESOURCE_TABLE_NAME + " (" + 
 			RESID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
 			RESNAME + " TEXT NOT NULL UNIQUE);";
+
 	/**
 	 *  A value of 1 in the policy column refers to a policy of access granted
 	 *  A value of 0 in the policy column refers to a policy of access denied
@@ -56,8 +63,8 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 			POLID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
 			POLAPPID + " INTEGER NOT NULL REFERENCES applications(id) ON DELETE CASCADE, " +
 			POLRESID + " INTEGER NOT NULL REFERENCES resources(id) ON DELETE CASCADE, " +
-			POLICY + " INTEGER DEFAULT 1" +
-			ACCESSLVL + "INTEGER DEFAULT 0);";
+			POLICY + " INTEGER DEFAULT 1, " +
+			ACCESSLVL + " INTEGER DEFAULT 0);";
 	
 	
 	private static DefaultDataLoader defaultDataLoader;
@@ -68,7 +75,7 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	 */
 	public PolicyDBHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
-		defaultDataLoader = new DefaultDataLoader();
+		defaultDataLoader = new DefaultDataLoader(context);
 	}
 
 	/**
@@ -349,84 +356,5 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 		else
 			policyRule.setPolicyRule(false);
 		return policyRule;
-	}
-	
-	/**
-	 * Class that loads the default policies from network or other sources into an ArrayList of PolicyRule
-	 * @TODO This class needs to be modified in order to fix how the default policies are loaded.
-	 */
-	class DefaultDataLoader {			
-		private ArrayList<AppInfo> applications;
-
-		private ArrayList<Resource> resources;
-
-		private ArrayList<PolicyRule> policies;
-
-		public DefaultDataLoader() {
-			applications = new ArrayList<AppInfo>();
-			resources = new ArrayList<Resource>();
-			policies = new ArrayList<PolicyRule>();
-			naiveWayToLoadData();
-		}
-
-		public ArrayList<AppInfo> getApplications() {
-			return applications;
-		}
-
-		public ArrayList<PolicyRule> getPolicies() {
-			return policies;
-		}
-
-		public ArrayList<Resource> getResources() {
-			return resources;
-		}
-		/**
-		 * At the moment the default policy is being loaded in a naive way have to work on this to improve it
-		 */
-		private void naiveWayToLoadData() {
-			AppInfo tempAppInfo = new AppInfo();
-
-			tempAppInfo.setId(1);
-			tempAppInfo.setName(SPrivacyApplication.getConstAppname());
-			applications.add(tempAppInfo);
-			
-			int count = 1;
-			setValues(count, SPrivacyApplication.getConstImages(), tempAppInfo);
-			count++;
-			setValues(count, SPrivacyApplication.getConstFiles(), tempAppInfo);
-			count++;
-			setValues(count, SPrivacyApplication.getConstVideos(), tempAppInfo);
-			count++;
-			setValues(count, SPrivacyApplication.getConstAudios(), tempAppInfo);
-			count++;
-			setValues(count, SPrivacyApplication.getConstContacts(), tempAppInfo);
-			count++;
-		}
-		public void setApplications(ArrayList<AppInfo> applications) {
-			this.applications = applications;
-		}
-		
-		public void setPolicies(ArrayList<PolicyRule> policies) {
-			this.policies = policies;
-		}
-
-		public void setResources(ArrayList<Resource> resources) {
-			this.resources = resources;
-		}
-		private void setValues(int id, String resource, AppInfo anAppInfo) {
-			Resource tempRes = new Resource();
-			PolicyRule tempPolicy = new PolicyRule();
-			tempRes.setId(id);
-			tempRes.setName(resource);
-			resources.add(tempRes);
-			
-			tempPolicy.setId(id);
-		    tempPolicy.setPolicyRule(true);
-			tempPolicy.setAppId(anAppInfo.getId());
-			tempPolicy.setAppName(anAppInfo.getName());
-			tempPolicy.setResId(tempRes.getId());
-		    tempPolicy.setResName(tempRes.getName());
-			policies.add(tempPolicy);
-		}
 	}
 }
