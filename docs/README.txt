@@ -1,7 +1,6 @@
+July 21, 2014
 
-November 21, 2012
-
-IEEEtran.cls version 1.8 revises format specifications so that the final
+IEEEtran.cls version 1.8-(modification Prajit) revises format specifications so that the final
 layout more closely matches the layout of the Microsoft Word templates.
 
 Additionally, the IEEEtran_HOWTO.pdf now includes the notice to not use
@@ -97,16 +96,6 @@ IEEEtran_HOWTO.pdf     - The IEEEtran LaTeX class user manual.
 
 bare_conf.tex          - A bare bones starter file for conference papers.
 
-bare_jrnl.tex          - A bare bones starter file for journal papers.
-
-bare_jrnl_compsoc.tex  - A bare bones starter file for Computer Society
-                         journal papers.
-
-bare_adv.tex           - A bare bones starter file showing advanced
-                         techniques such as conditional compilation,
-                         hyperlinks, PDF thumbnails, etc. The illustrated
-                         format is for a Computer Society journal paper.
-
 ***************************************************************************
 Legal Notice:
 This code is offered as-is without any warranty either expressed or
@@ -130,6 +119,5 @@ Retain all contribution notices and credits.
 ** Modified files should be clearly indicated as such, including  **
 ** renaming them and changing author support contact information. **
 
-File list of work: IEEEtran.cls, IEEEtran_HOWTO.pdf, bare_adv.tex,
-                   bare_conf.tex, bare_jrnl.tex, bare_jrnl_compsoc.tex
+File list of work: IEEEtran.cls, IEEEtran_HOWTO.pdf, bare_conf.tex
 ***************************************************************************
