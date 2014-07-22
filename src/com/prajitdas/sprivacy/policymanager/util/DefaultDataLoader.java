@@ -71,7 +71,7 @@ public class DefaultDataLoader {
 	/**
 	 * Finds all the content providers on the phone and stores them in a database accessible to the whole app 
 	 */
-	public void setProviderList() {
+	private void setProviderList() {
 		ProviderInfo[] providers;
 		int providerCount = resources.size();
 		for(PackageInfo pack : getContext().getPackageManager().getInstalledPackages(PackageManager.GET_PROVIDERS)) {
