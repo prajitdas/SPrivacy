@@ -56,6 +56,7 @@ public class PolicyRuleChooserActivity extends Activity {
 	
 	@Override
 	protected void onDestroy() {
+		super.onDestroy();
 //		Connector.getInstance().unregisterDatabase(this, SPrivacyApplication.getConstDbkey(), db.getDatabaseName());
 	}
 
