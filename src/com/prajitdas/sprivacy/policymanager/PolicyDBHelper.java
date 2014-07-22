@@ -66,7 +66,6 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 			POLICY + " INTEGER DEFAULT 1, " +
 			ACCESSLVL + " INTEGER DEFAULT 0);";
 	
-	
 	private static DefaultDataLoader defaultDataLoader;
 	
 	/**
@@ -356,5 +355,9 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 		else
 			policyRule.setPolicyRule(false);
 		return policyRule;
+	}
+	
+	public String getDatabaseName() {
+		return DATABASE_NAME;
 	}
 }
