@@ -7,6 +7,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
 
+import com.prajitdas.sprivacy.R;
 import com.prajitdas.sprivacy.SPrivacyApplication;
 
 /**
@@ -49,13 +50,22 @@ public class DefaultDataLoader {
 	 */
 	private void setApplicationsList() {
 		int appCount = applications.size();
-	    for(PackageInfo pack : getContext().getPackageManager().getInstalledPackages(PackageManager.GET_SIGNATURES))
-	    	applications.add(new AppInfo(appCount++,
-	    			pack.applicationInfo.name, 
-	    			pack.packageName, 
-	    			pack.versionName, 
-	    			pack.versionCode, 
-	    			pack.applicationInfo.loadIcon(getContext().getPackageManager())));
+	    for(PackageInfo pack : getContext().getPackageManager().getInstalledPackages(PackageManager.GET_SIGNATURES)) {
+	    	if(pack.applicationInfo.name != null)
+	    		applications.add(new AppInfo(appCount++,
+	    				pack.applicationInfo.name, 
+		    			pack.packageName, 
+		    			pack.versionName, 
+		    			pack.versionCode, 
+		    			pack.applicationInfo.loadIcon(getContext().getPackageManager())));
+	    	else
+	    		applications.add(new AppInfo(appCount++,
+	    				"", 
+		    			pack.packageName, 
+		    			pack.versionName, 
+		    			pack.versionCode, 
+		    			pack.applicationInfo.loadIcon(getContext().getPackageManager())));
+	    }
 	}
 
 	/**
@@ -92,7 +102,7 @@ public class DefaultDataLoader {
 										SPrivacyApplication.getConstAppname(),
 										SPrivacyApplication.getConstAppname(),
 										1,
-										SPrivacyApplication.getConstIcon());
+										getContext().getResources().getDrawable(R.drawable.android));
 		applications.add(tempAppInfo);
 		
 		int count = 1;
