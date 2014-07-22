@@ -18,7 +18,6 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.peculiarcat.sqlmaid.Connector;
 import com.prajitdas.sprivacy.R;
 import com.prajitdas.sprivacy.SPrivacyApplication;
 import com.prajitdas.sprivacy.policymanager.util.PolicyRule;
@@ -37,7 +36,7 @@ public class PolicyRuleChooserActivity extends Activity {
 		mToggleButtons = new ArrayList<ToggleButton>();
 		db = new PolicyDBHelper(this);
 		database = db.getWritableDatabase();
-		Connector.getInstance().registerDatabase(this, SPrivacyApplication.getConstDbkey(), db.getDatabaseName());
+//		Connector.getInstance().registerDatabase(this, SPrivacyApplication.getConstDbkey(), db.getDatabaseName());
 		
 		instantiateViews();
 		addOnClickListener();
@@ -57,7 +56,7 @@ public class PolicyRuleChooserActivity extends Activity {
 	
 	@Override
 	protected void onDestroy() {
-		Connector.getInstance().unregisterDatabase(this, SPrivacyApplication.getConstDbkey(), db.getDatabaseName());
+//		Connector.getInstance().unregisterDatabase(this, SPrivacyApplication.getConstDbkey(), db.getDatabaseName());
 	}
 
 	private void instantiateViews() {

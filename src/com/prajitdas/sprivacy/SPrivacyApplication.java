@@ -26,7 +26,7 @@ public class SPrivacyApplication extends Application {
 	
 	private static final String CONST_ACCESS_DENIED = "Denied";
 	
-	private static final String CONST_DBKEY = "dbkeySPrivacy";
+//	private static final String CONST_DBKEY = "dbkeySPrivacy";
 	
 	private static SPrivacyApplication singleton;
 	
@@ -103,7 +103,7 @@ public class SPrivacyApplication extends Application {
 		return CONST_ACCESS_GRANTED;
 	}
 
-	public static String getConstDbkey() {
-		return CONST_DBKEY;
-	}
+//	public static String getConstDbkey() {
+//		return CONST_DBKEY;
+//	}
 }
