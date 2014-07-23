@@ -10,3 +10,5 @@ Traditional solution(s) for controlling user data privacy on mobile devices have
 \end{enumerate}
 
 We argue that both these techniques potentially create loopholes which might be used by a malicious app towards its own untoward actions. Our proposed mechanism allows us to have no changes on the operating systems but at the same time allows us to control the data that an app can access on the device. We achieve this by implementing SPrivacy which is a middle-ware that is capable, based on a list of settings and a URI redirection mechanism, of controlling the data app(s) get. In our mechanism we take apps from the Android app market and modify the Content Provider URIs they use in order to ensure they call our middle-ware instead. Our middle-ware on then determines if the app will be given access to the data or not.
+
+\section{System Design and Architecture}
