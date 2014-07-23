@@ -12,11 +12,11 @@ import android.widget.ListView;
 
 import com.prajitdas.sprivacy.R;
 import com.prajitdas.sprivacy.policymanager.PolicyDBHelper;
-import com.prajitdas.sprivacy.policymanager.util.PolicyRule;
+import com.prajitdas.sprivacy.policymanager.util.Resource;
 
 public class DisplayAllProvidersActivity extends Activity {
-	private ArrayList<String> listOfPoliciesInStringForm;
-	private ListView mListViewPolicies;
+	private ArrayList<String> listOfResources;
+	private ListView mListView;
 	private ArrayAdapter<String> mAdapter;
 	private PolicyDBHelper db;
 	private SQLiteDatabase database; 
@@ -27,16 +27,16 @@ public class DisplayAllProvidersActivity extends Activity {
 		setContentView(R.layout.activity_display_all_policies);
 		db = new PolicyDBHelper(this);
 		database = db.getWritableDatabase();
-		listOfPoliciesInStringForm = new ArrayList<String>();
-		for(PolicyRule aPolicyRule : db.getAllPolicies(database))
-			listOfPoliciesInStringForm.add(aPolicyRule.getPolicyText());
-		loadView(listOfPoliciesInStringForm);
+		listOfResources = new ArrayList<String>();
+		for(Resource aResource : db.getAllProviders(database))
+			listOfResources.add(aResource.toString());
+		loadView(listOfResources);
 	}
 
 	private void loadView(ArrayList<String> list) {
-		mListViewPolicies = (ListView) findViewById(R.id.listViewPolicies);
+		mListView = (ListView) findViewById(R.id.listViewPolicies);
 		mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
-		mListViewPolicies.setAdapter(mAdapter);
+		mListView.setAdapter(mAdapter);
 	}
 
 	@Override

@@ -33,7 +33,7 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	// database declarations
 	private final static String DATABASE_NAME = "PrivacyPolicies";
 	private final static int DATABASE_VERSION = 1;
-	
+
 	private final static String APPLICATION_TABLE_NAME = "applications";
 	private final static String RESOURCE_TABLE_NAME = "resources";
 	private final static String POLICY_TABLE_NAME = "policies";
@@ -310,6 +310,68 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 		return policyRules;
 	}
 	
+	/**
+	 * Getting all policies
+	 * @return returns a list of policies
+	 */
+	public ArrayList<Resource> getAllProviders(SQLiteDatabase db) {
+		ArrayList<Resource> providers = new ArrayList<Resource>();
+		// Select All Query
+		String selectQuery = "SELECT * FROM " + RESOURCE_TABLE_NAME + ";";
+
+		Cursor cursor = db.rawQuery(selectQuery, null);
+
+		// looping through all rows and adding to list
+		if (cursor.moveToFirst()) {
+			do {
+				Resource resource = new Resource(Integer.parseInt(cursor.getString(0)),cursor.getString(1));
+//				policyRule.setAppName(cursor.getString(2));
+//				policyRule.setResId(Integer.parseInt(cursor.getString(3)));
+//				policyRule.setResName(cursor.getString(4));
+//				if(Integer.parseInt(cursor.getString(5)) == 1)
+//					policyRule.setPolicyRule(true);
+//				else
+//					policyRule.setPolicyRule(false);
+				// Adding policies to list
+				providers.add(resource);
+			} while (cursor.moveToNext());
+		}
+
+		// return policy rules list
+		return providers;
+	}
+
+	/**
+	 * Getting all policies
+	 * @return returns a list of policies
+	 */
+	public ArrayList<AppInfo> getAllApplications(SQLiteDatabase db) {
+		ArrayList<AppInfo> apps = new ArrayList<AppInfo>();
+		// Select All Query
+		String selectQuery = "SELECT * FROM " + APPLICATION_TABLE_NAME + ";";
+
+		Cursor cursor = db.rawQuery(selectQuery, null);
+
+		// looping through all rows and adding to list
+		if (cursor.moveToFirst()) {
+			do {
+				AppInfo app = new AppInfo(Integer.parseInt(cursor.getString(0)),cursor.getString(1));
+//				policyRule.setAppName(cursor.getString(2));
+//				policyRule.setResId(Integer.parseInt(cursor.getString(3)));
+//				policyRule.setResName(cursor.getString(4));
+//				if(Integer.parseInt(cursor.getString(5)) == 1)
+//					policyRule.setPolicyRule(true);
+//				else
+//					policyRule.setPolicyRule(false);
+				// Adding application to list
+				apps.add(app);
+			} while (cursor.moveToNext());
+		}
+
+		// return applications list
+		return apps;
+	}
+
 	public String getDatabaseName() {
 		return DATABASE_NAME;
 	}
@@ -318,7 +380,7 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	 * method to load the default set of policies into the database
 	 * @param db reference to the db instance
 	 */
-	private void loadDefaultPoliciesIntoDB(SQLiteDatabase db) {
+	public void loadDefaultPoliciesIntoDB(SQLiteDatabase db) {
 		defaultDataLoader = new DefaultDataLoader(getContext());
 		//loads the applications
 		for(AppInfo anAppInfo : defaultDataLoader.getApplications())
@@ -344,6 +406,16 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 		loadDefaultPoliciesIntoDB(db);
 	}
 
+	/**
+	 * Method to delete all data from the database; Very dangerous
+	 * @param db
+	 */
+	public void deleteAllData(SQLiteDatabase db) {
+		db.execSQL("delete from " + APPLICATION_TABLE_NAME + ";");
+		db.execSQL("delete from " + RESOURCE_TABLE_NAME + ";");
+		db.execSQL("delete from " + POLICY_TABLE_NAME + ";");
+	}
+	
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		Log.w(PolicyDBHelper.class.getName(), 
@@ -399,5 +471,9 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 
 	public void setContext(Context context) {
 		this.context = context;
+	}
+	
+	public static int getDatabaseVersion() {
+		return DATABASE_VERSION;
 	}
 }

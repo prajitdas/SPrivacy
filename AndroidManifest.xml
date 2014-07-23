@@ -20,36 +20,36 @@
     <!-- Unusual but true! -->
 
     <application
+        android:name=".SPrivacyApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        android:name="com.prajitdas.sprivacy.SPrivacyApplication" >
+        android:theme="@style/AppTheme" >
         <activity
-            android:name="com.prajitdas.sprivacy.policymanager.activities.PolicyRuleChooserActivity"
+            android:name=".policymanager.activities.PolicyRuleChooserActivity"
             android:label="@string/policy_chooser_activity_name" >
-            <intent-filter android:label="@string/app_name">
+            <intent-filter android:label="@string/app_name" >
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="com.prajitdas.sprivacy.policymanager.activities.DisplayAllPoliciesActivity"
+            android:name=".policymanager.activities.DisplayAllPoliciesActivity"
             android:label="@string/title_activity_display_all_policies" >
         </activity>
-
         <activity
-            android:name="com.prajitdas.sprivacy.policymanager.activities.DisplayAllProvidersActivity"
+            android:name=".policymanager.activities.DisplayAllProvidersActivity"
             android:label="@string/title_activity_display_all_providers" >
         </activity>
-
         <activity
-            android:name="com.prajitdas.sprivacy.policymanager.activities.DisplayAllApplicationsActivity"
+            android:name=".policymanager.activities.DisplayAllApplicationsActivity"
             android:label="@string/title_activity_display_all_applications" >
         </activity>
-
+        <activity
+            android:name=".policymanager.activities.DBOpsActivity"
+            android:label="@string/title_activity_dbops" >
+        </activity>
         <provider
             android:name=".contentprovider.SContentProvider"
             android:authorities="com.prajitdas.sprivacy.contentprovider.Content"
@@ -57,7 +57,6 @@
             android:label="@string/content_provider_label"
             android:permission="android.permission.sprivacy.READ_WRITE_CONTENT" >
         </provider>
-
-	</application>
+    </application>
 
 </manifest>

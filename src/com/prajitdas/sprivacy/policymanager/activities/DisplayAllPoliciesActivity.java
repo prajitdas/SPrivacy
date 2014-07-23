@@ -16,7 +16,7 @@ import com.prajitdas.sprivacy.policymanager.util.PolicyRule;
 
 public class DisplayAllPoliciesActivity extends Activity {
 	private ArrayList<String> listOfPoliciesInStringForm;
-	private ListView mListViewPolicies;
+	private ListView mListView;
 	private ArrayAdapter<String> mAdapter;
 	private PolicyDBHelper db;
 	private SQLiteDatabase database; 
@@ -34,9 +34,9 @@ public class DisplayAllPoliciesActivity extends Activity {
 	}
 
 	private void loadView(ArrayList<String> list) {
-		mListViewPolicies = (ListView) findViewById(R.id.listViewPolicies);
+		mListView = (ListView) findViewById(R.id.listViewPolicies);
 		mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
-		mListViewPolicies.setAdapter(mAdapter);
+		mListView.setAdapter(mAdapter);
 	}
 
 	@Override

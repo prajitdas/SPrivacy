@@ -7,7 +7,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
 
-import com.prajitdas.sprivacy.R;
 import com.prajitdas.sprivacy.SPrivacyApplication;
 
 /**
@@ -51,20 +50,22 @@ public class DefaultDataLoader {
 	private void setApplicationsList() {
 		int appCount = applications.size();
 	    for(PackageInfo pack : getContext().getPackageManager().getInstalledPackages(PackageManager.GET_SIGNATURES)) {
-	    	if(pack.applicationInfo.name != null)
+	    	if(pack.applicationInfo.name != null) {
 	    		applications.add(new AppInfo(appCount++,
-	    				pack.applicationInfo.name, 
-		    			pack.packageName, 
-		    			pack.versionName, 
-		    			pack.versionCode, 
-		    			pack.applicationInfo.loadIcon(getContext().getPackageManager())));
-	    	else
+	    				pack.applicationInfo.name));//, 
+//		    			pack.packageName, 
+//		    			pack.versionName, 
+//		    			pack.versionCode, 
+//		    			pack.applicationInfo.loadIcon(getContext().getPackageManager())));
+	    	}
+	    	else {
 	    		applications.add(new AppInfo(appCount++,
-	    				"", 
-		    			pack.packageName, 
-		    			pack.versionName, 
-		    			pack.versionCode, 
-		    			pack.applicationInfo.loadIcon(getContext().getPackageManager())));
+	    				""));//, 
+//		    			pack.packageName, 
+//		    			pack.versionName, 
+//		    			pack.versionCode, 
+//		    			pack.applicationInfo.loadIcon(getContext().getPackageManager())));
+	    	}
 	    }
 	}
 
@@ -78,7 +79,7 @@ public class DefaultDataLoader {
 			providers = pack.providers;
 			if (providers != null)
 				for (ProviderInfo provider : providers)
-					resources.add(new Resource(providerCount++, provider.name));
+					resources.add(new Resource(providerCount++, provider.packageName));
 		}
 	}
 	
@@ -98,11 +99,11 @@ public class DefaultDataLoader {
 	 */
 	private void naiveWayToLoadData() {
 		AppInfo tempAppInfo = new AppInfo(1, 
-										SPrivacyApplication.getConstAppname(),
-										SPrivacyApplication.getConstAppname(),
-										SPrivacyApplication.getConstAppname(),
-										1,
-										getContext().getResources().getDrawable(R.drawable.android));
+										SPrivacyApplication.getConstAppname());//,
+//										SPrivacyApplication.getConstAppname(),
+//										SPrivacyApplication.getConstAppname(),
+//										1,
+//										getContext().getResources().getDrawable(R.drawable.android));
 		applications.add(tempAppInfo);
 		
 		int count = 1;
