@@ -1,4 +1,4 @@
-package com.prajitdas.sprivacy.policymanager;
+package com.prajitdas.sprivacy.policymanager.activities;
 
 import java.util.ArrayList;
 
@@ -20,11 +20,14 @@ import android.widget.ToggleButton;
 
 import com.prajitdas.sprivacy.R;
 import com.prajitdas.sprivacy.SPrivacyApplication;
+import com.prajitdas.sprivacy.policymanager.PolicyDBHelper;
 import com.prajitdas.sprivacy.policymanager.util.PolicyRule;
 
 public class PolicyRuleChooserActivity extends Activity {
 	private TableLayout mTableOfPolicies;
 	private Button mBtnShowAllPolicies;
+	private Button mBtnShowAllApplications;
+	private Button mBtnShowAllProviders;
 	private PolicyDBHelper db;
 	private SQLiteDatabase database;
 	private ArrayList<ToggleButton> mToggleButtons;
@@ -61,7 +64,9 @@ public class PolicyRuleChooserActivity extends Activity {
 	}
 
 	private void instantiateViews() {
-		mBtnShowAllPolicies = (Button) findViewById(R.id.btnShow);
+		mBtnShowAllPolicies = (Button) findViewById(R.id.btnShowPols);
+		mBtnShowAllApplications = (Button) findViewById(R.id.btnShowApps);
+		mBtnShowAllProviders  = (Button) findViewById(R.id.btnShowPros);
 		mTableOfPolicies = (TableLayout) findViewById(R.id.tableOfPolicies);
 		addTableRow();
 		addTableRow(db.findPolicy(database, SPrivacyApplication.getConstAppname(), SPrivacyApplication.getConstImages()));
@@ -115,6 +120,24 @@ public class PolicyRuleChooserActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(v.getContext(), DisplayAllPoliciesActivity.class);
+				startActivity(intent);
+			}
+		});
+		
+		mBtnShowAllApplications.setOnClickListener(new OnClickListener() {
+			//Button to show all the policies at the same time
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(v.getContext(), DisplayAllApplicationsActivity.class);
+				startActivity(intent);
+			}
+		});
+
+		mBtnShowAllProviders.setOnClickListener(new OnClickListener() {
+			//Button to show all the policies at the same time
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(v.getContext(), DisplayAllProvidersActivity.class);
 				startActivity(intent);
 			}
 		});

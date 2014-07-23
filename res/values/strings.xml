@@ -13,13 +13,17 @@
     <string name="policy_chooser_activity_name">Policy Chooser</string>
     <string name="policy_provider_label">Policy Provider</string>
     <string name="content_provider_label">Content Provider</string>
-    <string name="show">Show All Policies</string>
+    <string name="showPols">Show All Policies</string>
+    <string name="showApps">Show All Applications</string>
+    <string name="showPros">Show All Providers</string>
     <string name="defaultText">Default Text</string>
     <string name="sprivacy_read_permission_description">Permission to read the privacy policies stored by SPrivacy Control</string>
     <string name="sprivacy_read_permission_label">SPrivacy Read Permission</string>
     <string name="sprivacy_write_permission_description">Permission to write the privacy policies stored by SPrivacy Control</string>
     <string name="sprivacy_write_permission_label">SPrivacy Write Permission</string>
     <string name="title_activity_display_all_policies">All Device Policies</string>
+    <string name="title_activity_display_all_providers">All Device Providers</string>
+    <string name="title_activity_display_all_applications">All Device Applications</string>
     <string name="text_view_policy_conditions">Policy Conditions</string>
     <string name="text_view_policy_setting">Policy Setting</string>
     

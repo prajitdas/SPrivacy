@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.prajitdas.sprivacy.policymanager.DisplayAllPoliciesActivity" >
+    tools:context="com.prajitdas.sprivacy.policymanager.activities.DisplayAllPoliciesActivity" >
 
     <item
         android:id="@+id/action_settings"

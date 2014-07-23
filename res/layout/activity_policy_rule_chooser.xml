@@ -7,25 +7,40 @@
         android:id="@+id/tableOfPolicies"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_above="@+id/btnShowPols"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:gravity="center_horizontal"
         android:paddingBottom="10dp"
-        android:paddingTop="10dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:gravity="center_horizontal"
-        android:layout_above="@+id/btnShow"
-        android:stretchColumns="*"
- 		android:shrinkColumns="*" />
+        android:paddingTop="10dp"
+        android:shrinkColumns="*"
+        android:stretchColumns="*" />
 
 	<Button
-        android:id="@+id/btnShow"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:text="@string/show" />
+	    android:id="@+id/btnShowPols"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_above="@+id/btnShowApps"
+	    android:layout_alignParentLeft="true"
+	    android:text="@string/showPols" />
+
+	<Button
+	    android:id="@+id/btnShowApps"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_above="@+id/btnShowPros"
+	    android:layout_alignParentLeft="true"
+	    android:text="@string/showApps" />
+
+	<Button
+	    android:id="@+id/btnShowPros"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true"
+	    android:layout_alignParentLeft="true"
+	    android:text="@string/showPros" />
 
 </RelativeLayout>

@@ -1,4 +1,4 @@
-package com.prajitdas.sprivacy.policymanager;
+package com.prajitdas.sprivacy.policymanager.activities;
 
 import java.util.ArrayList;
 
@@ -11,9 +11,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.prajitdas.sprivacy.R;
+import com.prajitdas.sprivacy.policymanager.PolicyDBHelper;
 import com.prajitdas.sprivacy.policymanager.util.PolicyRule;
 
-public class DisplayAllPoliciesActivity extends Activity {
+public class DisplayAllApplicationsActivity extends Activity {
 	private ArrayList<String> listOfPoliciesInStringForm;
 	private ListView mListViewPolicies;
 	private ArrayAdapter<String> mAdapter;
@@ -37,7 +38,6 @@ public class DisplayAllPoliciesActivity extends Activity {
 		mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
 		mListViewPolicies.setAdapter(mAdapter);
 	}
-
 	
 	@Override
 	protected void onResume() {

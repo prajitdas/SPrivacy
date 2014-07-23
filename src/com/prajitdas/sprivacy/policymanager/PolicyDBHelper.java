@@ -37,6 +37,8 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	private final static String APPLICATION_TABLE_NAME = "applications";
 	private final static String RESOURCE_TABLE_NAME = "resources";
 	private final static String POLICY_TABLE_NAME = "policies";
+	
+	private Context context;
 
 	/**
 	 * The applications installed on the phone
@@ -80,7 +82,7 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	 */
 	public PolicyDBHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
-		defaultDataLoader = new DefaultDataLoader(context);
+		this.setContext(context); 
 	}
 
 	/**
@@ -317,6 +319,7 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	 * @param db reference to the db instance
 	 */
 	private void loadDefaultPoliciesIntoDB(SQLiteDatabase db) {
+		defaultDataLoader = new DefaultDataLoader(getContext());
 		//loads the applications
 		for(AppInfo anAppInfo : defaultDataLoader.getApplications())
 			addApplication(db, anAppInfo);
@@ -388,5 +391,13 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 		values.put(RESNAME, aResource.getName());
 		return db.update(RESOURCE_TABLE_NAME, values, RESID + " = ?", 
 				new String[] { String.valueOf(aResource.getId()) });
+	}
+
+	public Context getContext() {
+		return context;
+	}
+
+	public void setContext(Context context) {
+		this.context = context;
 	}
 }
