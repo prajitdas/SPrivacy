@@ -17,21 +17,40 @@ public class DisplayAllPoliciesActivity extends Activity {
 	private ArrayList<String> listOfPoliciesInStringForm;
 	private ListView mListViewPolicies;
 	private ArrayAdapter<String> mAdapter;
+	private PolicyDBHelper db;
+	private SQLiteDatabase database; 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display_all_policies);
-		PolicyDBHelper db = new PolicyDBHelper(this);
-		SQLiteDatabase database = db.getWritableDatabase();
+		db = new PolicyDBHelper(this);
+		database = db.getWritableDatabase();
 		listOfPoliciesInStringForm = new ArrayList<String>();
 		for(PolicyRule aPolicyRule : db.getAllPolicies(database))
 			listOfPoliciesInStringForm.add(aPolicyRule.getPolicyText());
+		loadView(listOfPoliciesInStringForm);
+	}
+
+	private void loadView(ArrayList<String> list) {
 		mListViewPolicies = (ListView) findViewById(R.id.listViewPolicies);
-		mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listOfPoliciesInStringForm);
+		mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
 		mListViewPolicies.setAdapter(mAdapter);
 	}
 
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		database = db.getWritableDatabase();
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		db.close();
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
