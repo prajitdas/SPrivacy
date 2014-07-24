@@ -28,7 +28,7 @@ public class DisplayAllProvidersActivity extends Activity {
 		db = new PolicyDBHelper(this);
 		database = db.getWritableDatabase();
 		listOfResources = new ArrayList<String>();
-		for(Resource aResource : db.getAllProviders(database))
+		for(Resource aResource : db.findAllProviders(database))
 			listOfResources.add(aResource.toString());
 		loadView(listOfResources);
 	}

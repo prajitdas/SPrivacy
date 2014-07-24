@@ -28,7 +28,7 @@ public class DisplayAllPoliciesActivity extends Activity {
 		db = new PolicyDBHelper(this);
 		database = db.getWritableDatabase();
 		listOfPoliciesInStringForm = new ArrayList<String>();
-		for(PolicyRule aPolicyRule : db.getAllPolicies(database))
+		for(PolicyRule aPolicyRule : db.findAllPolicies(database))
 			listOfPoliciesInStringForm.add(aPolicyRule.getPolicyText());
 		loadView(listOfPoliciesInStringForm);
 	}

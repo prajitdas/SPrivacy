@@ -28,7 +28,7 @@ public class DisplayAllApplicationsActivity extends Activity {
 		db = new PolicyDBHelper(this);
 		database = db.getWritableDatabase();
 		listOfApplications = new ArrayList<String>();
-		for(AppInfo anApp : db.getAllApplications(database))
+		for(AppInfo anApp : db.findAllApplications(database))
 			listOfApplications.add(anApp.toString());
 		loadView(listOfApplications);
 	}

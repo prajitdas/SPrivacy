@@ -30,5 +30,8 @@
     <string name="title_activity_dbops">Database Operations</string>
     <string name="text_view_policy_conditions">Policy Conditions</string>
     <string name="text_view_policy_setting">Policy Setting</string>
-
+    <string name="dialog_delete_data">Delete All Data?</string>
+    <string name="dialog_resp_delete">Sure delete em!</string>
+    <string name="dialog_resp_NO">Hell no!</string>
+    
 </resources>

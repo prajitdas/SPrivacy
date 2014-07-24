@@ -4,14 +4,17 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -29,6 +32,7 @@ public class PolicyRuleChooserActivity extends Activity {
 	private PolicyDBHelper db;
 	private SQLiteDatabase database;
 	private ArrayList<ToggleButton> mToggleButtons;
+	private static final int DATA_MODIFIED = 1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +42,6 @@ public class PolicyRuleChooserActivity extends Activity {
 		db = new PolicyDBHelper(this);
 		database = db.getWritableDatabase();
 //		Connector.getInstance().registerDatabase(this, SPrivacyApplication.getConstDbkey(), db.getDatabaseName());
-		
 		instantiateViews();
 		addOnClickListener();
 	}
@@ -65,9 +68,15 @@ public class PolicyRuleChooserActivity extends Activity {
 		mBtnDBOps = (Button) findViewById(R.id.btnDBOps);
 		mTableOfPolicies = (TableLayout) findViewById(R.id.tableOfPolicies);
 		addTableRow();
-		addTableRow(db.findPolicy(database, SPrivacyApplication.getConstAppname(), SPrivacyApplication.getConstImages()));
-		addTableRow(db.findPolicy(database, SPrivacyApplication.getConstAppname(), SPrivacyApplication.getConstFiles()));
-		addTableRow(db.findPolicy(database, SPrivacyApplication.getConstAppname(), SPrivacyApplication.getConstContacts()));
+		try {
+			addTableRow(db.findPolicy(database, SPrivacyApplication.getConstAppname(), SPrivacyApplication.getConstImages()));
+			addTableRow(db.findPolicy(database, SPrivacyApplication.getConstAppname(), SPrivacyApplication.getConstFiles()));
+			addTableRow(db.findPolicy(database, SPrivacyApplication.getConstAppname(), SPrivacyApplication.getConstContacts()));
+		} catch(SQLException e) {
+			SPrivacyApplication.makeToast(this, "Seems like there is no data in the database");
+			SPrivacyApplication.setDeleted(true);
+			mBtnDBOps.performClick();
+		}
 	}
 
 	private void addTableRow(PolicyRule aPolicyRule) {
@@ -112,11 +121,12 @@ public class PolicyRuleChooserActivity extends Activity {
 
 	private void addOnClickListener() {
 		mBtnDBOps.setOnClickListener(new OnClickListener() {
+
 			//Button to show all the policies at the same time
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(v.getContext(), DBOpsActivity.class);
-				startActivity(intent);
+				startActivityForResult(intent, DATA_MODIFIED);
 			}
 		});
 		
@@ -129,6 +139,26 @@ public class PolicyRuleChooserActivity extends Activity {
 					togglePolicy(v.getId());
 				}
 			});
+		}
+	}
+	
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Log.v(SPrivacyApplication.getDebugTag(), "Came into db onActivityResult" 
+				+ ", " + Integer.toString(requestCode)
+				+ ", " + Integer.toString(resultCode)
+				+ ", " + Activity.RESULT_OK
+				+ ", " + Activity.RESULT_CANCELED + ", " + data.toString());
+		switch(requestCode) {
+			case DATA_MODIFIED:
+				if (resultCode == Activity.RESULT_CANCELED) {
+					((ViewGroup) mTableOfPolicies.getParent()).removeView(mTableOfPolicies);
+					instantiateViews();
+					Log.v(SPrivacyApplication.getDebugTag(), "Came into db onActivityResult" 
+							+ ", " + Integer.toString(requestCode) + ", " + Integer.toString(resultCode)
+							+ ", " + Activity.RESULT_OK
+							+ ", " + Activity.RESULT_CANCELED + ", " + data.toString());
+				}
+				break;
 		}
 	}
 

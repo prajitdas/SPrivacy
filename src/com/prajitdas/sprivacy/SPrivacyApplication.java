@@ -30,6 +30,8 @@ public class SPrivacyApplication extends Application {
 	
 	private static SPrivacyApplication singleton;
 	
+	private static boolean deleted = false;
+	
 	public static String getDebugTag() {
 		return DEBUG_TAG;
 	}
@@ -101,6 +103,14 @@ public class SPrivacyApplication extends Application {
 
 	public static String getConstAccessGranted() {
 		return CONST_ACCESS_GRANTED;
+	}
+
+	public static boolean isDeleted() {
+		return deleted;
+	}
+
+	public static void setDeleted(boolean deleted) {
+		SPrivacyApplication.deleted = deleted;
 	}
 
 //	public static String getConstDbkey() {

@@ -206,18 +206,23 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 					RESOURCE_TABLE_NAME + "." + RESNAME + " = '" + resName + 
 					"';";
 
-		Cursor cursor = db.rawQuery(selectQuery, null);
-		cursor.moveToFirst();
+		Cursor cursor;
 		PolicyRule policyRule = new PolicyRule();
-		policyRule.setId(Integer.parseInt(cursor.getString(0)));
-		policyRule.setAppId(Integer.parseInt(cursor.getString(1)));
-		policyRule.setAppName(cursor.getString(2));
-		policyRule.setResId(Integer.parseInt(cursor.getString(3)));
-		policyRule.setResName(cursor.getString(4));
-		if(Integer.parseInt(cursor.getString(5)) == 1)
-			policyRule.setPolicyRule(true);
-		else
-			policyRule.setPolicyRule(false);
+		try{
+			cursor = db.rawQuery(selectQuery, null);
+			cursor.moveToFirst();
+			policyRule.setId(Integer.parseInt(cursor.getString(0)));
+			policyRule.setAppId(Integer.parseInt(cursor.getString(1)));
+			policyRule.setAppName(cursor.getString(2));
+			policyRule.setResId(Integer.parseInt(cursor.getString(3)));
+			policyRule.setResName(cursor.getString(4));
+			if(Integer.parseInt(cursor.getString(5)) == 1)
+				policyRule.setPolicyRule(true);
+			else
+				policyRule.setPolicyRule(false);
+		} catch(SQLException e) {
+            throw new SQLException("Could not find " + e);
+		}
 		return policyRule;
 	}
 	
@@ -248,18 +253,23 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 					" WHERE "  +  
 					POLICY_TABLE_NAME + "." + POLID + " = " + id + ";";
 
-		Cursor cursor = db.rawQuery(selectQuery, null);
-		cursor.moveToFirst();
+		Cursor cursor;
 		PolicyRule policyRule = new PolicyRule();
-		policyRule.setId(Integer.parseInt(cursor.getString(0)));
-		policyRule.setAppId(Integer.parseInt(cursor.getString(1)));
-		policyRule.setAppName(cursor.getString(2));
-		policyRule.setResId(Integer.parseInt(cursor.getString(3)));
-		policyRule.setResName(cursor.getString(4));
-		if(Integer.parseInt(cursor.getString(5)) == 1)
-			policyRule.setPolicyRule(true);
-		else
-			policyRule.setPolicyRule(false);
+		try{
+			cursor = db.rawQuery(selectQuery, null);
+			cursor.moveToFirst();
+			policyRule.setId(Integer.parseInt(cursor.getString(0)));
+			policyRule.setAppId(Integer.parseInt(cursor.getString(1)));
+			policyRule.setAppName(cursor.getString(2));
+			policyRule.setResId(Integer.parseInt(cursor.getString(3)));
+			policyRule.setResName(cursor.getString(4));
+			if(Integer.parseInt(cursor.getString(5)) == 1)
+				policyRule.setPolicyRule(true);
+			else
+				policyRule.setPolicyRule(false);
+		} catch(SQLException e) {
+	        throw new SQLException("Could not find " + e);
+		}
 		return policyRule;
 	}
 	
@@ -267,7 +277,7 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	 * Getting all policies
 	 * @return returns a list of policies
 	 */
-	public ArrayList<PolicyRule> getAllPolicies(SQLiteDatabase db) {
+	public ArrayList<PolicyRule> findAllPolicies(SQLiteDatabase db) {
 		ArrayList<PolicyRule> policyRules = new ArrayList<PolicyRule>();
 		// Select All Query
 		String selectQuery = "SELECT "+
@@ -288,24 +298,27 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 
 		Cursor cursor = db.rawQuery(selectQuery, null);
 
-		// looping through all rows and adding to list
-		if (cursor.moveToFirst()) {
-			do {
-				PolicyRule policyRule = new PolicyRule();
-				policyRule.setId(Integer.parseInt(cursor.getString(0)));
-				policyRule.setAppId(Integer.parseInt(cursor.getString(1)));
-				policyRule.setAppName(cursor.getString(2));
-				policyRule.setResId(Integer.parseInt(cursor.getString(3)));
-				policyRule.setResName(cursor.getString(4));
-				if(Integer.parseInt(cursor.getString(5)) == 1)
-					policyRule.setPolicyRule(true);
-				else
-					policyRule.setPolicyRule(false);
-				// Adding policies to list
-				policyRules.add(policyRule);
-			} while (cursor.moveToNext());
+		try{
+			// looping through all rows and adding to list
+			if (cursor.moveToFirst()) {
+				do {
+					PolicyRule policyRule = new PolicyRule();
+					policyRule.setId(Integer.parseInt(cursor.getString(0)));
+					policyRule.setAppId(Integer.parseInt(cursor.getString(1)));
+					policyRule.setAppName(cursor.getString(2));
+					policyRule.setResId(Integer.parseInt(cursor.getString(3)));
+					policyRule.setResName(cursor.getString(4));
+					if(Integer.parseInt(cursor.getString(5)) == 1)
+						policyRule.setPolicyRule(true);
+					else
+						policyRule.setPolicyRule(false);
+					// Adding policies to list
+					policyRules.add(policyRule);
+				} while (cursor.moveToNext());
+			}
+		} catch(SQLException e) {
+	        throw new SQLException("Could not find " + e);
 		}
-
 		// return policy rules list
 		return policyRules;
 	}
@@ -314,7 +327,7 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	 * Getting all policies
 	 * @return returns a list of policies
 	 */
-	public ArrayList<Resource> getAllProviders(SQLiteDatabase db) {
+	public ArrayList<Resource> findAllProviders(SQLiteDatabase db) {
 		ArrayList<Resource> providers = new ArrayList<Resource>();
 		// Select All Query
 		String selectQuery = "SELECT * FROM " + RESOURCE_TABLE_NAME + ";";
@@ -345,7 +358,7 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	 * Getting all policies
 	 * @return returns a list of policies
 	 */
-	public ArrayList<AppInfo> getAllApplications(SQLiteDatabase db) {
+	public ArrayList<AppInfo> findAllApplications(SQLiteDatabase db) {
 		ArrayList<AppInfo> apps = new ArrayList<AppInfo>();
 		// Select All Query
 		String selectQuery = "SELECT * FROM " + APPLICATION_TABLE_NAME + ";";
@@ -380,7 +393,7 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	 * method to load the default set of policies into the database
 	 * @param db reference to the db instance
 	 */
-	public void loadDefaultPoliciesIntoDB(SQLiteDatabase db) {
+	private void loadDefaultPoliciesIntoDB(SQLiteDatabase db) {
 		defaultDataLoader = new DefaultDataLoader(getContext());
 		//loads the applications
 		for(AppInfo anAppInfo : defaultDataLoader.getApplications())
@@ -410,10 +423,16 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	 * Method to delete all data from the database; Very dangerous
 	 * @param db
 	 */
-	public void deleteAllData(SQLiteDatabase db) {
-		db.execSQL("delete from " + APPLICATION_TABLE_NAME + ";");
-		db.execSQL("delete from " + RESOURCE_TABLE_NAME + ";");
-		db.execSQL("delete from " + POLICY_TABLE_NAME + ";");
+	public int deleteAllData(SQLiteDatabase db) {
+		try {
+			db.execSQL("DROP TABLE IF EXISTS " +  APPLICATION_TABLE_NAME);
+			db.execSQL("DROP TABLE IF EXISTS " +  RESOURCE_TABLE_NAME);
+			db.execSQL("DROP TABLE IF EXISTS " +  POLICY_TABLE_NAME);
+		} catch (SQLException e) {
+            Log.e(SPrivacyApplication.getDebugTag(), "Error deleting rows ", e);
+            return -1;
+		}
+		return 1;
 	}
 	
 	@Override
