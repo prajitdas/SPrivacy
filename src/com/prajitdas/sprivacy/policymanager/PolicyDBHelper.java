@@ -423,16 +423,11 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	 * Method to delete all data from the database; Very dangerous
 	 * @param db
 	 */
-	public int deleteAllData(SQLiteDatabase db) {
-		try {
-			db.execSQL("DROP TABLE IF EXISTS " +  APPLICATION_TABLE_NAME);
-			db.execSQL("DROP TABLE IF EXISTS " +  RESOURCE_TABLE_NAME);
-			db.execSQL("DROP TABLE IF EXISTS " +  POLICY_TABLE_NAME);
-		} catch (SQLException e) {
-            Log.e(SPrivacyApplication.getDebugTag(), "Error deleting rows ", e);
-            return -1;
-		}
-		return 1;
+	public void deleteAllData(SQLiteDatabase db) {
+		db.execSQL("DROP TABLE IF EXISTS " +  APPLICATION_TABLE_NAME);
+		db.execSQL("DROP TABLE IF EXISTS " +  RESOURCE_TABLE_NAME);
+		db.execSQL("DROP TABLE IF EXISTS " +  POLICY_TABLE_NAME);
+		onCreate(db);
 	}
 	
 	@Override

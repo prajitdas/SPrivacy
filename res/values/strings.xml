@@ -16,8 +16,7 @@
     <string name="showPols">Policies</string>
     <string name="showApps">Applications</string>
     <string name="showPros">Providers</string>
-    <string name="delData">Delete All Data</string>
-    <string name="ldData">Load Default Data</string>
+    <string name="delData">Delete Data and Load Default</string>
     <string name="DBOps">Database Operations</string>
     <string name="defaultText">Default Text</string>
     <string name="sprivacy_read_permission_description">Permission to read the privacy policies stored by SPrivacy Control</string>
