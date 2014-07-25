@@ -3,6 +3,7 @@ package com.prajitdas.sprivacy.policymanager.util;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
@@ -18,18 +19,18 @@ public class DefaultDataLoader {
 	
 	private ArrayList<AppInfo> applications;
 
-	private ArrayList<Resource> resources;
+	private ArrayList<Provider> providers;
 
 	private ArrayList<PolicyRule> policies;
 
 	public DefaultDataLoader(Context context) {
 		setContext(context);
 		applications = new ArrayList<AppInfo>();
-		resources = new ArrayList<Resource>();
+		providers = new ArrayList<Provider>();
 		policies = new ArrayList<PolicyRule>();
-		naiveWayToLoadData();
 		//Potentially dangerous method, read comment at the method level below
 		loadExtraData();
+		policyLoad();
 	}
 
 	/**
@@ -48,38 +49,32 @@ public class DefaultDataLoader {
 	 * Finds all the applications on the phone and stores them in a database accessible to the whole app 
 	 */
 	private void setApplicationsList() {
-		int appCount = applications.size();
-	    for(PackageInfo pack : getContext().getPackageManager().getInstalledPackages(PackageManager.GET_SIGNATURES)) {
-	    	if(pack.applicationInfo.name != null) {
-	    		applications.add(new AppInfo(appCount++,
-	    				pack.applicationInfo.name));//, 
-//		    			pack.packageName, 
-//		    			pack.versionName, 
-//		    			pack.versionCode, 
-//		    			pack.applicationInfo.loadIcon(getContext().getPackageManager())));
-	    	}
-	    	else {
-	    		applications.add(new AppInfo(appCount++,
-	    				""));//, 
-//		    			pack.packageName, 
-//		    			pack.versionName, 
-//		    			pack.versionCode, 
-//		    			pack.applicationInfo.loadIcon(getContext().getPackageManager())));
-	    	}
-	    }
+		// Flags: See below
+		int flags = PackageManager.GET_META_DATA | 
+		            PackageManager.GET_SHARED_LIBRARY_FILES |     
+		            PackageManager.GET_UNINSTALLED_PACKAGES;
+		int appCount = 1;//First data is at id 1 in the db so count starts at 1
+		for(PackageInfo pack : getContext().getPackageManager().getInstalledPackages(flags)) {
+		    if ((pack.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 1)
+	    		applications.add(new AppInfo(appCount++,pack.packageName,pack.permissions));
+		}
 	}
 
 	/**
 	 * Finds all the content providers on the phone and stores them in a database accessible to the whole app 
 	 */
 	private void setProviderList() {
-		ProviderInfo[] providers;
-		int providerCount = resources.size();
+		ProviderInfo[] providerArray;
+		int providerCount = 1;//First data is at id 1 in the db so count starts at 1
 		for(PackageInfo pack : getContext().getPackageManager().getInstalledPackages(PackageManager.GET_PROVIDERS)) {
-			providers = pack.providers;
-			if (providers != null)
-				for (ProviderInfo provider : providers)
-					resources.add(new Resource(providerCount++, provider.packageName));
+			providerArray = pack.providers;
+			if (providerArray != null)
+				for (ProviderInfo provider : providerArray)
+    				providers.add(new Provider(providerCount++, 
+    						provider.name,
+    						provider.authority,
+    						provider.readPermission,
+    						provider.writePermission));
 		}
 	}
 	
@@ -91,32 +86,32 @@ public class DefaultDataLoader {
 		return policies;
 	}
 
-	public ArrayList<Resource> getResources() {
-		return resources;
+	public ArrayList<Provider> getResources() {
+		return providers;
 	}
+
 	/**
 	 * At the moment the default policy is being loaded in a naive way have to work on this to improve it
 	 */
-	private void naiveWayToLoadData() {
-		AppInfo tempAppInfo = new AppInfo(1, 
-										SPrivacyApplication.getConstAppname());//,
-//										SPrivacyApplication.getConstAppname(),
-//										SPrivacyApplication.getConstAppname(),
-//										1,
-//										getContext().getResources().getDrawable(R.drawable.android));
-		applications.add(tempAppInfo);
-		
-		int count = 1;
-		setValues(count, SPrivacyApplication.getConstImages(), tempAppInfo);
-		count++;
-		setValues(count, SPrivacyApplication.getConstFiles(), tempAppInfo);
-		count++;
-		setValues(count, SPrivacyApplication.getConstVideos(), tempAppInfo);
-		count++;
-		setValues(count, SPrivacyApplication.getConstAudios(), tempAppInfo);
-		count++;
-		setValues(count, SPrivacyApplication.getConstContacts(), tempAppInfo);
-		count++;
+	private void policyLoad() {
+		int indexOfKnownApp = findTheIndex();
+		if(indexOfKnownApp >= 0) {
+			int count = 0;
+			setValues(count++, SPrivacyApplication.getConstImages(), applications.get(indexOfKnownApp));
+			setValues(count++, SPrivacyApplication.getConstFiles(), applications.get(indexOfKnownApp));
+			setValues(count++, SPrivacyApplication.getConstVideos(), applications.get(indexOfKnownApp));
+			setValues(count++, SPrivacyApplication.getConstAudios(), applications.get(indexOfKnownApp));
+			setValues(count++, SPrivacyApplication.getConstContacts(), applications.get(indexOfKnownApp));
+		}
+	}
+	private int findTheIndex() {
+		int i = 0;
+		for(AppInfo app : applications) {
+			if(app.isMatch(SPrivacyApplication.getConstAppname()))
+				return i;
+			i++;
+		}
+		return -1;
 	}
 	public void setApplications(ArrayList<AppInfo> applications) {
 		this.applications = applications;
@@ -126,16 +121,18 @@ public class DefaultDataLoader {
 		this.policies = policies;
 	}
 
-	public void setResources(ArrayList<Resource> resources) {
-		this.resources = resources;
+	public void setResources(ArrayList<Provider> providers) {
+		this.providers = providers;
 	}
 	private void setValues(int id, String resource, AppInfo anAppInfo) {
-		Resource tempRes = new Resource(id, resource);
+		int resCount = providers.size()+1;// again the indexing problem so fixed by adding 1
+		Provider tempRes = new Provider(resCount++, resource, resource, null, null);
 		PolicyRule tempPolicy = new PolicyRule();
-		resources.add(tempRes);
+		providers.add(tempRes);
 		
 		tempPolicy.setId(id);
-	    tempPolicy.setPolicyRule(true);
+		//By default access is prohibited
+	    tempPolicy.setPolicyRule(false);
 		tempPolicy.setAppId(anAppInfo.getId());
 		tempPolicy.setAppName(anAppInfo.getName());
 		tempPolicy.setResId(tempRes.getId());

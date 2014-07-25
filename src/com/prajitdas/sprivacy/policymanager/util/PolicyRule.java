@@ -17,6 +17,12 @@ public class PolicyRule {
 		return id;
 	}
 	public String getPolicyText() {
+//		return 	Integer.toString(id) + ", " +
+//				Integer.toString(appId) + ", " + 
+//				appName + ", " + 
+//				Integer.toString(resId) + ", " +
+//				resName + ", " +
+//				policyRule;
 		return 	appName + ", " + 
 				resName + ", " +
 				policyRule;

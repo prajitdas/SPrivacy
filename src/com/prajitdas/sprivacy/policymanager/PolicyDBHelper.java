@@ -14,15 +14,19 @@ import com.prajitdas.sprivacy.SPrivacyApplication;
 import com.prajitdas.sprivacy.policymanager.util.AppInfo;
 import com.prajitdas.sprivacy.policymanager.util.DefaultDataLoader;
 import com.prajitdas.sprivacy.policymanager.util.PolicyRule;
-import com.prajitdas.sprivacy.policymanager.util.Resource;
+import com.prajitdas.sprivacy.policymanager.util.Provider;
 
 public class PolicyDBHelper extends SQLiteOpenHelper {
 	// fields for the database
 	private final static String APPID = "id";
 	private final static String APPNAME = "name";
+	private final static String APPPERM = "permissions";
 	
 	private final static String RESID = "id";
 	private final static String RESNAME = "name";
+	private final static String RESAUTH = "authority";
+	private final static String RESREADPERM = "readperm";
+	private final static String RESWRITEPERM = "writeperm";
 
 	private final static String POLID = "id";
 	private final static String POLAPPID = "appid";
@@ -45,14 +49,18 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	 */
 	private final static String CREATE_APPLICATION_TABLE = " CREATE TABLE " + APPLICATION_TABLE_NAME + " (" + 
 			APPID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
-			APPNAME + " TEXT NOT NULL UNIQUE);";
+			APPNAME + " TEXT NOT NULL UNIQUE, " +
+			APPPERM + " TEXT);";
 	
 	/**
 	 * The resources that are accessible on the phone
 	 */
 	private final static String CREATE_RESOURCE_TABLE =  " CREATE TABLE " + RESOURCE_TABLE_NAME + " (" + 
 			RESID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
-			RESNAME + " TEXT NOT NULL UNIQUE);";
+			RESNAME + " TEXT NOT NULL, " + //Should be unique has been set not unique because it seems some of the providers are repeating TODO figure this out
+			RESAUTH + " TEXT, " + //Should be not null has been set null because it seems some of the providers do not have an authority
+			RESREADPERM + " TEXT, " +
+			RESWRITEPERM+ " TEXT);";
 
 	/**
 	 *  A value of 1 in the policy column refers to a policy of access granted
@@ -71,8 +79,8 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 			POLID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
 			POLAPPID + " INTEGER NOT NULL REFERENCES applications(id) ON DELETE CASCADE, " +
 			POLRESID + " INTEGER NOT NULL REFERENCES resources(id) ON DELETE CASCADE, " +
-			POLICY + " INTEGER DEFAULT 1, " +
-			ACCESSLVL + " INTEGER DEFAULT 0);";
+			POLICY + " INTEGER NOT NULL DEFAULT 0, " +
+			ACCESSLVL + " INTEGER NOT NULL DEFAULT 0);";
 	
 	private static DefaultDataLoader defaultDataLoader;
 	
@@ -132,7 +140,7 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	 * method to insert into resource table the resource
 	 * @param value the name of the resource
 	 */
-	public int addResource(SQLiteDatabase db, Resource aResource) {
+	public int addResource(SQLiteDatabase db, Provider aResource) {
 		ContentValues values = new ContentValues();
 		values.put(RESNAME, aResource.getName());
 		try {
@@ -172,7 +180,7 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	 * @param id identifier of the row to delete
 	 * @param tableName table from which to delete data
 	 */
-	public void deleteResource(SQLiteDatabase db, Resource aResource) {
+	public void deleteResource(SQLiteDatabase db, Provider aResource) {
 		db.delete(RESOURCE_TABLE_NAME, RESID + " = ?",
 				new String[] { String.valueOf(aResource.getId()) });
 	}
@@ -206,20 +214,20 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 					RESOURCE_TABLE_NAME + "." + RESNAME + " = '" + resName + 
 					"';";
 
-		Cursor cursor;
+		Cursor cursor = db.rawQuery(selectQuery, null);
 		PolicyRule policyRule = new PolicyRule();
 		try{
-			cursor = db.rawQuery(selectQuery, null);
-			cursor.moveToFirst();
-			policyRule.setId(Integer.parseInt(cursor.getString(0)));
-			policyRule.setAppId(Integer.parseInt(cursor.getString(1)));
-			policyRule.setAppName(cursor.getString(2));
-			policyRule.setResId(Integer.parseInt(cursor.getString(3)));
-			policyRule.setResName(cursor.getString(4));
-			if(Integer.parseInt(cursor.getString(5)) == 1)
-				policyRule.setPolicyRule(true);
-			else
-				policyRule.setPolicyRule(false);
+			if (cursor.moveToFirst()) {
+				policyRule.setId(Integer.parseInt(cursor.getString(0)));
+				policyRule.setAppId(Integer.parseInt(cursor.getString(1)));
+				policyRule.setAppName(cursor.getString(2));
+				policyRule.setResId(Integer.parseInt(cursor.getString(3)));
+				policyRule.setResName(cursor.getString(4));
+				if(Integer.parseInt(cursor.getString(5)) == 1)
+					policyRule.setPolicyRule(true);
+				else
+					policyRule.setPolicyRule(false);
+			}
 		} catch(SQLException e) {
             throw new SQLException("Could not find " + e);
 		}
@@ -253,20 +261,20 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 					" WHERE "  +  
 					POLICY_TABLE_NAME + "." + POLID + " = " + id + ";";
 
-		Cursor cursor;
+		Cursor cursor = db.rawQuery(selectQuery, null);
 		PolicyRule policyRule = new PolicyRule();
 		try{
-			cursor = db.rawQuery(selectQuery, null);
-			cursor.moveToFirst();
-			policyRule.setId(Integer.parseInt(cursor.getString(0)));
-			policyRule.setAppId(Integer.parseInt(cursor.getString(1)));
-			policyRule.setAppName(cursor.getString(2));
-			policyRule.setResId(Integer.parseInt(cursor.getString(3)));
-			policyRule.setResName(cursor.getString(4));
-			if(Integer.parseInt(cursor.getString(5)) == 1)
-				policyRule.setPolicyRule(true);
-			else
-				policyRule.setPolicyRule(false);
+			if (cursor.moveToFirst()) {
+				policyRule.setId(Integer.parseInt(cursor.getString(0)));
+				policyRule.setAppId(Integer.parseInt(cursor.getString(1)));
+				policyRule.setAppName(cursor.getString(2));
+				policyRule.setResId(Integer.parseInt(cursor.getString(3)));
+				policyRule.setResName(cursor.getString(4));
+				if(Integer.parseInt(cursor.getString(5)) == 1)
+					policyRule.setPolicyRule(true);
+				else
+					policyRule.setPolicyRule(false);
+			}
 		} catch(SQLException e) {
 	        throw new SQLException("Could not find " + e);
 		}
@@ -327,8 +335,8 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	 * Getting all policies
 	 * @return returns a list of policies
 	 */
-	public ArrayList<Resource> findAllProviders(SQLiteDatabase db) {
-		ArrayList<Resource> providers = new ArrayList<Resource>();
+	public ArrayList<Provider> findAllProviders(SQLiteDatabase db) {
+		ArrayList<Provider> providers = new ArrayList<Provider>();
 		// Select All Query
 		String selectQuery = "SELECT * FROM " + RESOURCE_TABLE_NAME + ";";
 
@@ -337,7 +345,12 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 		// looping through all rows and adding to list
 		if (cursor.moveToFirst()) {
 			do {
-				Resource resource = new Resource(Integer.parseInt(cursor.getString(0)),cursor.getString(1));
+				Provider provider = new Provider(
+						Integer.parseInt(cursor.getString(0)),
+						cursor.getString(1),
+						cursor.getString(2),
+						cursor.getString(3),
+						cursor.getString(4));
 //				policyRule.setAppName(cursor.getString(2));
 //				policyRule.setResId(Integer.parseInt(cursor.getString(3)));
 //				policyRule.setResName(cursor.getString(4));
@@ -346,7 +359,7 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 //				else
 //					policyRule.setPolicyRule(false);
 				// Adding policies to list
-				providers.add(resource);
+				providers.add(provider);
 			} while (cursor.moveToNext());
 		}
 
@@ -368,7 +381,10 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 		// looping through all rows and adding to list
 		if (cursor.moveToFirst()) {
 			do {
-				AppInfo app = new AppInfo(Integer.parseInt(cursor.getString(0)),cursor.getString(1));
+				AppInfo app = new AppInfo(Integer.parseInt(
+						cursor.getString(0)),
+						cursor.getString(1),
+						cursor.getString(2));
 //				policyRule.setAppName(cursor.getString(2));
 //				policyRule.setResId(Integer.parseInt(cursor.getString(3)));
 //				policyRule.setResName(cursor.getString(4));
@@ -399,7 +415,7 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 		for(AppInfo anAppInfo : defaultDataLoader.getApplications())
 			addApplication(db, anAppInfo);
 		//loads the resources or providers
-		for(Resource aResource : defaultDataLoader.getResources())
+		for(Provider aResource : defaultDataLoader.getResources())
 			addResource(db, aResource);
 		//loads the policies, this is the interesting part and can be used to load
 		//a default set of policies from an xml resource or a web service
@@ -472,7 +488,7 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	 * method to update single resource
 	 * @param resName
 	 */
-	public int updateResource(SQLiteDatabase db, Resource aResource) {
+	public int updateResource(SQLiteDatabase db, Provider aResource) {
 		ContentValues values = new ContentValues();
 		values.put(RESNAME, aResource.getName());
 		return db.update(RESOURCE_TABLE_NAME, values, RESID + " = ?", 

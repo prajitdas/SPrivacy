@@ -12,7 +12,7 @@ import android.widget.ListView;
 
 import com.prajitdas.sprivacy.R;
 import com.prajitdas.sprivacy.policymanager.PolicyDBHelper;
-import com.prajitdas.sprivacy.policymanager.util.Resource;
+import com.prajitdas.sprivacy.policymanager.util.Provider;
 
 public class DisplayAllProvidersActivity extends Activity {
 	private ArrayList<String> listOfResources;
@@ -28,7 +28,7 @@ public class DisplayAllProvidersActivity extends Activity {
 		db = new PolicyDBHelper(this);
 		database = db.getWritableDatabase();
 		listOfResources = new ArrayList<String>();
-		for(Resource aResource : db.findAllProviders(database))
+		for(Provider aResource : db.findAllProviders(database))
 			listOfResources.add(aResource.toString());
 		loadView(listOfResources);
 	}

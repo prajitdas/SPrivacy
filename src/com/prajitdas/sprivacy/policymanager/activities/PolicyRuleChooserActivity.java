@@ -103,9 +103,9 @@ public class PolicyRuleChooserActivity extends Activity {
 		mToggleButtons.add(tempToggleButton);
 	}
 
-	private void deleteDataRows() {
-		mTableOfPolicies.removeAllViews();
-	}
+//	private void deleteDataRows() {
+//		mTableOfPolicies.removeAllViews();
+//	}
 
 	private void instantiateViews() {
 		mBtnDBOps = (Button) findViewById(R.id.btnDBOps);
@@ -161,8 +161,7 @@ public class PolicyRuleChooserActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		database = db.getWritableDatabase();
-		deleteDataRows();
-		addDataRows();
+//		deleteDataRows();
 	}
 	
 	private void togglePolicy(int idOfPolicy) {
