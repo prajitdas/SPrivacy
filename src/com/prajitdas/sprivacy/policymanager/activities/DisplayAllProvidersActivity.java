@@ -24,7 +24,7 @@ public class DisplayAllProvidersActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_display_all_policies);
+		setContentView(R.layout.activity_display_all);
 		db = new PolicyDBHelper(this);
 		database = db.getWritableDatabase();
 		listOfResources = new ArrayList<String>();

@@ -57,8 +57,8 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	 */
 	private final static String CREATE_RESOURCE_TABLE =  " CREATE TABLE " + RESOURCE_TABLE_NAME + " (" + 
 			RESID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
-			RESNAME + " TEXT NOT NULL, " + //Should be unique has been set not unique because it seems some of the providers are repeating TODO figure this out
-			RESAUTH + " TEXT, " + //Should be not null has been set null because it seems some of the providers do not have an authority
+			RESNAME + " TEXT NOT NULL, " + //Should be "unique" has been set not unique because it seems some of the providers are repeating TODO figure this out
+			RESAUTH + " TEXT, " + //Should be "not null" has been set null because it seems some of the providers do not have an authority
 			RESREADPERM + " TEXT, " +
 			RESWRITEPERM+ " TEXT);";
 
@@ -70,7 +70,7 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	 *  A value of 1 in the accesslvl column refers to access level of "give fake data"
 	 *  A value of 2 in the accesslvl column refers to access level of "give no data"
 	 *  
-	 *  This last option wil lbe more complicated to implement and will have to incorporate 
+	 *  This last option will be more complicated to implement and will have to incorporate 
 	 *  how we limit the data. One possible idea is to remove any data which can identify the
 	 *  device or the user in any way.
 	 *  A value of 3 in the accesslvl column refers to access level of "give limited data"
