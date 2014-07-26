@@ -22,12 +22,15 @@ public class DefaultDataLoader {
 	private ArrayList<Provider> providers;
 
 	private ArrayList<PolicyRule> policies;
+	
+	private PackageManager packageManager;
 
 	public DefaultDataLoader(Context context) {
 		setContext(context);
 		applications = new ArrayList<AppInfo>();
 		providers = new ArrayList<Provider>();
 		policies = new ArrayList<PolicyRule>();
+		packageManager = getContext().getPackageManager();
 		//Potentially dangerous method, read comment at the method level below
 		loadExtraData();
 		policyLoad();
@@ -52,11 +55,16 @@ public class DefaultDataLoader {
 		// Flags: See below
 		int flags = PackageManager.GET_META_DATA | 
 		            PackageManager.GET_SHARED_LIBRARY_FILES |     
-		            PackageManager.GET_UNINSTALLED_PACKAGES;
+		            PackageManager.GET_UNINSTALLED_PACKAGES | 
+		            PackageManager.GET_PERMISSIONS;
 		int appCount = 1;//First data is at id 1 in the db so count starts at 1
-		for(PackageInfo pack : getContext().getPackageManager().getInstalledPackages(flags)) {
+		for(PackageInfo pack : packageManager.getInstalledPackages(flags)) {
 		    if ((pack.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 1)
-	    		applications.add(new AppInfo(appCount++,pack.packageName,pack.permissions));
+	    		applications.add(new AppInfo(
+	    				appCount++,
+	    				packageManager.getApplicationLabel(pack.applicationInfo).toString(),
+	    				pack.packageName,
+	    				permissionsArrayToString(pack.requestedPermissions)));
 		}
 	}
 
@@ -65,13 +73,15 @@ public class DefaultDataLoader {
 	 */
 	private void setProviderList() {
 		ProviderInfo[] providerArray;
+		PackageManager pm = getContext().getPackageManager();
 		int providerCount = 1;//First data is at id 1 in the db so count starts at 1
-		for(PackageInfo pack : getContext().getPackageManager().getInstalledPackages(PackageManager.GET_PROVIDERS)) {
+		for(PackageInfo pack : pm.getInstalledPackages(PackageManager.GET_PROVIDERS)) {
 			providerArray = pack.providers;
 			if (providerArray != null)
 				for (ProviderInfo provider : providerArray)
     				providers.add(new Provider(providerCount++, 
     						provider.name,
+    						pm.getApplicationLabel(provider.applicationInfo).toString(),
     						provider.authority,
     						provider.readPermission,
     						provider.writePermission));
@@ -126,17 +136,16 @@ public class DefaultDataLoader {
 	}
 	private void setValues(int id, String resource, AppInfo anAppInfo) {
 		int resCount = providers.size()+1;// again the indexing problem so fixed by adding 1
-		Provider tempRes = new Provider(resCount++, resource, resource, null, null);
-		PolicyRule tempPolicy = new PolicyRule();
+		Provider tempRes = new Provider(resCount++, resource, resource, resource, resource, resource);
 		providers.add(tempRes);
-		
-		tempPolicy.setId(id);
-		//By default access is prohibited
-	    tempPolicy.setPolicyRule(false);
-		tempPolicy.setAppId(anAppInfo.getId());
-		tempPolicy.setAppName(anAppInfo.getName());
-		tempPolicy.setResId(tempRes.getId());
-	    tempPolicy.setResName(tempRes.getName());
+		PolicyRule tempPolicy = new PolicyRule(id,
+				anAppInfo.getId(),
+				anAppInfo.getLabel(),
+				tempRes.getId(),
+				tempRes.getLabel(),
+				false,
+				0,
+				new UserContext("*","*","*","*"));
 		policies.add(tempPolicy);
 	}
 
@@ -146,5 +155,13 @@ public class DefaultDataLoader {
 
 	public void setContext(Context context) {
 		this.context = context;
+	}
+	public String permissionsArrayToString(String[] permissions) {
+		StringBuffer tempPerm = new StringBuffer();
+		if(permissions != null) {
+			for(String perm : permissions)
+				tempPerm.append(perm);
+		}
+		return tempPerm.toString();
 	}
 }

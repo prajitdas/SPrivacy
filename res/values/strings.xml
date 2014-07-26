@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">SPrivacy</string>
-    <string name="permlabel_read_write_content">Read or Write Any Content Providers</string>
+    <string name="permlabel_read_write_content">Read/Write any content providers on the device</string>
     <string name="permdesc_read_write_content">Pseudo permission to allow access to any content on the mobile device.</string>
     <string name="permlabel_read_policy">Read Policy</string>
     <string name="permdesc_read_policy">Read Policy</string>

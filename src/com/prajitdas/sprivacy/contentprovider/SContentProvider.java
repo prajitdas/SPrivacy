@@ -341,7 +341,7 @@ public class SContentProvider extends ContentProvider {
 	private boolean isDataAccessAllowed(String resource) {
 		PolicyDBHelper policyDBHelper = new PolicyDBHelper(getContext());
 		SQLiteDatabase policyDB = policyDBHelper.getWritableDatabase();
-		return policyDBHelper.findPolicy(policyDB, SPrivacyApplication.getConstAppname(), resource).isPolicyRule();
+		return policyDBHelper.findPolicy(policyDB, SPrivacyApplication.getConstAppname(), resource).isRule();
 	}
 
 	@Override

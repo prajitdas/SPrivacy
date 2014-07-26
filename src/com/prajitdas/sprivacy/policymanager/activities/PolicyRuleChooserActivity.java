@@ -93,7 +93,7 @@ public class PolicyRuleChooserActivity extends Activity {
 		
 		mTextViewPolicyStmt.setText(aPolicyRule.toString());
 		
-		tempToggleButton.setChecked(aPolicyRule.isPolicyRule());
+		tempToggleButton.setChecked(aPolicyRule.isRule());
 		tempToggleButton.setId(aPolicyRule.getId());
 		
 		tblRow.addView(mTextViewPolicyStmt);

@@ -19,11 +19,13 @@ import com.prajitdas.sprivacy.policymanager.util.Provider;
 public class PolicyDBHelper extends SQLiteOpenHelper {
 	// fields for the database
 	private final static String APPID = "id";
-	private final static String APPNAME = "name";
+	private final static String APPLABEL = "label";
+	private final static String APPPACK = "package";
 	private final static String APPPERM = "permissions";
 	
 	private final static String RESID = "id";
-	private final static String RESNAME = "name";
+	private final static String RESLABEL = "label";
+	private final static String RESPRO = "provider";
 	private final static String RESAUTH = "authority";
 	private final static String RESREADPERM = "readperm";
 	private final static String RESWRITEPERM = "writeperm";
@@ -31,8 +33,12 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	private final static String POLID = "id";
 	private final static String POLAPPID = "appid";
 	private final static String POLRESID = "resid";
+	private final static String CONTEXTLOC = "location";
+	private final static String CONTEXTACT = "activity";
+	private final static String CONTEXTTIME = "time";
+	private final static String CONTEXTID = "identity";
 	private final static String POLICY = "policy";
-	private final static String ACCESSLVL = "accesslvl";
+	private final static String POLACCLVL = "accesslvl";
 	
 	// database declarations
 	private final static String DATABASE_NAME = "PrivacyPolicies";
@@ -46,23 +52,49 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 
 	/**
 	 * The applications installed on the phone
+	 * Table has the following columns:-
+	 * APPID
+	 * APPLABEL
+	 * APPPACK
+	 * APPPERM
 	 */
 	private final static String CREATE_APPLICATION_TABLE = " CREATE TABLE " + APPLICATION_TABLE_NAME + " (" + 
 			APPID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
-			APPNAME + " TEXT NOT NULL UNIQUE, " +
+			APPLABEL + " TEXT NOT NULL UNIQUE, " +
+			APPPACK + " TEXT NOT NULL UNIQUE, " +
 			APPPERM + " TEXT);";
 	
 	/**
 	 * The resources that are accessible on the phone
+	 * Table has the following columns:-
+	 * RESID
+	 * RESLABEL
+	 * RESPRO
+	 * RESAUTH
+	 * RESREADPERM
+	 * RESWRITEPERM 
 	 */
 	private final static String CREATE_RESOURCE_TABLE =  " CREATE TABLE " + RESOURCE_TABLE_NAME + " (" + 
 			RESID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
-			RESNAME + " TEXT NOT NULL, " + //Should be "unique" has been set not unique because it seems some of the providers are repeating TODO figure this out
+			RESLABEL + " TEXT NOT NULL, " + //Should be "unique" has been set not unique because it seems some of the providers are repeating TODO figure this out
+			RESPRO + " TEXT NOT NULL, " + //Should be "unique" has been set not unique because it seems some of the providers are repeating TODO figure this out
 			RESAUTH + " TEXT, " + //Should be "not null" has been set null because it seems some of the providers do not have an authority
 			RESREADPERM + " TEXT, " +
 			RESWRITEPERM+ " TEXT);";
 
 	/**
+	 *  The policies that are installed by default on the phone.
+	 *  The table has the following columns:-
+	 *  POLID
+	 *  POLAPPID
+	 *  POLRESID
+	 *  CONTEXTLOC
+	 *  CONTEXTACT
+	 *  CONTEXTTIME
+	 *  CONTEXTID
+	 *  POLICY
+	 *  POLACCLVL
+	 *  
 	 *  A value of 1 in the policy column refers to a policy of access granted
 	 *  A value of 0 in the policy column refers to a policy of access denied
 	 *  
@@ -79,8 +111,12 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 			POLID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
 			POLAPPID + " INTEGER NOT NULL REFERENCES applications(id) ON DELETE CASCADE, " +
 			POLRESID + " INTEGER NOT NULL REFERENCES resources(id) ON DELETE CASCADE, " +
+			CONTEXTLOC + " TEXT NOT NULL DEFAULT '*', "+
+			CONTEXTACT + " TEXT NOT NULL DEFAULT '*', "+
+			CONTEXTTIME + " TEXT NOT NULL DEFAULT '*', "+
+			CONTEXTID + " TEXT NOT NULL DEFAULT '*', "+
 			POLICY + " INTEGER NOT NULL DEFAULT 0, " +
-			ACCESSLVL + " INTEGER NOT NULL DEFAULT 0);";
+			POLACCLVL + " INTEGER NOT NULL DEFAULT 0);";
 	
 	private static DefaultDataLoader defaultDataLoader;
 	
@@ -99,7 +135,9 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	 */
 	public int addApplication(SQLiteDatabase db, AppInfo anAppInfo) {
 		ContentValues values = new ContentValues();
-		values.put(APPNAME, anAppInfo.getName());
+		values.put(APPLABEL, anAppInfo.getLabel());
+		values.put(APPPACK, anAppInfo.getPackageName());
+		values.put(APPPERM, anAppInfo.getPermissions());
 		try{
 			db.insert(APPLICATION_TABLE_NAME, null, values);
 		} catch (SQLException e) {
@@ -123,7 +161,7 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 		ContentValues values = new ContentValues();
 		values.put(POLAPPID, aPolicyRule.getAppId());
 		values.put(POLRESID, aPolicyRule.getResId());
-		if(aPolicyRule.isPolicyRule())
+		if(aPolicyRule.isRule())
 			values.put(POLICY, 1);
 		else
 			values.put(POLICY, 0);
@@ -142,7 +180,11 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	 */
 	public int addResource(SQLiteDatabase db, Provider aResource) {
 		ContentValues values = new ContentValues();
-		values.put(RESNAME, aResource.getName());
+		values.put(RESLABEL, aResource.getLabel());
+		values.put(RESPRO, aResource.getProviderName());
+		values.put(RESAUTH, aResource.getAuthority());
+		values.put(RESREADPERM, aResource.getReadPermission());
+		values.put(RESWRITEPERM, aResource.getWritePermission());
 		try {
 			db.insert(RESOURCE_TABLE_NAME, null, values);
 		} catch (SQLException e) {
@@ -192,14 +234,14 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	 * @param resName
 	 * @return the policy
 	 */
-	public PolicyRule findPolicy(SQLiteDatabase db, String appName, String resName) {
+	public PolicyRule findPolicy(SQLiteDatabase db, String appPack, String resProvider) {
 		// Select Policy Query
 		String selectQuery = "SELECT "+
 					POLICY_TABLE_NAME + "." + POLID + "," +
 					APPLICATION_TABLE_NAME + "." + APPID + "," +
-					APPLICATION_TABLE_NAME + "." + APPNAME + "," +
+					APPLICATION_TABLE_NAME + "." + APPLABEL + "," +
 					RESOURCE_TABLE_NAME + "." + RESID + "," +
-					RESOURCE_TABLE_NAME + "." + RESNAME + "," +
+					RESOURCE_TABLE_NAME + "." + RESLABEL + "," +
 					POLICY_TABLE_NAME + "." + POLICY +
 					" FROM " + 
 					POLICY_TABLE_NAME +
@@ -210,8 +252,8 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 					" ON " + POLICY_TABLE_NAME + "." + POLRESID + 
 					" = " +  RESOURCE_TABLE_NAME + "." + RESID + 
 					" WHERE "  +  
-					APPLICATION_TABLE_NAME + "." + APPNAME + " = '" + appName + "' AND " +
-					RESOURCE_TABLE_NAME + "." + RESNAME + " = '" + resName + 
+					APPLICATION_TABLE_NAME + "." + APPPACK + " = '" + appPack + "' AND " +
+					RESOURCE_TABLE_NAME + "." + RESPRO + " = '" + resProvider + 
 					"';";
 
 		Cursor cursor = db.rawQuery(selectQuery, null);
@@ -220,13 +262,13 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 			if (cursor.moveToFirst()) {
 				policyRule.setId(Integer.parseInt(cursor.getString(0)));
 				policyRule.setAppId(Integer.parseInt(cursor.getString(1)));
-				policyRule.setAppName(cursor.getString(2));
+				policyRule.setAppLabel(cursor.getString(2));
 				policyRule.setResId(Integer.parseInt(cursor.getString(3)));
-				policyRule.setResName(cursor.getString(4));
+				policyRule.setResLabel(cursor.getString(4));
 				if(Integer.parseInt(cursor.getString(5)) == 1)
-					policyRule.setPolicyRule(true);
+					policyRule.setRule(true);
 				else
-					policyRule.setPolicyRule(false);
+					policyRule.setRule(false);
 			}
 		} catch(SQLException e) {
             throw new SQLException("Could not find " + e);
@@ -246,9 +288,9 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 		String selectQuery = "SELECT "+
 					POLICY_TABLE_NAME + "." + POLID + "," +
 					APPLICATION_TABLE_NAME + "." + APPID + "," +
-					APPLICATION_TABLE_NAME + "." + APPNAME + "," +
+					APPLICATION_TABLE_NAME + "." + APPLABEL + "," +
 					RESOURCE_TABLE_NAME + "." + RESID + "," +
-					RESOURCE_TABLE_NAME + "." + RESNAME + "," +
+					RESOURCE_TABLE_NAME + "." + RESLABEL + "," +
 					POLICY_TABLE_NAME + "." + POLICY +
 					" FROM " + 
 					POLICY_TABLE_NAME +
@@ -267,13 +309,13 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 			if (cursor.moveToFirst()) {
 				policyRule.setId(Integer.parseInt(cursor.getString(0)));
 				policyRule.setAppId(Integer.parseInt(cursor.getString(1)));
-				policyRule.setAppName(cursor.getString(2));
+				policyRule.setAppLabel(cursor.getString(2));
 				policyRule.setResId(Integer.parseInt(cursor.getString(3)));
-				policyRule.setResName(cursor.getString(4));
+				policyRule.setResLabel(cursor.getString(4));
 				if(Integer.parseInt(cursor.getString(5)) == 1)
-					policyRule.setPolicyRule(true);
+					policyRule.setRule(true);
 				else
-					policyRule.setPolicyRule(false);
+					policyRule.setRule(false);
 			}
 		} catch(SQLException e) {
 	        throw new SQLException("Could not find " + e);
@@ -291,9 +333,9 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 		String selectQuery = "SELECT "+
 					POLICY_TABLE_NAME + "." + POLID + "," +
 					APPLICATION_TABLE_NAME + "." + APPID + "," +
-					APPLICATION_TABLE_NAME + "." + APPNAME + "," +
+					APPLICATION_TABLE_NAME + "." + APPLABEL + "," +
 					RESOURCE_TABLE_NAME + "." + RESID + "," +
-					RESOURCE_TABLE_NAME + "." + RESNAME + "," +
+					RESOURCE_TABLE_NAME + "." + RESLABEL + "," +
 					POLICY_TABLE_NAME + "." + POLICY +
 					" FROM " + 
 					POLICY_TABLE_NAME +
@@ -313,13 +355,13 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 					PolicyRule policyRule = new PolicyRule();
 					policyRule.setId(Integer.parseInt(cursor.getString(0)));
 					policyRule.setAppId(Integer.parseInt(cursor.getString(1)));
-					policyRule.setAppName(cursor.getString(2));
+					policyRule.setAppLabel(cursor.getString(2));
 					policyRule.setResId(Integer.parseInt(cursor.getString(3)));
-					policyRule.setResName(cursor.getString(4));
+					policyRule.setResLabel(cursor.getString(4));
 					if(Integer.parseInt(cursor.getString(5)) == 1)
-						policyRule.setPolicyRule(true);
+						policyRule.setRule(true);
 					else
-						policyRule.setPolicyRule(false);
+						policyRule.setRule(false);
 					// Adding policies to list
 					policyRules.add(policyRule);
 				} while (cursor.moveToNext());
@@ -350,14 +392,8 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 						cursor.getString(1),
 						cursor.getString(2),
 						cursor.getString(3),
-						cursor.getString(4));
-//				policyRule.setAppName(cursor.getString(2));
-//				policyRule.setResId(Integer.parseInt(cursor.getString(3)));
-//				policyRule.setResName(cursor.getString(4));
-//				if(Integer.parseInt(cursor.getString(5)) == 1)
-//					policyRule.setPolicyRule(true);
-//				else
-//					policyRule.setPolicyRule(false);
+						cursor.getString(4),
+						cursor.getString(5));
 				// Adding policies to list
 				providers.add(provider);
 			} while (cursor.moveToNext());
@@ -384,19 +420,11 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 				AppInfo app = new AppInfo(Integer.parseInt(
 						cursor.getString(0)),
 						cursor.getString(1),
-						cursor.getString(2));
-//				policyRule.setAppName(cursor.getString(2));
-//				policyRule.setResId(Integer.parseInt(cursor.getString(3)));
-//				policyRule.setResName(cursor.getString(4));
-//				if(Integer.parseInt(cursor.getString(5)) == 1)
-//					policyRule.setPolicyRule(true);
-//				else
-//					policyRule.setPolicyRule(false);
-				// Adding application to list
+						cursor.getString(2),
+						cursor.getString(3));
 				apps.add(app);
 			} while (cursor.moveToNext());
 		}
-
 		// return applications list
 		return apps;
 	}
@@ -463,7 +491,9 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	 */
 	public int updateApplication(SQLiteDatabase db, AppInfo anAppInfo) {
 		ContentValues values = new ContentValues();
-		values.put(APPNAME, anAppInfo.getName());
+		values.put(APPLABEL, anAppInfo.getLabel());
+		values.put(APPPACK, anAppInfo.getPackageName());
+		values.put(APPPERM, anAppInfo.getPermissions());
 		return db.update(APPLICATION_TABLE_NAME, values, APPID + " = ?", 
 				new String[] { String.valueOf(anAppInfo.getId()) });
 	}
@@ -476,7 +506,7 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 		ContentValues values = new ContentValues();
 		values.put(POLAPPID, aPolicyRule.getAppId());
 		values.put(POLRESID, aPolicyRule.getResId());
-		if(aPolicyRule.isPolicyRule())
+		if(aPolicyRule.isRule())
 			values.put(POLICY, 1);
 		else
 			values.put(POLICY, 0);
@@ -490,7 +520,11 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	 */
 	public int updateResource(SQLiteDatabase db, Provider aResource) {
 		ContentValues values = new ContentValues();
-		values.put(RESNAME, aResource.getName());
+		values.put(RESLABEL, aResource.getLabel());
+		values.put(RESPRO, aResource.getProviderName());
+		values.put(RESAUTH, aResource.getAuthority());
+		values.put(RESREADPERM, aResource.getReadPermission());
+		values.put(RESWRITEPERM, aResource.getWritePermission());
 		return db.update(RESOURCE_TABLE_NAME, values, RESID + " = ?", 
 				new String[] { String.valueOf(aResource.getId()) });
 	}

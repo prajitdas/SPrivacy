@@ -3,65 +3,88 @@ package com.prajitdas.sprivacy.policymanager.util;
 public class PolicyRule {
 	private int id;
 	private int appId;
-	private String appName;
+	private String appLabel;
 	private int resId;
-	private String resName;
-	private boolean policyRule;
+	private String resLabel;
+	private boolean rule;
+	private int accessLevel;
+	private UserContext userContext;
+	//Default constructor created to assist db operations
+	public PolicyRule() {
+	}
+	public PolicyRule(int id, int appId, String appLabel, int resId,
+			String resLabel, boolean rule, int accessLevel,
+			UserContext userContext) {
+		setId(id);
+		setAppId(appId);
+		setAppLabel(appLabel);
+		setResId(resId);
+		setResLabel(resLabel);
+		setRule(rule);
+		setAccessLevel(accessLevel);
+		setUserContext(userContext);
+	}
+	public int getAccessLevel() {
+		return accessLevel;
+	}
 	public int getAppId() {
 		return appId;
 	}
-	public String getAppName() {
-		return appName;
+	public String getAppLabel() {
+		return appLabel;
 	}
 	public int getId() {
 		return id;
 	}
 	public String getPolicyText() {
-//		return 	Integer.toString(id) + ", " +
-//				Integer.toString(appId) + ", " + 
-//				appName + ", " + 
-//				Integer.toString(resId) + ", " +
-//				resName + ", " +
-//				policyRule;
-		return 	appName + ", " + 
-				resName + ", " +
-				policyRule;
+		return 	appLabel + ", " + 
+				resLabel + ", " +
+				rule;
 	}
 	public int getResId() {
 		return resId;
 	}
-	public String getResName() {
-		return resName;
+	public String getResLabel() {
+		return resLabel;
 	}
-	public boolean isPolicyRule() {
-		return policyRule;
+	public UserContext getUserContext() {
+		return userContext;
+	}
+	public boolean isRule() {
+		return rule;
+	}
+	public void setAccessLevel(int accessLevel) {
+		this.accessLevel = accessLevel;
 	}
 	public void setAppId(int appId) {
 		this.appId = appId;
 	}
-	public void setAppName(String appName) {
-		this.appName = appName;
+	public void setAppLabel(String appLabel) {
+		this.appLabel = appLabel;
 	}
 	public void setId(int id) {
 		this.id = id;
 	}
-	public void setPolicyRule(boolean policyRule) {
-		this.policyRule = policyRule;
-	}
 	public void setResId(int resId) {
 		this.resId = resId;
 	}
-	public void setResName(String resName) {
-		this.resName = resName;
+	public void setResLabel(String resLabel) {
+		this.resLabel = resLabel;
+	}
+	public void setRule(boolean rule) {
+		this.rule = rule;
+	}
+	public void setUserContext(UserContext userContext) {
+		this.userContext = userContext;
 	}
 	public void togglePolicyRule() {
-		if(isPolicyRule())
-			setPolicyRule(false);
+		if(isRule())
+			setRule(false);
 		else
-			setPolicyRule(true);
+			setRule(true);
 	}
 	@Override
 	public String toString() {
-		return 	appName + " | " + resName;
+		return 	appLabel + " | " + resLabel;
 	}
 }

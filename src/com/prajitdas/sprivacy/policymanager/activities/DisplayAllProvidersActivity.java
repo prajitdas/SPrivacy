@@ -1,6 +1,7 @@
 package com.prajitdas.sprivacy.policymanager.activities;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import android.app.Activity;
 import android.database.sqlite.SQLiteDatabase;
@@ -30,6 +31,7 @@ public class DisplayAllProvidersActivity extends Activity {
 		listOfResources = new ArrayList<String>();
 		for(Provider aResource : db.findAllProviders(database))
 			listOfResources.add(aResource.toString());
+		Collections.sort(listOfResources);
 		loadView(listOfResources);
 	}
 

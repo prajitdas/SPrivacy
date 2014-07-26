@@ -2,18 +2,19 @@ package com.prajitdas.sprivacy.policymanager.util;
 
 public class Provider {
 	private int id;
-	private String name;
+	private String label;
+	private String providerName;
 	private String authority;
 	private String readPermission;
 	private String writePermission;
-	public Provider(int id, String name, String authority,
-			String readPermission, String writePermission) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.authority = authority;
-		this.readPermission = readPermission;
-		this.writePermission = writePermission;
+	public Provider(int id, String label, String providerName,
+			String authority, String readPermission, String writePermission) {
+		setId(id);
+		setLabel(label);
+		setProviderName(providerName);
+		setAuthority(authority);
+		setReadPermission(readPermission);
+		setWritePermission(writePermission);
 	}
 	public String getAuthority() {
 		return authority;
@@ -21,8 +22,11 @@ public class Provider {
 	public int getId() {
 		return id;
 	}
-	public String getName() {
-		return name;
+	public String getLabel() {
+		return label;
+	}
+	public String getProviderName() {
+		return providerName;
 	}
 	public String getReadPermission() {
 		return readPermission;
@@ -36,8 +40,11 @@ public class Provider {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setLabel(String label) {
+		this.label = label;
+	}
+	public void setProviderName(String providerName) {
+		this.providerName = providerName;
 	}
 	public void setReadPermission(String readPermission) {
 		this.readPermission = readPermission;
@@ -47,6 +54,6 @@ public class Provider {
 	}
 	@Override
 	public String toString(){
-		return name;
+		return label;
 	}
 }
