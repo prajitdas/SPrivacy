@@ -32,13 +32,13 @@ public class DisplayAllApplicationsActivity extends Activity {
 		database = db.getWritableDatabase();
 		listOfApplications = new ArrayList<HashMap<String, String>>();
 
-		mapFrom = new String[] {"rowid", "col_1"};
+		mapFrom = new String[] {"labelData", "detailData"};
 		mapTo = new int[] {R.id.labelData, R.id.detailData};
 
 		for(AppInfo anApp : db.findAllApplications(database)) {
 			HashMap<String, String> tempMap = new HashMap<String, String>();
-			tempMap.put("rowid", anApp.getLabel());
-			tempMap.put("col_1", anApp.getDetailData());
+			tempMap.put("labelData", anApp.getLabel());
+			tempMap.put("detailData", anApp.getDetailData());
 			listOfApplications.add(tempMap);
 		}
 		loadView(listOfApplications);

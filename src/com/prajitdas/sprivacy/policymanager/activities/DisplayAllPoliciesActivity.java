@@ -32,13 +32,13 @@ public class DisplayAllPoliciesActivity extends Activity {
 		database = db.getWritableDatabase();
 		listOfPoliciesInStringForm = new ArrayList<HashMap<String, String>>();
 
-		mapFrom = new String[] {"rowid", "col_1"};
+		mapFrom = new String[] {"labelData", "detailData"};
 		mapTo = new int[] {R.id.labelData, R.id.detailData};
 
 		for(PolicyRule aPolicyRule : db.findAllPolicies(database)) {
 			HashMap<String, String> tempMap = new HashMap<String, String>();
-			tempMap.put("rowid", aPolicyRule.getLabel());
-			tempMap.put("col_1", aPolicyRule.getDetailData());
+			tempMap.put("labelData", aPolicyRule.getLabel());
+			tempMap.put("detailData", aPolicyRule.getDetailData());
 			listOfPoliciesInStringForm.add(tempMap);
 		}
 		loadView(listOfPoliciesInStringForm);
