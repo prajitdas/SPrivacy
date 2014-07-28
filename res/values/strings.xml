@@ -32,5 +32,7 @@
     <string name="dialog_delete_data">Delete and reload default data?</string>
     <string name="dialog_resp_delete">Yes</string>
     <string name="dialog_resp_NO">No</string>
+    <string name="largeSampleTextForListView">Large Text</string>
+    <string name="smallSampleTextForListView">Small Text</string>
     
 </resources>

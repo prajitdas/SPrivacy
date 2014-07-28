@@ -9,7 +9,7 @@
     tools:context="com.prajitdas.sprivacy.policymanager.activities.DisplayAllPoliciesActivity" >
 
     <ListView
-        android:id="@+id/listViewPolicies"
+        android:id="@+id/listViewAllEntities"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

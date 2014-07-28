@@ -1,25 +1,28 @@
 package com.prajitdas.sprivacy.policymanager.activities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.app.Activity;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
 import com.prajitdas.sprivacy.R;
 import com.prajitdas.sprivacy.policymanager.PolicyDBHelper;
 import com.prajitdas.sprivacy.policymanager.util.PolicyRule;
 
 public class DisplayAllPoliciesActivity extends Activity {
-	private ArrayList<String> listOfPoliciesInStringForm;
+	private ArrayList<HashMap<String, String>> listOfPoliciesInStringForm;
 	private ListView mListView;
-	private ArrayAdapter<String> mAdapter;
+	private SimpleAdapter mAdapter;
 	private PolicyDBHelper db;
 	private SQLiteDatabase database; 
+	private String[] mapFrom;
+	private int[] mapTo;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -27,15 +30,23 @@ public class DisplayAllPoliciesActivity extends Activity {
 		setContentView(R.layout.activity_display_all);
 		db = new PolicyDBHelper(this);
 		database = db.getWritableDatabase();
-		listOfPoliciesInStringForm = new ArrayList<String>();
-		for(PolicyRule aPolicyRule : db.findAllPolicies(database))
-			listOfPoliciesInStringForm.add(aPolicyRule.getPolicyText());
+		listOfPoliciesInStringForm = new ArrayList<HashMap<String, String>>();
+
+		mapFrom = new String[] {"rowid", "col_1"};
+		mapTo = new int[] {R.id.labelData, R.id.detailData};
+
+		for(PolicyRule aPolicyRule : db.findAllPolicies(database)) {
+			HashMap<String, String> tempMap = new HashMap<String, String>();
+			tempMap.put("rowid", aPolicyRule.getLabel());
+			tempMap.put("col_1", aPolicyRule.getDetailData());
+			listOfPoliciesInStringForm.add(tempMap);
+		}
 		loadView(listOfPoliciesInStringForm);
 	}
 
-	private void loadView(ArrayList<String> list) {
-		mListView = (ListView) findViewById(R.id.listViewPolicies);
-		mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
+	private void loadView(ArrayList<HashMap<String, String>> list) {
+		mListView = (ListView) findViewById(R.id.listViewAllEntities);
+		mAdapter = new SimpleAdapter(this, list, R.layout.list_item, mapFrom, mapTo);
 		mListView.setAdapter(mAdapter);
 	}
 
@@ -54,7 +65,7 @@ public class DisplayAllPoliciesActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.display_all_policies, menu);
+		getMenuInflater().inflate(R.menu.display_all_data, menu);
 		return true;
 	}
 

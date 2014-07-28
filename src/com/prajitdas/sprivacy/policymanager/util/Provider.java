@@ -52,8 +52,10 @@ public class Provider {
 	public void setWritePermission(String writePermission) {
 		this.writePermission = writePermission;
 	}
-	@Override
+	public String getDetailData() {
+		return authority;
+	}	@Override
 	public String toString(){
-		return label;
+		return label+"\n"+authority;
 	}
 }

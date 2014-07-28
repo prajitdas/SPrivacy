@@ -41,8 +41,11 @@ public class AppInfo {
 	public void setPermissions(String permissions) {
 		this.permissions = permissions;
 	}
+	public String getDetailData() {
+		return packageName;
+	}
 	@Override
     public String toString() {
-        return label;
+        return label+"\n"+packageName;
     }
 }
