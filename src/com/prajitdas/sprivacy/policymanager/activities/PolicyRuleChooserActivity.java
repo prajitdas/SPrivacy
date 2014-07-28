@@ -33,9 +33,9 @@ public class PolicyRuleChooserActivity extends Activity {
 
 	private void addDataRows() {
 		try {
-			addTableRow(db.findPolicy(database, SPrivacyApplication.getConstAppname(), SPrivacyApplication.getConstImages()));
-			addTableRow(db.findPolicy(database, SPrivacyApplication.getConstAppname(), SPrivacyApplication.getConstFiles()));
-			addTableRow(db.findPolicy(database, SPrivacyApplication.getConstAppname(), SPrivacyApplication.getConstContacts()));
+			addTableRow(db.findPolicyByApp(database, SPrivacyApplication.getConstAppname(), SPrivacyApplication.getConstImages()));
+			addTableRow(db.findPolicyByApp(database, SPrivacyApplication.getConstAppname(), SPrivacyApplication.getConstFiles()));
+			addTableRow(db.findPolicyByApp(database, SPrivacyApplication.getConstAppname(), SPrivacyApplication.getConstContacts()));
 		} catch(SQLException e) {
 			SPrivacyApplication.makeToast(this, "Seems like there is no data in the database");
 		}

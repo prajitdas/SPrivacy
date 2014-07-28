@@ -15,6 +15,7 @@ import com.prajitdas.sprivacy.policymanager.util.AppInfo;
 import com.prajitdas.sprivacy.policymanager.util.DefaultDataLoader;
 import com.prajitdas.sprivacy.policymanager.util.PolicyRule;
 import com.prajitdas.sprivacy.policymanager.util.Provider;
+import com.prajitdas.sprivacy.policymanager.util.UserContext;
 
 public class PolicyDBHelper extends SQLiteOpenHelper {
 	// fields for the database
@@ -121,6 +122,24 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	private static DefaultDataLoader defaultDataLoader;
 	
 	/**
+	 * method to load the default set of policies into the database
+	 * @param db reference to the db instance
+	 */
+	private void loadDefaultPoliciesIntoDB(SQLiteDatabase db) {
+		defaultDataLoader = new DefaultDataLoader(getContext());
+		//loads the applications
+		for(AppInfo anAppInfo : defaultDataLoader.getApplications())
+			addApplication(db, anAppInfo);
+		//loads the resources or providers
+		for(Provider aResource : defaultDataLoader.getResources())
+			addResource(db, aResource);
+		//loads the policies, this is the interesting part and can be used to load
+		//a default set of policies from an xml resource or a web service
+		for(PolicyRule aPolicyRule : defaultDataLoader.getPolicies())
+			addPolicy(db, aPolicyRule);
+	}
+
+	/**
 	 * Database creation constructor
 	 * @param context
 	 */
@@ -129,9 +148,31 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 		this.setContext(context); 
 	}
 
+	public String getDatabaseName() {
+		return DATABASE_NAME;
+	}
+
+	public Context getContext() {
+		return context;
+	}
+
+	public void setContext(Context context) {
+		this.context = context;
+	}
+	
+	public static int getDatabaseVersion() {
+		return DATABASE_VERSION;
+	}
+
+	/**
+	 * All CRUD(Create, Read, Update, Delete) Operations
+	 */
+	
 	/**
 	 * method to insert into application table the application
-	 * @param value the name of the application
+	 * @param db
+	 * @param anAppInfo
+	 * @return
 	 */
 	public int addApplication(SQLiteDatabase db, AppInfo anAppInfo) {
 		ContentValues values = new ContentValues();
@@ -148,23 +189,24 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	}
 	
 	/**
-	 * All CRUD(Create, Read, Update, Delete) Operations
-	 */
-	
-	/**
 	 * method to insert into policy table the policy
-	 * @param appId the application id
-	 * @param resId the resource id
-	 * @param policy the policy value
+	 * @param db
+	 * @param aPolicyRule
+	 * @return
 	 */
 	public int addPolicy(SQLiteDatabase db, PolicyRule aPolicyRule) {
 		ContentValues values = new ContentValues();
 		values.put(POLAPPID, aPolicyRule.getAppId());
 		values.put(POLRESID, aPolicyRule.getResId());
+		values.put(CONTEXTLOC, aPolicyRule.getUserContext().getLocation());
+		values.put(CONTEXTACT, aPolicyRule.getUserContext().getActivity());
+		values.put(CONTEXTTIME, aPolicyRule.getUserContext().getTime());
+		values.put(CONTEXTID, aPolicyRule.getUserContext().getIdentity());
 		if(aPolicyRule.isRule())
 			values.put(POLICY, 1);
 		else
 			values.put(POLICY, 0);
+		values.put(POLACCLVL, aPolicyRule.getAccessLevel());
 		try {
 			db.insert(POLICY_TABLE_NAME, null, values);
 		} catch (SQLException e) {
@@ -176,7 +218,9 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 
 	/**
 	 * method to insert into resource table the resource
-	 * @param value the name of the resource
+	 * @param db
+	 * @param aResource
+	 * @return
 	 */
 	public int addResource(SQLiteDatabase db, Provider aResource) {
 		ContentValues values = new ContentValues();
@@ -193,48 +237,45 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 		}
 		return 1;
 	}
-	
+
 	/**
 	 * method to delete a row from a table based on the identifier 
-	 * @param db reference to the db instance
-	 * @param id identifier of the row to delete
-	 * @param tableName table from which to delete data
+	 * @param db
+	 * @param anAppInfo
 	 */
 	public void deleteApplication(SQLiteDatabase db, AppInfo anAppInfo) {
 		db.delete(APPLICATION_TABLE_NAME, APPID + " = ?",
 				new String[] { String.valueOf(anAppInfo.getId()) });
 	}
-	
+
 	/**
-	 * method to delete a row from a table based on the identifier 
-	 * @param db reference to the db instance
-	 * @param id identifier of the row to delete
-	 * @param tableName table from which to delete data
+	 * method to delete a row from a table based on the identifier
+	 * @param db
+	 * @param aPolicyRule
 	 */
 	public void deletePolicy(SQLiteDatabase db, PolicyRule aPolicyRule) {
 		db.delete(POLICY_TABLE_NAME, POLID + " = ?",
 				new String[] { String.valueOf(aPolicyRule.getId()) });
 	}
-	
+
 	/**
-	 * method to delete a row from a table based on the identifier 
-	 * @param db reference to the db instance
-	 * @param id identifier of the row to delete
-	 * @param tableName table from which to delete data
+	 * method to delete a row from a table based on the identifier
+	 * @param db
+	 * @param aResource
 	 */
 	public void deleteResource(SQLiteDatabase db, Provider aResource) {
 		db.delete(RESOURCE_TABLE_NAME, RESID + " = ?",
 				new String[] { String.valueOf(aResource.getId()) });
 	}
-	
+
 	/**
 	 * Finds a policy based on the application and the resource being accessed
 	 * @param db
-	 * @param appName
-	 * @param resName
-	 * @return the policy
+	 * @param appPack
+	 * @param resProvider
+	 * @return
 	 */
-	public PolicyRule findPolicy(SQLiteDatabase db, String appPack, String resProvider) {
+	public PolicyRule findPolicyByApp(SQLiteDatabase db, String appPack, String resProvider) {
 		// Select Policy Query
 		String selectQuery = "SELECT "+
 					POLICY_TABLE_NAME + "." + POLID + "," +
@@ -242,7 +283,12 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 					APPLICATION_TABLE_NAME + "." + APPLABEL + "," +
 					RESOURCE_TABLE_NAME + "." + RESID + "," +
 					RESOURCE_TABLE_NAME + "." + RESLABEL + "," +
-					POLICY_TABLE_NAME + "." + POLICY +
+					POLICY_TABLE_NAME + "." + CONTEXTLOC + "," +
+					POLICY_TABLE_NAME + "." + CONTEXTACT + "," +
+					POLICY_TABLE_NAME + "." + CONTEXTTIME + "," +
+					POLICY_TABLE_NAME + "." + CONTEXTID + "," +
+					POLICY_TABLE_NAME + "." + POLICY + "," +
+					POLICY_TABLE_NAME + "." + POLACCLVL + 
 					" FROM " + 
 					POLICY_TABLE_NAME +
 					" LEFT JOIN " + APPLICATION_TABLE_NAME + 
@@ -258,6 +304,7 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 
 		Cursor cursor = db.rawQuery(selectQuery, null);
 		PolicyRule policyRule = new PolicyRule();
+		
 		try{
 			if (cursor.moveToFirst()) {
 				policyRule.setId(Integer.parseInt(cursor.getString(0)));
@@ -265,10 +312,15 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 				policyRule.setAppLabel(cursor.getString(2));
 				policyRule.setResId(Integer.parseInt(cursor.getString(3)));
 				policyRule.setResLabel(cursor.getString(4));
-				if(Integer.parseInt(cursor.getString(5)) == 1)
+				
+				UserContext contextCondition = new UserContext(cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8));
+				policyRule.setUserContext(contextCondition);
+				
+				if(Integer.parseInt(cursor.getString(9)) == 1)
 					policyRule.setRule(true);
 				else
 					policyRule.setRule(false);
+				policyRule.setAccessLevel(Integer.parseInt(cursor.getString(10)));
 			}
 		} catch(SQLException e) {
             throw new SQLException("Could not find " + e);
@@ -279,9 +331,8 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	/**
 	 * Finds a policy based on the policy id
 	 * @param db
-	 * @param appName
-	 * @param resName
-	 * @return the policy
+	 * @param id
+	 * @return
 	 */
 	public PolicyRule findPolicyByID(SQLiteDatabase db, int id) {
 		// Select Policy Query
@@ -291,7 +342,12 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 					APPLICATION_TABLE_NAME + "." + APPLABEL + "," +
 					RESOURCE_TABLE_NAME + "." + RESID + "," +
 					RESOURCE_TABLE_NAME + "." + RESLABEL + "," +
-					POLICY_TABLE_NAME + "." + POLICY +
+					POLICY_TABLE_NAME + "." + CONTEXTLOC + "," +
+					POLICY_TABLE_NAME + "." + CONTEXTACT + "," +
+					POLICY_TABLE_NAME + "." + CONTEXTTIME + "," +
+					POLICY_TABLE_NAME + "." + CONTEXTID + "," +
+					POLICY_TABLE_NAME + "." + POLICY + "," +
+					POLICY_TABLE_NAME + "." + POLACCLVL + 
 					" FROM " + 
 					POLICY_TABLE_NAME +
 					" LEFT JOIN " + APPLICATION_TABLE_NAME + 
@@ -312,20 +368,26 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 				policyRule.setAppLabel(cursor.getString(2));
 				policyRule.setResId(Integer.parseInt(cursor.getString(3)));
 				policyRule.setResLabel(cursor.getString(4));
-				if(Integer.parseInt(cursor.getString(5)) == 1)
+				
+				UserContext contextCondition = new UserContext(cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8));
+				policyRule.setUserContext(contextCondition);
+				
+				if(Integer.parseInt(cursor.getString(9)) == 1)
 					policyRule.setRule(true);
 				else
 					policyRule.setRule(false);
+				policyRule.setAccessLevel(Integer.parseInt(cursor.getString(10)));
 			}
 		} catch(SQLException e) {
 	        throw new SQLException("Could not find " + e);
 		}
 		return policyRule;
 	}
-	
+
 	/**
 	 * Getting all policies
-	 * @return returns a list of policies
+	 * @param db
+	 * @return
 	 */
 	public ArrayList<PolicyRule> findAllPolicies(SQLiteDatabase db) {
 		ArrayList<PolicyRule> policyRules = new ArrayList<PolicyRule>();
@@ -336,7 +398,12 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 					APPLICATION_TABLE_NAME + "." + APPLABEL + "," +
 					RESOURCE_TABLE_NAME + "." + RESID + "," +
 					RESOURCE_TABLE_NAME + "." + RESLABEL + "," +
-					POLICY_TABLE_NAME + "." + POLICY +
+					POLICY_TABLE_NAME + "." + CONTEXTLOC + "," +
+					POLICY_TABLE_NAME + "." + CONTEXTACT + "," +
+					POLICY_TABLE_NAME + "." + CONTEXTTIME + "," +
+					POLICY_TABLE_NAME + "." + CONTEXTID + "," +
+					POLICY_TABLE_NAME + "." + POLICY + "," +
+					POLICY_TABLE_NAME + "." + POLACCLVL + 
 					" FROM " + 
 					POLICY_TABLE_NAME +
 					" LEFT JOIN " + APPLICATION_TABLE_NAME + 
@@ -358,10 +425,16 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 					policyRule.setAppLabel(cursor.getString(2));
 					policyRule.setResId(Integer.parseInt(cursor.getString(3)));
 					policyRule.setResLabel(cursor.getString(4));
-					if(Integer.parseInt(cursor.getString(5)) == 1)
+					
+					UserContext contextCondition = new UserContext(cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8));
+					policyRule.setUserContext(contextCondition);
+					
+					if(Integer.parseInt(cursor.getString(9)) == 1)
 						policyRule.setRule(true);
 					else
 						policyRule.setRule(false);
+					policyRule.setAccessLevel(Integer.parseInt(cursor.getString(10)));
+
 					// Adding policies to list
 					policyRules.add(policyRule);
 				} while (cursor.moveToNext());
@@ -374,8 +447,9 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	}
 	
 	/**
-	 * Getting all policies
-	 * @return returns a list of policies
+	 * Getting all providers
+	 * @param db
+	 * @return
 	 */
 	public ArrayList<Provider> findAllProviders(SQLiteDatabase db) {
 		ArrayList<Provider> providers = new ArrayList<Provider>();
@@ -394,7 +468,8 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 						cursor.getString(3),
 						cursor.getString(4),
 						cursor.getString(5));
-				// Adding policies to list
+				Log.v(SPrivacyApplication.getDebugTag(), provider.toString());
+				// Adding providers to list
 				providers.add(provider);
 			} while (cursor.moveToNext());
 		}
@@ -404,8 +479,9 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * Getting all policies
-	 * @return returns a list of policies
+	 * Getting all applications
+	 * @param db
+	 * @return
 	 */
 	public ArrayList<AppInfo> findAllApplications(SQLiteDatabase db) {
 		ArrayList<AppInfo> apps = new ArrayList<AppInfo>();
@@ -417,11 +493,12 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 		// looping through all rows and adding to list
 		if (cursor.moveToFirst()) {
 			do {
-				AppInfo app = new AppInfo(Integer.parseInt(
-						cursor.getString(0)),
+				AppInfo app = new AppInfo(
+						Integer.parseInt(cursor.getString(0)),
 						cursor.getString(1),
 						cursor.getString(2),
 						cursor.getString(3));
+				// Adding applications to list
 				apps.add(app);
 			} while (cursor.moveToNext());
 		}
@@ -429,28 +506,6 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 		return apps;
 	}
 
-	public String getDatabaseName() {
-		return DATABASE_NAME;
-	}
-
-	/**
-	 * method to load the default set of policies into the database
-	 * @param db reference to the db instance
-	 */
-	private void loadDefaultPoliciesIntoDB(SQLiteDatabase db) {
-		defaultDataLoader = new DefaultDataLoader(getContext());
-		//loads the applications
-		for(AppInfo anAppInfo : defaultDataLoader.getApplications())
-			addApplication(db, anAppInfo);
-		//loads the resources or providers
-		for(Provider aResource : defaultDataLoader.getResources())
-			addResource(db, aResource);
-		//loads the policies, this is the interesting part and can be used to load
-		//a default set of policies from an xml resource or a web service
-		for(PolicyRule aPolicyRule : defaultDataLoader.getPolicies())
-			addPolicy(db, aPolicyRule);
-	}
-	
 	/**
 	 * table creation happens in onCreate this method also loads the default policies
 	 */
@@ -506,10 +561,15 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 		ContentValues values = new ContentValues();
 		values.put(POLAPPID, aPolicyRule.getAppId());
 		values.put(POLRESID, aPolicyRule.getResId());
+		values.put(CONTEXTLOC, aPolicyRule.getUserContext().getLocation());
+		values.put(CONTEXTACT, aPolicyRule.getUserContext().getActivity());
+		values.put(CONTEXTTIME, aPolicyRule.getUserContext().getTime());
+		values.put(CONTEXTID, aPolicyRule.getUserContext().getIdentity());
 		if(aPolicyRule.isRule())
 			values.put(POLICY, 1);
 		else
 			values.put(POLICY, 0);
+		values.put(POLACCLVL, aPolicyRule.getAccessLevel());
 		return db.update(POLICY_TABLE_NAME, values, POLID + " = ?", 
 				new String[] { String.valueOf(aPolicyRule.getId()) });
 	}
@@ -527,17 +587,5 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 		values.put(RESWRITEPERM, aResource.getWritePermission());
 		return db.update(RESOURCE_TABLE_NAME, values, RESID + " = ?", 
 				new String[] { String.valueOf(aResource.getId()) });
-	}
-
-	public Context getContext() {
-		return context;
-	}
-
-	public void setContext(Context context) {
-		this.context = context;
-	}
-	
-	public static int getDatabaseVersion() {
-		return DATABASE_VERSION;
 	}
 }

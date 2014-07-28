@@ -80,8 +80,8 @@ public class DefaultDataLoader {
 			if (providerArray != null)
 				for (ProviderInfo provider : providerArray)
     				providers.add(new Provider(providerCount++, 
-    						provider.name,
     						pm.getApplicationLabel(provider.applicationInfo).toString(),
+    						provider.name,
     						provider.authority,
     						provider.readPermission,
     						provider.writePermission));
