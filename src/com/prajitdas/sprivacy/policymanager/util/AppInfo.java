@@ -24,8 +24,8 @@ public class AppInfo {
 	public String getPermissions() {
 		return permissions;
 	}
-	public boolean isMatch(String appLabel){
-		if(label.equals(appLabel))
+	public boolean isMatch(String packageName){
+		if(this.packageName.equals(packageName))
 			return true;
 		return false;
 	}

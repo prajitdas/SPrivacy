@@ -275,7 +275,7 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	 * @param resProvider
 	 * @return
 	 */
-	public PolicyRule findPolicyByApp(SQLiteDatabase db, String appPack, String resProvider) {
+	public PolicyRule findPolicyByApp(SQLiteDatabase db, String appPack, String resAuth) {
 		// Select Policy Query
 		String selectQuery = "SELECT "+
 					POLICY_TABLE_NAME + "." + POLID + "," +
@@ -299,13 +299,13 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 					" = " +  RESOURCE_TABLE_NAME + "." + RESID + 
 					" WHERE "  +  
 					APPLICATION_TABLE_NAME + "." + APPPACK + " = '" + appPack + "' AND " +
-					RESOURCE_TABLE_NAME + "." + RESPRO + " = '" + resProvider + 
+					RESOURCE_TABLE_NAME + "." + RESAUTH + " = '" + resAuth + 
 					"';";
 
-		Cursor cursor = db.rawQuery(selectQuery, null);
 		PolicyRule policyRule = new PolicyRule();
 		
 		try{
+			Cursor cursor = db.rawQuery(selectQuery, null);
 			if (cursor.moveToFirst()) {
 				policyRule.setId(Integer.parseInt(cursor.getString(0)));
 				policyRule.setAppId(Integer.parseInt(cursor.getString(1)));
@@ -359,9 +359,10 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 					" WHERE "  +  
 					POLICY_TABLE_NAME + "." + POLID + " = " + id + ";";
 
-		Cursor cursor = db.rawQuery(selectQuery, null);
 		PolicyRule policyRule = new PolicyRule();
+		
 		try{
+			Cursor cursor = db.rawQuery(selectQuery, null);
 			if (cursor.moveToFirst()) {
 				policyRule.setId(Integer.parseInt(cursor.getString(0)));
 				policyRule.setAppId(Integer.parseInt(cursor.getString(1)));
@@ -413,9 +414,9 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 					" ON " + POLICY_TABLE_NAME + "." + POLRESID + 
 					" = " +  RESOURCE_TABLE_NAME + "." + RESID + ";";
 
-		Cursor cursor = db.rawQuery(selectQuery, null);
-
 		try{
+			Cursor cursor = db.rawQuery(selectQuery, null);
+
 			// looping through all rows and adding to list
 			if (cursor.moveToFirst()) {
 				do {
@@ -456,24 +457,27 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 		// Select All Query
 		String selectQuery = "SELECT * FROM " + RESOURCE_TABLE_NAME + ";";
 
-		Cursor cursor = db.rawQuery(selectQuery, null);
-
-		// looping through all rows and adding to list
-		if (cursor.moveToFirst()) {
-			do {
-				Provider provider = new Provider(
-						Integer.parseInt(cursor.getString(0)),
-						cursor.getString(1),
-						cursor.getString(2),
-						cursor.getString(3),
-						cursor.getString(4),
-						cursor.getString(5));
-				Log.v(SPrivacyApplication.getDebugTag(), provider.toString());
-				// Adding providers to list
-				providers.add(provider);
-			} while (cursor.moveToNext());
+		try{
+			Cursor cursor = db.rawQuery(selectQuery, null);
+	
+			// looping through all rows and adding to list
+			if (cursor.moveToFirst()) {
+				do {
+					Provider provider = new Provider(
+							Integer.parseInt(cursor.getString(0)),
+							cursor.getString(1),
+							cursor.getString(2),
+							cursor.getString(3),
+							cursor.getString(4),
+							cursor.getString(5));
+					Log.v(SPrivacyApplication.getDebugTag(), provider.toString());
+					// Adding providers to list
+					providers.add(provider);
+				} while (cursor.moveToNext());
+			}
+		} catch(SQLException e) {
+	        throw new SQLException("Could not find " + e);
 		}
-
 		// return policy rules list
 		return providers;
 	}
@@ -488,19 +492,23 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 		// Select All Query
 		String selectQuery = "SELECT * FROM " + APPLICATION_TABLE_NAME + ";";
 
-		Cursor cursor = db.rawQuery(selectQuery, null);
-
-		// looping through all rows and adding to list
-		if (cursor.moveToFirst()) {
-			do {
-				AppInfo app = new AppInfo(
-						Integer.parseInt(cursor.getString(0)),
-						cursor.getString(1),
-						cursor.getString(2),
-						cursor.getString(3));
-				// Adding applications to list
-				apps.add(app);
-			} while (cursor.moveToNext());
+		try{
+			Cursor cursor = db.rawQuery(selectQuery, null);
+	
+			// looping through all rows and adding to list
+			if (cursor.moveToFirst()) {
+				do {
+					AppInfo app = new AppInfo(
+							Integer.parseInt(cursor.getString(0)),
+							cursor.getString(1),
+							cursor.getString(2),
+							cursor.getString(3));
+					// Adding applications to list
+					apps.add(app);
+				} while (cursor.moveToNext());
+			}
+		} catch(SQLException e) {
+	        throw new SQLException("Could not find " + e);
 		}
 		// return applications list
 		return apps;

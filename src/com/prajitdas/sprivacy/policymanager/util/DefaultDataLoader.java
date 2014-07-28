@@ -31,7 +31,7 @@ public class DefaultDataLoader {
 		providers = new ArrayList<Provider>();
 		policies = new ArrayList<PolicyRule>();
 		packageManager = getContext().getPackageManager();
-		//Potentially dangerous method, read comment at the method level below
+		//Potentially dangerous method, read comment above the method below
 		loadExtraData();
 		policyLoad();
 	}

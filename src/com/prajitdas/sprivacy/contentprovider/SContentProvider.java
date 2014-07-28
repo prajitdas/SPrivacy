@@ -26,7 +26,10 @@ import android.provider.MediaStore.Video;
 import android.util.Log;
 
 import com.prajitdas.sprivacy.SPrivacyApplication;
-import com.prajitdas.sprivacy.policymanager.PolicyDBHelper;
+import com.prajitdas.sprivacy.policymanager.PolicyChecker;
+import com.prajitdas.sprivacy.policymanager.util.AccessController;
+import com.prajitdas.sprivacy.policymanager.util.PolicyQuery;
+import com.prajitdas.sprivacy.policymanager.util.UserContext;
 
 public class SContentProvider extends ContentProvider {
 	static final String PROVIDER_NAME = "com.prajitdas.sprivacy.contentprovider.Content";
@@ -63,6 +66,8 @@ public class SContentProvider extends ContentProvider {
 	}
 	
 	private static HashMap<String, String> PROJECTION_MAP;
+	
+	private AccessController accessController;
 	
 	/**
 	* Database specific constant declarations
@@ -174,7 +179,12 @@ public class SContentProvider extends ContentProvider {
 	private Cursor setImageData(Uri uri, String[] projection, String selection, 
 			String[] selectionArgs, String sortOrder) {
 		Cursor c;
-		if(isDataAccessAllowed(SPrivacyApplication.getConstImages())) {
+		//HOW WILL WE DO THIS?
+		accessController = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
+				SPrivacyApplication.getConstImages(), 
+				SPrivacyApplication.getConstAppname(), 
+				new UserContext("*", "*", "*", "*")), getContext());
+		if(accessController.isPolicy()) {
 			c = getContext().getContentResolver()
 					.query(RealURIsForQuery.imageUri,
 					projection, 
@@ -197,7 +207,12 @@ public class SContentProvider extends ContentProvider {
 	private Cursor setFileData(Uri uri, String[] projection, String selection, 
 			String[] selectionArgs, String sortOrder) {
 		Cursor c;
-		if(isDataAccessAllowed(SPrivacyApplication.getConstFiles())) {
+		//HOW WILL WE DO THIS?
+		accessController = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
+				SPrivacyApplication.getConstFiles(), 
+				SPrivacyApplication.getConstAppname(), 
+				new UserContext("*", "*", "*", "*")), getContext());
+		if(accessController.isPolicy()) {
 			c = getContext().getContentResolver()
 					.query(RealURIsForQuery.fileUri,
 					projection, 
@@ -247,7 +262,12 @@ public class SContentProvider extends ContentProvider {
 	private Cursor setVideoData(Uri uri, String[] projection, String selection, 
 			String[] selectionArgs, String sortOrder) {
 		Cursor c;
-		if(isDataAccessAllowed(SPrivacyApplication.getConstVideos())) {
+		//HOW WILL WE DO THIS?
+		accessController = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
+				SPrivacyApplication.getConstVideos(), 
+				SPrivacyApplication.getConstAppname(), 
+				new UserContext("*", "*", "*", "*")), getContext());
+		if(accessController.isPolicy()) {
 			c = getContext().getContentResolver()
 					.query(RealURIsForQuery.videoUri,
 					projection, 
@@ -271,7 +291,12 @@ public class SContentProvider extends ContentProvider {
 	private Cursor setAudioData(Uri uri, String[] projection, String selection, 
 			String[] selectionArgs, String sortOrder) {
 		Cursor c;
-		if(isDataAccessAllowed(SPrivacyApplication.getConstAudios())) {
+		//HOW WILL WE DO THIS?
+		accessController = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
+				SPrivacyApplication.getConstAudios(), 
+				SPrivacyApplication.getConstAppname(), 
+				new UserContext("*", "*", "*", "*")), getContext());
+		if(accessController.isPolicy()) {
 			c = getContext().getContentResolver()
 					.query(RealURIsForQuery.audioUri,
 					projection, 
@@ -295,7 +320,12 @@ public class SContentProvider extends ContentProvider {
 	private Cursor setContactData(Uri uri, String[] projection, String selection, 
 			String[] selectionArgs, String sortOrder) {
 		Cursor c;
-		if(isDataAccessAllowed(SPrivacyApplication.getConstContacts())) {
+		//HOW WILL WE DO THIS?
+		accessController = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
+				SPrivacyApplication.getConstContacts(), 
+				SPrivacyApplication.getConstAppname(), 
+				new UserContext("*", "*", "*", "*")), getContext());
+		if(accessController.isPolicy()) {
 			c = getContext().getContentResolver()
 					.query(RealURIsForQuery.contactUri,
 					projection, 
@@ -332,16 +362,6 @@ public class SContentProvider extends ContentProvider {
 	@Override
 	public Bundle call(String method, String arg, Bundle extras) {
 		return extras;
-	}
-
-	/**
-	 * This code should be able to find what policies are there to protect what content.
-	 * @return
-	 */
-	private boolean isDataAccessAllowed(String resource) {
-		PolicyDBHelper policyDBHelper = new PolicyDBHelper(getContext());
-		SQLiteDatabase policyDB = policyDBHelper.getWritableDatabase();
-		return policyDBHelper.findPolicyByApp(policyDB, SPrivacyApplication.getConstAppname(), resource).isRule();
 	}
 
 	@Override

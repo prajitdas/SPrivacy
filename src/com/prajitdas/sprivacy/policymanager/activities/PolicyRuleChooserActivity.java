@@ -57,7 +57,6 @@ public class PolicyRuleChooserActivity extends Activity {
 				//Toggle Button to identify which policy was modified
 				@Override
 				public void onClick(View v) {
-//					SPrivacyApplication.makeToast(v.getContext(), "clicked on " + listOfPolicyRules.get(index).toString());
 					togglePolicy(v.getId());
 				}
 			});
@@ -85,27 +84,25 @@ public class PolicyRuleChooserActivity extends Activity {
 	}
 	
 	private void addTableRow(PolicyRule aPolicyRule) {
-		TableRow tblRow = new TableRow(this);
-		TextView mTextViewPolicyStmt = new TextView(this);
-		ToggleButton tempToggleButton = new ToggleButton(this);
-		tempToggleButton.setTextOn(SPrivacyApplication.getConstAccessGranted());
-		tempToggleButton.setTextOff(SPrivacyApplication.getConstAccessDenied());
-		
-		mTextViewPolicyStmt.setText(aPolicyRule.toString());
-		
-		tempToggleButton.setChecked(aPolicyRule.isRule());
-		tempToggleButton.setId(aPolicyRule.getId());
-		
-		tblRow.addView(mTextViewPolicyStmt);
-		tblRow.addView(tempToggleButton);
-		mTableOfPolicies.addView(tblRow);
-		
-		mToggleButtons.add(tempToggleButton);
+		if(aPolicyRule!=null){
+			TableRow tblRow = new TableRow(this);
+			TextView mTextViewPolicyStmt = new TextView(this);
+			ToggleButton tempToggleButton = new ToggleButton(this);
+			tempToggleButton.setTextOn(SPrivacyApplication.getConstAccessGranted());
+			tempToggleButton.setTextOff(SPrivacyApplication.getConstAccessDenied());
+			
+			mTextViewPolicyStmt.setText(aPolicyRule.toString());
+			
+			tempToggleButton.setChecked(aPolicyRule.isRule());
+			tempToggleButton.setId(aPolicyRule.getId());
+			
+			tblRow.addView(mTextViewPolicyStmt);
+			tblRow.addView(tempToggleButton);
+			mTableOfPolicies.addView(tblRow);
+			
+			mToggleButtons.add(tempToggleButton);
+		}
 	}
-
-//	private void deleteDataRows() {
-//		mTableOfPolicies.removeAllViews();
-//	}
 
 	private void instantiateViews() {
 		mBtnDBOps = (Button) findViewById(R.id.btnDBOps);
@@ -123,7 +120,6 @@ public class PolicyRuleChooserActivity extends Activity {
 		database = db.getWritableDatabase();
 		instantiateViews();
 		addOnClickListener();
-//		Connector.getInstance().registerDatabase(this, SPrivacyApplication.getConstDbkey(), db.getDatabaseName());
 	}
 	
 	@Override
@@ -136,7 +132,6 @@ public class PolicyRuleChooserActivity extends Activity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-//		Connector.getInstance().unregisterDatabase(this, SPrivacyApplication.getConstDbkey(), db.getDatabaseName());
 	}
 
 	@Override
@@ -161,7 +156,6 @@ public class PolicyRuleChooserActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		database = db.getWritableDatabase();
-//		deleteDataRows();
 	}
 	
 	private void togglePolicy(int idOfPolicy) {
