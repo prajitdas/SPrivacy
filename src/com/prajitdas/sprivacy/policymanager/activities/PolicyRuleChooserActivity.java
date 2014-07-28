@@ -22,7 +22,7 @@ import android.widget.ToggleButton;
 import com.prajitdas.sprivacy.R;
 import com.prajitdas.sprivacy.SPrivacyApplication;
 import com.prajitdas.sprivacy.policymanager.PolicyDBHelper;
-import com.prajitdas.sprivacy.policymanager.util.PolicyRule;
+import com.prajitdas.sprivacy.policymanager.util.PolicyInfo;
 
 public class PolicyRuleChooserActivity extends Activity {
 	private Button mBtnDBOps;
@@ -83,7 +83,7 @@ public class PolicyRuleChooserActivity extends Activity {
 		mTableOfPolicies.addView(tblRow);
 	}
 	
-	private void addTableRow(PolicyRule aPolicyRule) {
+	private void addTableRow(PolicyInfo aPolicyRule) {
 		if(aPolicyRule!=null){
 			TableRow tblRow = new TableRow(this);
 			TextView mTextViewPolicyStmt = new TextView(this);
@@ -159,7 +159,7 @@ public class PolicyRuleChooserActivity extends Activity {
 	}
 	
 	private void togglePolicy(int idOfPolicy) {
-		PolicyRule tempPolicyRule = db.findPolicyByID(database, idOfPolicy);
+		PolicyInfo tempPolicyRule = db.findPolicyByID(database, idOfPolicy);
 		tempPolicyRule.togglePolicyRule();
 		db.updatePolicyRule(database, tempPolicyRule);
 	}

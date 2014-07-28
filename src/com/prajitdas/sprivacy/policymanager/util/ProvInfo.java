@@ -1,13 +1,13 @@
 package com.prajitdas.sprivacy.policymanager.util;
 
-public class Provider {
+public class ProvInfo {
 	private int id;
 	private String label;
 	private String providerName;
 	private String authority;
 	private String readPermission;
 	private String writePermission;
-	public Provider(int id, String label, String providerName,
+	public ProvInfo(int id, String label, String providerName,
 			String authority, String readPermission, String writePermission) {
 		setId(id);
 		setLabel(label);

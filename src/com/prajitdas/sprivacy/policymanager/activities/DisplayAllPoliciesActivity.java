@@ -13,7 +13,7 @@ import android.widget.SimpleAdapter;
 
 import com.prajitdas.sprivacy.R;
 import com.prajitdas.sprivacy.policymanager.PolicyDBHelper;
-import com.prajitdas.sprivacy.policymanager.util.PolicyRule;
+import com.prajitdas.sprivacy.policymanager.util.PolicyInfo;
 
 public class DisplayAllPoliciesActivity extends Activity {
 	private ArrayList<HashMap<String, String>> listOfPoliciesInStringForm;
@@ -35,7 +35,7 @@ public class DisplayAllPoliciesActivity extends Activity {
 		mapFrom = new String[] {"labelData", "detailData"};
 		mapTo = new int[] {R.id.labelData, R.id.detailData};
 
-		for(PolicyRule aPolicyRule : db.findAllPolicies(database)) {
+		for(PolicyInfo aPolicyRule : db.findAllPolicies(database)) {
 			HashMap<String, String> tempMap = new HashMap<String, String>();
 			tempMap.put("labelData", aPolicyRule.getLabel());
 			tempMap.put("detailData", aPolicyRule.getDetailData());

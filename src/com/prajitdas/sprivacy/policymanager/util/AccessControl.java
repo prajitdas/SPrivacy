@@ -1,9 +1,9 @@
 package com.prajitdas.sprivacy.policymanager.util;
 
-public class AccessController {
+public class AccessControl {
 	private boolean policy;
 	private int level;
-	public AccessController(boolean policy, int level) {
+	public AccessControl(boolean policy, int level) {
 		setPolicy(policy);
 		setLevel(level);
 	}

@@ -19,17 +19,17 @@ public class DefaultDataLoader {
 	
 	private ArrayList<AppInfo> applications;
 
-	private ArrayList<Provider> providers;
+	private ArrayList<ProvInfo> provInfos;
 
-	private ArrayList<PolicyRule> policies;
+	private ArrayList<PolicyInfo> policies;
 	
 	private PackageManager packageManager;
 
 	public DefaultDataLoader(Context context) {
 		setContext(context);
 		applications = new ArrayList<AppInfo>();
-		providers = new ArrayList<Provider>();
-		policies = new ArrayList<PolicyRule>();
+		provInfos = new ArrayList<ProvInfo>();
+		policies = new ArrayList<PolicyInfo>();
 		packageManager = getContext().getPackageManager();
 		//Potentially dangerous method, read comment above the method below
 		loadExtraData();
@@ -79,7 +79,7 @@ public class DefaultDataLoader {
 			providerArray = pack.providers;
 			if (providerArray != null)
 				for (ProviderInfo provider : providerArray)
-    				providers.add(new Provider(providerCount++, 
+    				provInfos.add(new ProvInfo(providerCount++, 
     						pm.getApplicationLabel(provider.applicationInfo).toString(),
     						provider.name,
     						provider.authority,
@@ -92,12 +92,12 @@ public class DefaultDataLoader {
 		return applications;
 	}
 
-	public ArrayList<PolicyRule> getPolicies() {
+	public ArrayList<PolicyInfo> getPolicies() {
 		return policies;
 	}
 
-	public ArrayList<Provider> getResources() {
-		return providers;
+	public ArrayList<ProvInfo> getProviders() {
+		return provInfos;
 	}
 
 	/**
@@ -127,18 +127,18 @@ public class DefaultDataLoader {
 		this.applications = applications;
 	}
 	
-	public void setPolicies(ArrayList<PolicyRule> policies) {
+	public void setPolicies(ArrayList<PolicyInfo> policies) {
 		this.policies = policies;
 	}
 
-	public void setResources(ArrayList<Provider> providers) {
-		this.providers = providers;
+	public void setResources(ArrayList<ProvInfo> provInfos) {
+		this.provInfos = provInfos;
 	}
 	private void setValues(int id, String resource, AppInfo anAppInfo) {
-		int resCount = providers.size()+1;// again the indexing problem so fixed by adding 1
-		Provider tempRes = new Provider(resCount++, resource, resource, resource, resource, resource);
-		providers.add(tempRes);
-		PolicyRule tempPolicy = new PolicyRule(id,
+		int resCount = provInfos.size()+1;// again the indexing problem so fixed by adding 1
+		ProvInfo tempRes = new ProvInfo(resCount++, resource, resource, resource, resource, resource);
+		provInfos.add(tempRes);
+		PolicyInfo tempPolicy = new PolicyInfo(id,
 				anAppInfo.getId(),
 				anAppInfo.getLabel(),
 				tempRes.getId(),

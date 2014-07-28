@@ -13,7 +13,7 @@ import android.widget.SimpleAdapter;
 
 import com.prajitdas.sprivacy.R;
 import com.prajitdas.sprivacy.policymanager.PolicyDBHelper;
-import com.prajitdas.sprivacy.policymanager.util.Provider;
+import com.prajitdas.sprivacy.policymanager.util.ProvInfo;
 
 public class DisplayAllProvidersActivity extends Activity {
 	private ArrayList<HashMap<String, String>> listOfResources;
@@ -35,7 +35,7 @@ public class DisplayAllProvidersActivity extends Activity {
 		mapFrom = new String[] {"labelData", "detailData"};
 		mapTo = new int[] {R.id.labelData, R.id.detailData};
 
-		for(Provider aProvider : db.findAllProviders(database)) {
+		for(ProvInfo aProvider : db.findAllProviders(database)) {
 			HashMap<String, String> tempMap = new HashMap<String, String>();
 			tempMap.put("labelData", aProvider.getLabel());
 			tempMap.put("detailData", aProvider.getDetailData());

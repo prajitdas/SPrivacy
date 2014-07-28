@@ -27,7 +27,7 @@ import android.util.Log;
 
 import com.prajitdas.sprivacy.SPrivacyApplication;
 import com.prajitdas.sprivacy.policymanager.PolicyChecker;
-import com.prajitdas.sprivacy.policymanager.util.AccessController;
+import com.prajitdas.sprivacy.policymanager.util.AccessControl;
 import com.prajitdas.sprivacy.policymanager.util.PolicyQuery;
 import com.prajitdas.sprivacy.policymanager.util.UserContext;
 
@@ -67,7 +67,7 @@ public class SContentProvider extends ContentProvider {
 	
 	private static HashMap<String, String> PROJECTION_MAP;
 	
-	private AccessController accessController;
+	private AccessControl accessControl;
 	
 	/**
 	* Database specific constant declarations
@@ -180,11 +180,11 @@ public class SContentProvider extends ContentProvider {
 			String[] selectionArgs, String sortOrder) {
 		Cursor c;
 		//HOW WILL WE DO THIS?
-		accessController = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
+		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
 				SPrivacyApplication.getConstImages(), 
 				SPrivacyApplication.getConstAppname(), 
 				new UserContext("*", "*", "*", "*")), getContext());
-		if(accessController.isPolicy()) {
+		if(accessControl.isPolicy()) {
 			c = getContext().getContentResolver()
 					.query(RealURIsForQuery.imageUri,
 					projection, 
@@ -208,11 +208,11 @@ public class SContentProvider extends ContentProvider {
 			String[] selectionArgs, String sortOrder) {
 		Cursor c;
 		//HOW WILL WE DO THIS?
-		accessController = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
+		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
 				SPrivacyApplication.getConstFiles(), 
 				SPrivacyApplication.getConstAppname(), 
 				new UserContext("*", "*", "*", "*")), getContext());
-		if(accessController.isPolicy()) {
+		if(accessControl.isPolicy()) {
 			c = getContext().getContentResolver()
 					.query(RealURIsForQuery.fileUri,
 					projection, 
@@ -263,11 +263,11 @@ public class SContentProvider extends ContentProvider {
 			String[] selectionArgs, String sortOrder) {
 		Cursor c;
 		//HOW WILL WE DO THIS?
-		accessController = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
+		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
 				SPrivacyApplication.getConstVideos(), 
 				SPrivacyApplication.getConstAppname(), 
 				new UserContext("*", "*", "*", "*")), getContext());
-		if(accessController.isPolicy()) {
+		if(accessControl.isPolicy()) {
 			c = getContext().getContentResolver()
 					.query(RealURIsForQuery.videoUri,
 					projection, 
@@ -292,11 +292,11 @@ public class SContentProvider extends ContentProvider {
 			String[] selectionArgs, String sortOrder) {
 		Cursor c;
 		//HOW WILL WE DO THIS?
-		accessController = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
+		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
 				SPrivacyApplication.getConstAudios(), 
 				SPrivacyApplication.getConstAppname(), 
 				new UserContext("*", "*", "*", "*")), getContext());
-		if(accessController.isPolicy()) {
+		if(accessControl.isPolicy()) {
 			c = getContext().getContentResolver()
 					.query(RealURIsForQuery.audioUri,
 					projection, 
@@ -321,11 +321,11 @@ public class SContentProvider extends ContentProvider {
 			String[] selectionArgs, String sortOrder) {
 		Cursor c;
 		//HOW WILL WE DO THIS?
-		accessController = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
+		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
 				SPrivacyApplication.getConstContacts(), 
 				SPrivacyApplication.getConstAppname(), 
 				new UserContext("*", "*", "*", "*")), getContext());
-		if(accessController.isPolicy()) {
+		if(accessControl.isPolicy()) {
 			c = getContext().getContentResolver()
 					.query(RealURIsForQuery.contactUri,
 					projection, 

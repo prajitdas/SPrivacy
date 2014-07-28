@@ -1,25 +1,25 @@
 package com.prajitdas.sprivacy.policymanager.util;
 
-public class PolicyRule {
+public class PolicyInfo {
 	private int id;
 	private int appId;
 	private String appLabel;
-	private int resId;
-	private String resLabel;
+	private int provId;
+	private String provLabel;
 	private boolean rule;
 	private int accessLevel;
 	private UserContext userContext;
 	//Default constructor created to assist db operations
-	public PolicyRule() {
+	public PolicyInfo() {
 	}
-	public PolicyRule(int id, int appId, String appLabel, int resId,
-			String resLabel, boolean rule, int accessLevel,
+	public PolicyInfo(int id, int appId, String appLabel, int provId,
+			String provLabel, boolean rule, int accessLevel,
 			UserContext userContext) {
 		setId(id);
 		setAppId(appId);
 		setAppLabel(appLabel);
-		setResId(resId);
-		setResLabel(resLabel);
+		setProvId(provId);
+		setProvLabel(provLabel);
 		setRule(rule);
 		setAccessLevel(accessLevel);
 		setUserContext(userContext);
@@ -36,11 +36,11 @@ public class PolicyRule {
 	public int getId() {
 		return id;
 	}
-	public int getResId() {
-		return resId;
+	public int getProvId() {
+		return provId;
 	}
-	public String getResLabel() {
-		return resLabel;
+	public String getProvLabel() {
+		return provLabel;
 	}
 	public UserContext getUserContext() {
 		return userContext;
@@ -60,11 +60,11 @@ public class PolicyRule {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public void setResId(int resId) {
-		this.resId = resId;
+	public void setProvId(int provId) {
+		this.provId = provId;
 	}
-	public void setResLabel(String resLabel) {
-		this.resLabel = resLabel;
+	public void setProvLabel(String provLabel) {
+		this.provLabel = provLabel;
 	}
 	public void setRule(boolean rule) {
 		this.rule = rule;
@@ -79,13 +79,13 @@ public class PolicyRule {
 			setRule(true);
 	}
 	public String getLabel(){
-		return appLabel + " | " + resLabel;
+		return appLabel + " | " + provLabel;
 	}
 	public String getDetailData() {
 		return isRule() ? "Access Granted" : "Access Denied";
 	}
 	@Override
 	public String toString() {
-		return 	appLabel + " | " + resLabel;
+		return 	appLabel + " | " + provLabel;
 	}
 }
