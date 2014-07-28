@@ -130,7 +130,7 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 		//loads the applications
 		for(AppInfo anAppInfo : defaultDataLoader.getApplications())
 			addApplication(db, anAppInfo);
-		//loads the providers or providers
+		//loads the providers
 		for(ProvInfo aProvider : defaultDataLoader.getProviders())
 			addProvider(db, aProvider);
 		//loads the policies, this is the interesting part and can be used to load
