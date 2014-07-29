@@ -50,7 +50,6 @@ public class DisplayAllProvidersActivity extends Activity {
 	        @Override
 	        public int compare(HashMap<String, String> first,
 	                HashMap<String, String> second) {
-	            // TODO: Null checking, both for maps and values
 	            String firstValue = first.get(labelData);
 	            String secondValue = second.get(labelData);
 	            return firstValue.compareTo(secondValue);

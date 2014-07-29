@@ -179,7 +179,7 @@ public class SContentProvider extends ContentProvider {
 	private Cursor setImageData(Uri uri, String[] projection, String selection, 
 			String[] selectionArgs, String sortOrder) {
 		Cursor c;
-		//HOW WILL WE DO THIS?
+		//TODO Have to figure out how to return dummy data based on access levels.
 		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
 				SPrivacyApplication.getConstImages(), 
 				SPrivacyApplication.getConstAppname(), 
@@ -207,7 +207,7 @@ public class SContentProvider extends ContentProvider {
 	private Cursor setFileData(Uri uri, String[] projection, String selection, 
 			String[] selectionArgs, String sortOrder) {
 		Cursor c;
-		//HOW WILL WE DO THIS?
+		//TODO Have to figure out how to return dummy data based on access levels.
 		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
 				SPrivacyApplication.getConstFiles(), 
 				SPrivacyApplication.getConstAppname(), 
@@ -228,7 +228,6 @@ public class SContentProvider extends ContentProvider {
 			try {
 				Log.v(SPrivacyApplication.getDebugTag(), "File Policy true and contents are: " + getStringFromFile(c.getString(idx)));
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -262,7 +261,7 @@ public class SContentProvider extends ContentProvider {
 	private Cursor setVideoData(Uri uri, String[] projection, String selection, 
 			String[] selectionArgs, String sortOrder) {
 		Cursor c;
-		//HOW WILL WE DO THIS?
+		//TODO Have to figure out how to return dummy data based on access levels.
 		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
 				SPrivacyApplication.getConstVideos(), 
 				SPrivacyApplication.getConstAppname(), 
@@ -291,7 +290,7 @@ public class SContentProvider extends ContentProvider {
 	private Cursor setAudioData(Uri uri, String[] projection, String selection, 
 			String[] selectionArgs, String sortOrder) {
 		Cursor c;
-		//HOW WILL WE DO THIS?
+		//TODO Have to figure out how to return dummy data based on access levels.
 		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
 				SPrivacyApplication.getConstAudios(), 
 				SPrivacyApplication.getConstAppname(), 
@@ -320,7 +319,7 @@ public class SContentProvider extends ContentProvider {
 	private Cursor setContactData(Uri uri, String[] projection, String selection, 
 			String[] selectionArgs, String sortOrder) {
 		Cursor c;
-		//HOW WILL WE DO THIS?
+		//TODO Have to figure out how to return dummy data based on access levels.
 		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
 				SPrivacyApplication.getConstContacts(), 
 				SPrivacyApplication.getConstAppname(), 
