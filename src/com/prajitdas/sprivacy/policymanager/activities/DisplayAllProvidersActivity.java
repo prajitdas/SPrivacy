@@ -1,6 +1,8 @@
 package com.prajitdas.sprivacy.policymanager.activities;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 import android.app.Activity;
@@ -23,6 +25,8 @@ public class DisplayAllProvidersActivity extends Activity {
 	private SQLiteDatabase database; 
 	private String[] mapFrom;
 	private int[] mapTo;
+	private final String labelData = "labelData";
+	private final String detailData = "detailData";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,15 +36,27 @@ public class DisplayAllProvidersActivity extends Activity {
 		database = db.getWritableDatabase();
 		listOfResources = new ArrayList<HashMap<String, String>>();
 
-		mapFrom = new String[] {"labelData", "detailData"};
+		mapFrom = new String[] {labelData, detailData};
 		mapTo = new int[] {R.id.labelData, R.id.detailData};
 
 		for(ProvInfo aProvider : db.findAllProviders(database)) {
 			HashMap<String, String> tempMap = new HashMap<String, String>();
-			tempMap.put("labelData", aProvider.getLabelData());
-			tempMap.put("detailData", aProvider.getDetailData());
+			tempMap.put(labelData, aProvider.getLabelData());
+			tempMap.put(detailData, aProvider.getDetailData());
 			listOfResources.add(tempMap);
 		}
+	    Collections.sort(listOfResources, new Comparator<HashMap< String,String >>() {
+
+	        @Override
+	        public int compare(HashMap<String, String> first,
+	                HashMap<String, String> second) {
+	            // TODO: Null checking, both for maps and values
+	            String firstValue = first.get(labelData);
+	            String secondValue = second.get(labelData);
+	            return firstValue.compareTo(secondValue);
+	        }
+	    });
+	    
 		loadView(listOfResources);
 	}
 

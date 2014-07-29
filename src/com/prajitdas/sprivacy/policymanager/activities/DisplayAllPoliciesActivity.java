@@ -1,6 +1,8 @@
 package com.prajitdas.sprivacy.policymanager.activities;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 import android.app.Activity;
@@ -23,6 +25,8 @@ public class DisplayAllPoliciesActivity extends Activity {
 	private SQLiteDatabase database; 
 	private String[] mapFrom;
 	private int[] mapTo;
+	private final String labelData = "labelData";
+	private final String detailData = "detailData";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,16 +36,28 @@ public class DisplayAllPoliciesActivity extends Activity {
 		database = db.getWritableDatabase();
 		listOfPoliciesInStringForm = new ArrayList<HashMap<String, String>>();
 
-		mapFrom = new String[] {"labelData", "detailData"};
+		mapFrom = new String[] {labelData, detailData};
 		mapTo = new int[] {R.id.labelData, R.id.detailData};
 
 		for(PolicyInfo aPolicyRule : db.findAllPolicies(database)) {
 			HashMap<String, String> tempMap = new HashMap<String, String>();
-			tempMap.put("labelData", aPolicyRule.getLabelData());
-			tempMap.put("detailData", aPolicyRule.getDetailData());
+			tempMap.put(labelData, aPolicyRule.getLabelData());
+			tempMap.put(detailData, aPolicyRule.getDetailData());
 			listOfPoliciesInStringForm.add(tempMap);
 		}
-		loadView(listOfPoliciesInStringForm);
+	    Collections.sort(listOfPoliciesInStringForm, new Comparator<HashMap< String,String >>() {
+
+	        @Override
+	        public int compare(HashMap<String, String> first,
+	                HashMap<String, String> second) {
+	            // TODO: Null checking, both for maps and values
+	            String firstValue = first.get(labelData);
+	            String secondValue = second.get(labelData);
+	            return firstValue.compareTo(secondValue);
+	        }
+	    });
+	    
+	    loadView(listOfPoliciesInStringForm);
 	}
 
 	private void loadView(ArrayList<HashMap<String, String>> list) {
