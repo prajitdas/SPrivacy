@@ -49,6 +49,10 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	private final static String PROVIDER_TABLE_NAME = "providers";
 	private final static String POLICY_TABLE_NAME = "policies";
 	
+	private final static String APPLICATION_TABLE_INDEX = "appindex";
+	private final static String PROVIDER_TABLE_INDEX = "provindex";
+//	private final static String POLICY_TABLE_INDEX = "polindex";
+	
 	private Context context;
 
 	/**
@@ -119,6 +123,14 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 			CONTEXTID + " TEXT NOT NULL DEFAULT '*', "+
 			POLICY + " INTEGER NOT NULL DEFAULT 0, " +
 			POLACCLVL + " INTEGER NOT NULL DEFAULT 0);";
+	
+	private final static String CREATE_APPLICATIONS_INDEX = " CREATE INDEX " +
+			APPLICATION_TABLE_INDEX + " ON " + 
+			APPLICATION_TABLE_NAME + " (" + APPPACK + ");";
+	
+	private final static String CREATE_PROVIDERS_INDEX = " CREATE INDEX " +
+			PROVIDER_TABLE_INDEX + " ON " + 
+			PROVIDER_TABLE_NAME + " (" + PROVAUTH + ");";
 	
 	private static DefaultDataLoader defaultDataLoader;
 	
@@ -521,7 +533,9 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(CREATE_APPLICATION_TABLE);
+		db.execSQL(CREATE_APPLICATIONS_INDEX);
 		db.execSQL(CREATE_PROVIDER_TABLE);
+		db.execSQL(CREATE_PROVIDERS_INDEX);
 		db.execSQL(CREATE_POLICY_TABLE);
 		//The following method loads the database with the default data on creation of the database
 		loadDefaultPoliciesIntoDB(db);
@@ -532,10 +546,7 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	 * @param db
 	 */
 	public void deleteAllData(SQLiteDatabase db) {
-		db.execSQL("DROP TABLE IF EXISTS " +  APPLICATION_TABLE_NAME);
-		db.execSQL("DROP TABLE IF EXISTS " +  PROVIDER_TABLE_NAME);
-		db.execSQL("DROP TABLE IF EXISTS " +  POLICY_TABLE_NAME);
-		onCreate(db);
+		dropDBObjects(db);
 	}
 	
 	@Override
@@ -543,12 +554,17 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 		Log.w(PolicyDBHelper.class.getName(), 
 				"Upgrading database from version " + oldVersion + " to "
 						+ newVersion + ". Old data will be destroyed");
+		dropDBObjects(db);
+	}
+
+	private void dropDBObjects(SQLiteDatabase db) {
 		db.execSQL("DROP TABLE IF EXISTS " +  APPLICATION_TABLE_NAME);
+		db.execSQL("DROP INDEX " + APPLICATION_TABLE_INDEX);
 		db.execSQL("DROP TABLE IF EXISTS " +  PROVIDER_TABLE_NAME);
+		db.execSQL("DROP INDEX " + PROVIDER_TABLE_INDEX);
 		db.execSQL("DROP TABLE IF EXISTS " +  POLICY_TABLE_NAME);
 		onCreate(db);
 	}
-	
 	/**
 	 * method to update single application
 	 * @param appName
