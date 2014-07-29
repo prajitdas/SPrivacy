@@ -18,7 +18,7 @@ import com.prajitdas.sprivacy.policymanager.util.ProvInfo;
 import com.prajitdas.sprivacy.policymanager.util.UserContext;
 
 public class PolicyDBHelper extends SQLiteOpenHelper {
-	// fields for the database
+	// fields for the database tables
 	private final static String APPID = "id";
 	private final static String APPLABEL = "label";
 	private final static String APPPACK = "package";
