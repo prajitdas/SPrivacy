@@ -12,10 +12,16 @@ public class AppInfo {
 		setPackageName(packageName);
 		setPermissions(permissions);
 	}
+	public String getDetailData() {
+		return packageName;
+	}
 	public int getId() {
 		return id;
 	}
 	public String getLabel() {
+		return label;
+	}
+	public String getLabelData(){
 		return label;
 	}
 	public String getPackageName() {
@@ -40,9 +46,6 @@ public class AppInfo {
 	}
 	public void setPermissions(String permissions) {
 		this.permissions = permissions;
-	}
-	public String getDetailData() {
-		return packageName;
 	}
 	@Override
     public String toString() {

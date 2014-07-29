@@ -33,8 +33,17 @@ public class PolicyInfo {
 	public String getAppLabel() {
 		return appLabel;
 	}
+	public String getDetailData() {
+		return isRule() ? "Access Granted" : "Access Denied";
+	}
 	public int getId() {
 		return id;
+	}
+	public String getLabel(){
+		return appLabel + " | " + provLabel;
+	}
+	public String getLabelData(){
+		return appLabel + " | " + provLabel;
 	}
 	public int getProvId() {
 		return provId;
@@ -77,12 +86,6 @@ public class PolicyInfo {
 			setRule(false);
 		else
 			setRule(true);
-	}
-	public String getLabel(){
-		return appLabel + " | " + provLabel;
-	}
-	public String getDetailData() {
-		return isRule() ? "Access Granted" : "Access Denied";
 	}
 	@Override
 	public String toString() {

@@ -37,7 +37,7 @@ public class DisplayAllApplicationsActivity extends Activity {
 
 		for(AppInfo anApp : db.findAllApplications(database)) {
 			HashMap<String, String> tempMap = new HashMap<String, String>();
-			tempMap.put("labelData", anApp.getLabel());
+			tempMap.put("labelData", anApp.getLabelData());
 			tempMap.put("detailData", anApp.getDetailData());
 			listOfApplications.add(tempMap);
 		}

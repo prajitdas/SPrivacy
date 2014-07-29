@@ -37,7 +37,7 @@ public class DisplayAllProvidersActivity extends Activity {
 
 		for(ProvInfo aProvider : db.findAllProviders(database)) {
 			HashMap<String, String> tempMap = new HashMap<String, String>();
-			tempMap.put("labelData", aProvider.getLabel());
+			tempMap.put("labelData", aProvider.getLabelData());
 			tempMap.put("detailData", aProvider.getDetailData());
 			listOfResources.add(tempMap);
 		}

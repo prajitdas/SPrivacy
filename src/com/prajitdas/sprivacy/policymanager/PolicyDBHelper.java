@@ -81,7 +81,8 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 			PROVPRO + " TEXT NOT NULL, " + //Should be "unique" has been set not unique because it seems some of the providers are repeating TODO figure this out
 			PROVAUTH + " TEXT, " + //Should be "not null" has been set null because it seems some of the providers do not have an authority
 			PROVREADPERM + " TEXT, " +
-			PROVWRITEPERM+ " TEXT);";
+			PROVWRITEPERM+ " TEXT, " +
+			"UNIQUE("+PROVPRO+", "+PROVAUTH+"));";
 
 	/**
 	 *  The policies that are installed by default on the phone.

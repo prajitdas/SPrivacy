@@ -19,11 +19,17 @@ public class ProvInfo {
 	public String getAuthority() {
 		return authority;
 	}
+	public String getDetailData() {
+		return authority;
+	}
 	public int getId() {
 		return id;
 	}
 	public String getLabel() {
 		return label;
+	}
+	public String getLabelData(){
+		return label;// + " | " + providerName;
 	}
 	public String getProviderName() {
 		return providerName;
@@ -51,9 +57,6 @@ public class ProvInfo {
 	}
 	public void setWritePermission(String writePermission) {
 		this.writePermission = writePermission;
-	}
-	public String getDetailData() {
-		return authority;
 	}	@Override
 	public String toString(){
 		return label+"\n"+authority;

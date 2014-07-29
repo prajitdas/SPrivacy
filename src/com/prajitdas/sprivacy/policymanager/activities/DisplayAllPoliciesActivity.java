@@ -37,7 +37,7 @@ public class DisplayAllPoliciesActivity extends Activity {
 
 		for(PolicyInfo aPolicyRule : db.findAllPolicies(database)) {
 			HashMap<String, String> tempMap = new HashMap<String, String>();
-			tempMap.put("labelData", aPolicyRule.getLabel());
+			tempMap.put("labelData", aPolicyRule.getLabelData());
 			tempMap.put("detailData", aPolicyRule.getDetailData());
 			listOfPoliciesInStringForm.add(tempMap);
 		}
