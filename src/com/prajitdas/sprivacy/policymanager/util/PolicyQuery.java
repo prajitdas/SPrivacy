@@ -8,7 +8,10 @@ public class PolicyQuery {
 			UserContext userContext) {
 		setProviderAuthority(providerAuthority);
 		setApplicaitonPackageName(applicaitonPackageName);
-		setUserContext(userContext);
+		if(userContext!=null)
+			setUserContext(userContext);
+		else
+			setUserContext(new UserContext());
 	}
 	public String getApplicaitonPackageName() {
 		return applicaitonPackageName;

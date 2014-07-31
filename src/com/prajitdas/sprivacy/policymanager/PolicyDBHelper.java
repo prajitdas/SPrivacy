@@ -104,14 +104,13 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 	 *  A value of 1 in the policy column refers to a policy of access granted
 	 *  A value of 0 in the policy column refers to a policy of access denied
 	 *  
-	 *  A value of 0 in the accesslvl column refers to access level of "give all data"
+	 *  A value of 0 in the accesslvl column refers to access level of "give no data"
 	 *  A value of 1 in the accesslvl column refers to access level of "give fake data"
-	 *  A value of 2 in the accesslvl column refers to access level of "give no data"
 	 *  
 	 *  This last option will be more complicated to implement and will have to incorporate 
 	 *  how we limit the data. One possible idea is to remove any data which can identify the
 	 *  device or the user in any way.
-	 *  A value of 3 in the accesslvl column refers to access level of "give limited data"
+	 *  A value of 2 in the accesslvl column refers to access level of "give limited data"
 	 */
 	private final static String CREATE_POLICY_TABLE =  " CREATE TABLE " + POLICY_TABLE_NAME + " (" +
 			POLID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 

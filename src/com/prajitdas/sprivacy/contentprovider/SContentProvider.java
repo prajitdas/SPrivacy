@@ -26,10 +26,11 @@ import android.provider.MediaStore.Video;
 import android.util.Log;
 
 import com.prajitdas.sprivacy.SPrivacyApplication;
+import com.prajitdas.sprivacy.contentprovider.util.AnonymizedDataCursor;
+import com.prajitdas.sprivacy.contentprovider.util.FakeCursorHandler;
 import com.prajitdas.sprivacy.policymanager.PolicyChecker;
 import com.prajitdas.sprivacy.policymanager.util.AccessControl;
 import com.prajitdas.sprivacy.policymanager.util.PolicyQuery;
-import com.prajitdas.sprivacy.policymanager.util.UserContext;
 
 public class SContentProvider extends ContentProvider {
 	static final String PROVIDER_NAME = "com.prajitdas.sprivacy.contentprovider.Content";
@@ -68,6 +69,8 @@ public class SContentProvider extends ContentProvider {
 	private static HashMap<String, String> PROJECTION_MAP;
 	
 	private AccessControl accessControl;
+	private FakeCursorHandler fakeCursor = new FakeCursorHandler();
+	private AnonymizedDataCursor anonymizedDataCursor = new AnonymizedDataCursor();
 	
 	/**
 	* Database specific constant declarations
@@ -178,12 +181,12 @@ public class SContentProvider extends ContentProvider {
 	
 	private Cursor setImageData(Uri uri, String[] projection, String selection, 
 			String[] selectionArgs, String sortOrder) {
-		Cursor c;
+		Cursor c = null;
 		//TODO Have to figure out how to return dummy data based on access levels.
 		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
 				SPrivacyApplication.getConstImages(), 
 				SPrivacyApplication.getConstAppname(), 
-				new UserContext("*", "*", "*", "*")), getContext());
+				null), getContext());
 		if(accessControl.isPolicy()) {
 			c = getContext().getContentResolver()
 					.query(RealURIsForQuery.imageUri,
@@ -198,8 +201,18 @@ public class SContentProvider extends ContentProvider {
 			Log.v(SPrivacyApplication.getDebugTag(), "Image Policy true");
 		}
 		else {
-			Log.v(SPrivacyApplication.getDebugTag(), "Image Policy false");
-			c = null;
+			if(accessControl.getLevel()==1) {
+				fakeCursor.setDataType(SPrivacyApplication.getConstImages());
+				c = fakeCursor.getFakeCursor();
+			}
+			else if(accessControl.getLevel()==2) {
+				anonymizedDataCursor.setDataType(SPrivacyApplication.getConstImages());
+				c = anonymizedDataCursor.getAnonymizedDataCursor();
+			}
+			else {
+				Log.v(SPrivacyApplication.getDebugTag(), "Image Policy false");
+				c = null;
+			}
 		}
 		return c;
 	}
@@ -211,7 +224,7 @@ public class SContentProvider extends ContentProvider {
 		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
 				SPrivacyApplication.getConstFiles(), 
 				SPrivacyApplication.getConstAppname(), 
-				new UserContext("*", "*", "*", "*")), getContext());
+				null), getContext());
 		if(accessControl.isPolicy()) {
 			c = getContext().getContentResolver()
 					.query(RealURIsForQuery.fileUri,
@@ -232,8 +245,18 @@ public class SContentProvider extends ContentProvider {
 			}
 		}
 		else {
-			Log.v(SPrivacyApplication.getDebugTag(), "File Policy false");
-			c = null;
+			if(accessControl.getLevel()==1) {
+				fakeCursor.setDataType(SPrivacyApplication.getConstFiles());
+				c = fakeCursor.getFakeCursor();
+			}
+			else if(accessControl.getLevel()==2) {
+				anonymizedDataCursor.setDataType(SPrivacyApplication.getConstFiles());
+				c = anonymizedDataCursor.getAnonymizedDataCursor();
+			}
+			else {
+				Log.v(SPrivacyApplication.getDebugTag(), "File Policy false");
+				c = null;
+			}
 		}
 		return c;
 	}
@@ -265,7 +288,7 @@ public class SContentProvider extends ContentProvider {
 		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
 				SPrivacyApplication.getConstVideos(), 
 				SPrivacyApplication.getConstAppname(), 
-				new UserContext("*", "*", "*", "*")), getContext());
+				null), getContext());
 		if(accessControl.isPolicy()) {
 			c = getContext().getContentResolver()
 					.query(RealURIsForQuery.videoUri,
@@ -280,8 +303,18 @@ public class SContentProvider extends ContentProvider {
 			Log.v(SPrivacyApplication.getDebugTag(), "Video Policy true");
 		}
 		else {
-			Log.v(SPrivacyApplication.getDebugTag(), "Video Policy false");
-			c = null;
+			if(accessControl.getLevel()==1) {
+				fakeCursor.setDataType(SPrivacyApplication.getConstVideos());
+				c = fakeCursor.getFakeCursor();
+			}
+			else if(accessControl.getLevel()==2) {
+				anonymizedDataCursor.setDataType(SPrivacyApplication.getConstVideos());
+				c = anonymizedDataCursor.getAnonymizedDataCursor();
+			}
+			else {
+				Log.v(SPrivacyApplication.getDebugTag(), "Video Policy false");
+				c = null;
+			}
 		}
 		return c;
 	}
@@ -294,7 +327,7 @@ public class SContentProvider extends ContentProvider {
 		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
 				SPrivacyApplication.getConstAudios(), 
 				SPrivacyApplication.getConstAppname(), 
-				new UserContext("*", "*", "*", "*")), getContext());
+				null), getContext());
 		if(accessControl.isPolicy()) {
 			c = getContext().getContentResolver()
 					.query(RealURIsForQuery.audioUri,
@@ -309,8 +342,18 @@ public class SContentProvider extends ContentProvider {
 			Log.v(SPrivacyApplication.getDebugTag(), "Audio Policy true");
 		}
 		else {
-			Log.v(SPrivacyApplication.getDebugTag(), "Audio Policy false");
-			c = null;
+			if(accessControl.getLevel()==1) {
+				fakeCursor.setDataType(SPrivacyApplication.getConstAudios());
+				c = fakeCursor.getFakeCursor();
+			}
+			else if(accessControl.getLevel()==2) {
+				anonymizedDataCursor.setDataType(SPrivacyApplication.getConstAudios());
+				c = anonymizedDataCursor.getAnonymizedDataCursor();
+			}
+			else {
+				Log.v(SPrivacyApplication.getDebugTag(), "Audio Policy false");
+				c = null;
+			}
 		}
 		return c;
 	}
@@ -323,7 +366,7 @@ public class SContentProvider extends ContentProvider {
 		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
 				SPrivacyApplication.getConstContacts(), 
 				SPrivacyApplication.getConstAppname(), 
-				new UserContext("*", "*", "*", "*")), getContext());
+				null), getContext());
 		if(accessControl.isPolicy()) {
 			c = getContext().getContentResolver()
 					.query(RealURIsForQuery.contactUri,
@@ -338,8 +381,18 @@ public class SContentProvider extends ContentProvider {
 			Log.v(SPrivacyApplication.getDebugTag(), "Contact Policy true");
 		}
 		else {
-			Log.v(SPrivacyApplication.getDebugTag(), "Contact Policy false");
-			c = null;
+			if(accessControl.getLevel()==1) {
+				fakeCursor.setDataType(SPrivacyApplication.getConstContacts());
+				c = fakeCursor.getFakeCursor();
+			}
+			else if(accessControl.getLevel()==2) {
+				anonymizedDataCursor.setDataType(SPrivacyApplication.getConstContacts());
+				c = anonymizedDataCursor.getAnonymizedDataCursor();
+			}
+			else {
+				Log.v(SPrivacyApplication.getDebugTag(), "Contact Policy false");
+				c = null;
+			}
 		}
 		return c;
 	}

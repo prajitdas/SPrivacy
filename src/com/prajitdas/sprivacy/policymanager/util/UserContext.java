@@ -36,4 +36,6 @@ public class UserContext {
 		setTime(time);
 		setIdentity(identity);
 	}
+	public UserContext() {
+	}
 }

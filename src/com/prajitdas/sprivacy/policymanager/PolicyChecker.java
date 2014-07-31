@@ -14,9 +14,17 @@ public class PolicyChecker {
 	 * @return
 	 */
 	public static AccessControl isDataAccessAllowed(PolicyQuery policyQuery, Context context) {
+		getCurrentContext(policyQuery);
 		PolicyDBHelper policyDBHelper = new PolicyDBHelper(context);
 		SQLiteDatabase policyDB = policyDBHelper.getWritableDatabase();
 		PolicyInfo tempPolicyRule = policyDBHelper.findPolicyByApp(policyDB, SPrivacyApplication.getConstAppname(), policyQuery.getProviderAuthority());
 		return new AccessControl(tempPolicyRule.isRule(), tempPolicyRule.getAccessLevel());
+	}
+
+	private static void getCurrentContext(PolicyQuery policyQuery) {
+		policyQuery.getUserContext().setLocation("*");
+		policyQuery.getUserContext().setActivity("*");
+		policyQuery.getUserContext().setIdentity("*");
+		policyQuery.getUserContext().setTime("*");
 	}
 }
