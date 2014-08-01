@@ -1,6 +1,15 @@
 \section{Introduction}
 
-Android Privacy is a big challenge. This paper is our attempt at solving it.\cite{amadeo}
+Arguably one of the most popular mobile operating systems, by number of devices in the market today, is Google's Android~\cite{winningHarry2013}. Our mobile devices, which use the Android operating system, are increasingly being used to access and store our personal data like our contacts, email, calendar data, photos, chats, social networking data, financial data, as well as contextual data like location and activity information. At present, the security and privacy of users' data on these devices is controlled by a static install time permission acquisition process. The permissions requested are of the ``all or nothing'' form meaning either the user grants all the permissions or else they cannot use the app in question. 
+
+One fundamental issue with the permission model for Android apps is that the user does not get to decide, if they want to protect certain specific contents on their phones. Let's consider the following use case:
+John Doe is at a party. He wants to keep the pictures taken during the party as private. He had previously installed an app ``InstaUpload'' that automatically synchronizes all his gallery data to an online account and tweets about the photos. John usually wants to avail the services of the app but in this specific contextual scenario he prefers that the app should not upload the pictures. The app obviously has the permission required to access the photos on John's mobile so there is no way for John to stop it.
+
+
+It might sometimes be important to the user of a mobile device to be able to protect certain content on their phones. huge Empowered with these permissions, apps are then requesting this user data via various APIs in the Android framework. The two main mechanisms for apps to access data on Android include, using an Intent or using an explicit call to a ContentProvider. Given the highly personal nature of the data it is imperative that we protect it from being used by ``rogue'' apps with malicious intent. However, It might be the case that a user wants to use a particular app because they wanted to test out certain features provided by it. 
+
+c and iOS. A simple review of the literature and online documentation for Android tells us that iOS security is centralized in the settings of the device. Access to certain privileged data is controlled by first usage permission request basis. and Android security is follows an individual app permission model. Android Privacy is a big challenge. This paper is our attempt at solving it.
+The apps that we control are processed by a decompilation mechanism followed by static modification of constants in order to control access to Content Providers they use.
 
 Broadly these will be the sections in the paper but we might change this later:
 \begin{enumerate}
