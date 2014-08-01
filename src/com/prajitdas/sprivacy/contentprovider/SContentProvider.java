@@ -26,8 +26,6 @@ import android.provider.MediaStore.Video;
 import android.util.Log;
 
 import com.prajitdas.sprivacy.SPrivacyApplication;
-import com.prajitdas.sprivacy.contentprovider.util.AnonymizedDataCursor;
-import com.prajitdas.sprivacy.contentprovider.util.FakeCursorHandler;
 import com.prajitdas.sprivacy.policymanager.PolicyChecker;
 import com.prajitdas.sprivacy.policymanager.util.AccessControl;
 import com.prajitdas.sprivacy.policymanager.util.PolicyQuery;
@@ -69,8 +67,6 @@ public class SContentProvider extends ContentProvider {
 	private static HashMap<String, String> PROJECTION_MAP;
 	
 	private AccessControl accessControl;
-	private FakeCursorHandler fakeCursor = new FakeCursorHandler();
-	private AnonymizedDataCursor anonymizedDataCursor = new AnonymizedDataCursor();
 	
 	/**
 	* Database specific constant declarations
@@ -202,12 +198,20 @@ public class SContentProvider extends ContentProvider {
 		}
 		else {
 			if(accessControl.getLevel()==1) {
-				fakeCursor.setDataType(SPrivacyApplication.getConstImages());
-				c = fakeCursor.getFakeCursor();
+				c = getContext().getContentResolver()
+						.query(FakeURIsForQuery.imageUri,
+								null, 
+								null, 
+								null, 
+								null);
 			}
 			else if(accessControl.getLevel()==2) {
-				anonymizedDataCursor.setDataType(SPrivacyApplication.getConstImages());
-				c = anonymizedDataCursor.getAnonymizedDataCursor();
+				c = getContext().getContentResolver()
+						.query(AnonimyzedURIsForQuery.imageUri,
+								null, 
+								null, 
+								null, 
+								null);
 			}
 			else {
 				Log.v(SPrivacyApplication.getDebugTag(), "Image Policy false");
@@ -246,15 +250,23 @@ public class SContentProvider extends ContentProvider {
 		}
 		else {
 			if(accessControl.getLevel()==1) {
-				fakeCursor.setDataType(SPrivacyApplication.getConstFiles());
-				c = fakeCursor.getFakeCursor();
+				c = getContext().getContentResolver()
+						.query(FakeURIsForQuery.fileUri,
+								null, 
+								null, 
+								null, 
+								null);
 			}
 			else if(accessControl.getLevel()==2) {
-				anonymizedDataCursor.setDataType(SPrivacyApplication.getConstFiles());
-				c = anonymizedDataCursor.getAnonymizedDataCursor();
+				c = getContext().getContentResolver()
+						.query(AnonimyzedURIsForQuery.fileUri,
+								null, 
+								null, 
+								null, 
+								null);
 			}
 			else {
-				Log.v(SPrivacyApplication.getDebugTag(), "File Policy false");
+				Log.v(SPrivacyApplication.getDebugTag(), "Image Policy false");
 				c = null;
 			}
 		}
@@ -304,15 +316,23 @@ public class SContentProvider extends ContentProvider {
 		}
 		else {
 			if(accessControl.getLevel()==1) {
-				fakeCursor.setDataType(SPrivacyApplication.getConstVideos());
-				c = fakeCursor.getFakeCursor();
+				c = getContext().getContentResolver()
+						.query(FakeURIsForQuery.videoUri,
+								null, 
+								null, 
+								null, 
+								null);
 			}
 			else if(accessControl.getLevel()==2) {
-				anonymizedDataCursor.setDataType(SPrivacyApplication.getConstVideos());
-				c = anonymizedDataCursor.getAnonymizedDataCursor();
+				c = getContext().getContentResolver()
+						.query(AnonimyzedURIsForQuery.videoUri,
+								null, 
+								null, 
+								null, 
+								null);
 			}
 			else {
-				Log.v(SPrivacyApplication.getDebugTag(), "Video Policy false");
+				Log.v(SPrivacyApplication.getDebugTag(), "Image Policy false");
 				c = null;
 			}
 		}
@@ -343,15 +363,23 @@ public class SContentProvider extends ContentProvider {
 		}
 		else {
 			if(accessControl.getLevel()==1) {
-				fakeCursor.setDataType(SPrivacyApplication.getConstAudios());
-				c = fakeCursor.getFakeCursor();
+				c = getContext().getContentResolver()
+						.query(FakeURIsForQuery.audioUri,
+								null, 
+								null, 
+								null, 
+								null);
 			}
 			else if(accessControl.getLevel()==2) {
-				anonymizedDataCursor.setDataType(SPrivacyApplication.getConstAudios());
-				c = anonymizedDataCursor.getAnonymizedDataCursor();
+				c = getContext().getContentResolver()
+						.query(AnonimyzedURIsForQuery.audioUri,
+								null, 
+								null, 
+								null, 
+								null);
 			}
 			else {
-				Log.v(SPrivacyApplication.getDebugTag(), "Audio Policy false");
+				Log.v(SPrivacyApplication.getDebugTag(), "Image Policy false");
 				c = null;
 			}
 		}
@@ -382,15 +410,23 @@ public class SContentProvider extends ContentProvider {
 		}
 		else {
 			if(accessControl.getLevel()==1) {
-				fakeCursor.setDataType(SPrivacyApplication.getConstContacts());
-				c = fakeCursor.getFakeCursor();
+				c = getContext().getContentResolver()
+						.query(FakeURIsForQuery.contactUri,
+								null, 
+								null, 
+								null, 
+								null);
 			}
 			else if(accessControl.getLevel()==2) {
-				anonymizedDataCursor.setDataType(SPrivacyApplication.getConstContacts());
-				c = anonymizedDataCursor.getAnonymizedDataCursor();
+				c = getContext().getContentResolver()
+						.query(AnonimyzedURIsForQuery.contactUri,
+								null, 
+								null, 
+								null, 
+								null);
 			}
 			else {
-				Log.v(SPrivacyApplication.getDebugTag(), "Contact Policy false");
+				Log.v(SPrivacyApplication.getDebugTag(), "Image Policy false");
 				c = null;
 			}
 		}
@@ -401,6 +437,34 @@ public class SContentProvider extends ContentProvider {
      * This interface defines constants for the Cursor and CursorLoader
      */
 	private interface RealURIsForQuery {
+		//Gets the images on external SD card
+		Uri imageUri = Images.Media.EXTERNAL_CONTENT_URI;
+		//Gets the files on external SD card
+		Uri fileUri = Files.getContentUri("external");
+		Uri videoUri = Video.Media.EXTERNAL_CONTENT_URI;
+		Uri audioUri = Audio.Media.EXTERNAL_CONTENT_URI;
+		//Gets the contacts on the device
+		Uri contactUri = Contacts.CONTENT_URI;
+    }
+	
+	/**
+     * This interface defines constants for the Cursor and CursorLoader
+     */
+	private interface FakeURIsForQuery {
+		//Gets the images on external SD card
+		Uri imageUri = Images.Media.EXTERNAL_CONTENT_URI;
+		//Gets the files on external SD card
+		Uri fileUri = Files.getContentUri("external");
+		Uri videoUri = Video.Media.EXTERNAL_CONTENT_URI;
+		Uri audioUri = Audio.Media.EXTERNAL_CONTENT_URI;
+		//Gets the contacts on the device
+		Uri contactUri = Contacts.CONTENT_URI;
+    }
+	
+	/**
+     * This interface defines constants for the Cursor and CursorLoader
+     */
+	private interface AnonimyzedURIsForQuery {
 		//Gets the images on external SD card
 		Uri imageUri = Images.Media.EXTERNAL_CONTENT_URI;
 		//Gets the files on external SD card
