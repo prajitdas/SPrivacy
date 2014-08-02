@@ -8,7 +8,7 @@ import android.widget.Toast;
 public class SPrivacyApplication extends Application {
 	private static final String DEBUG_TAG = "SPrivacyApplicationDebugTag";
 
-	private static final String CONST_APPNAME = "com.prajitdas.parserapp";
+	private static final String CONST_APPNAME = "com.prajitdas.sprivacy";
 
 	private static final String CONST_ANNONYMOUS = "anonymous";
 
