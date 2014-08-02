@@ -57,6 +57,13 @@
             android:label="@string/content_provider_label"
             android:permission="android.permission.sprivacy.READ_WRITE_CONTENT" >
         </provider>
-    </application>
+        <provider
+            android:name=".contentprovider.SContentProvider"
+            android:authorities="com.prajitdas.sprivacy.contentprovider.Content"
+            android:exported="true"
+            android:label="@string/content_provider_label"
+            android:permission="android.permission.sprivacy.READ_WRITE_CONTENT" >
+        </provider>
+	</application>
 
 </manifest>

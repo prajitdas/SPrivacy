@@ -558,9 +558,9 @@ public class PolicyDBHelper extends SQLiteOpenHelper {
 
 	private void dropDBObjects(SQLiteDatabase db) {
 		db.execSQL("DROP TABLE IF EXISTS " +  APPLICATION_TABLE_NAME);
-		db.execSQL("DROP INDEX " + APPLICATION_TABLE_INDEX);
+		db.execSQL("DROP INDEX IF EXISTS " + APPLICATION_TABLE_INDEX);
 		db.execSQL("DROP TABLE IF EXISTS " +  PROVIDER_TABLE_NAME);
-		db.execSQL("DROP INDEX " + PROVIDER_TABLE_INDEX);
+		db.execSQL("DROP INDEX IF EXISTS " + PROVIDER_TABLE_INDEX);
 		db.execSQL("DROP TABLE IF EXISTS " +  POLICY_TABLE_NAME);
 		onCreate(db);
 	}

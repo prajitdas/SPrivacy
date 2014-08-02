@@ -10,6 +10,10 @@ public class SPrivacyApplication extends Application {
 
 	private static final String CONST_APPNAME = "com.prajitdas.parserapp";
 
+	private static final String CONST_ANNONYMOUS = "anonymous";
+
+	private static final String CONST_FAKE = "fake";
+
 	private static final String CONST_IMAGES = "images";
 
 	private static final String CONST_FILES = "files";
@@ -99,5 +103,13 @@ public class SPrivacyApplication extends Application {
 
 	public static String getConstAccessGranted() {
 		return CONST_ACCESS_GRANTED;
+	}
+
+	public static String getConstAnnonymous() {
+		return CONST_ANNONYMOUS;
+	}
+
+	public static String getConstFake() {
+		return CONST_FAKE;
 	}
 }
