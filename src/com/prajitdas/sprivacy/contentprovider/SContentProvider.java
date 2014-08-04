@@ -23,8 +23,9 @@ import com.prajitdas.sprivacy.policymanager.util.AccessControl;
 import com.prajitdas.sprivacy.policymanager.util.PolicyQuery;
 
 public class SContentProvider extends ContentProvider {
-	static final String PROVIDER_NAME = "com.prajitdas.sprivacy.contentprovider.Content";
+	static final String PROVIDER_NAME = SPrivacyApplication.getConstSprivacyAuthority();
 	static final String URL = "content://" + PROVIDER_NAME;
+
 	static final Uri IMAGES_CONTENT_URI = Uri.parse(URL 
 			+ SPrivacyApplication.getConstSlash() + SPrivacyApplication.getConstImages());
 	
@@ -37,15 +38,14 @@ public class SContentProvider extends ContentProvider {
 			+ SPrivacyApplication.getConstSlash() + SPrivacyApplication.getConstAudios());
 	static final Uri CONTACTS_CONTENT_URI = Uri.parse(URL 
 			+ SPrivacyApplication.getConstSlash() + SPrivacyApplication.getConstContacts());
+
 	static final String _ID = "_id";
 	static final String NAME = "name";
+
 	static final int IMAGES = 1;
-	
 	static final int FILES = 2;
 	static final int VIDEOS = 3;
-	
 	static final int AUDIOS = 4;
-	
 	static final int CONTACTS = 5;
 	
 	static final UriMatcher uriMatcher;
@@ -62,14 +62,21 @@ public class SContentProvider extends ContentProvider {
      * This interface defines constants for the Cursor and CursorLoader
      */
 	private interface AnonimyzedURIsForQuery {
-		//Gets the images on external SD card
-		Uri imageUri = Images.Media.EXTERNAL_CONTENT_URI;
-		//Gets the files on external SD card
-		Uri fileUri = Files.getContentUri("external");
-		Uri videoUri = Video.Media.EXTERNAL_CONTENT_URI;
-		Uri audioUri = Audio.Media.EXTERNAL_CONTENT_URI;
-		//Gets the contacts on the device
-		Uri contactUri = Contacts.CONTENT_URI;
+		Uri imageUri = Uri.parse(SPrivacyApplication.getConstAnonymizedAuthorityPrefix()
+				+SPrivacyApplication.getConstAnnonymous()
+				+SPrivacyApplication.getConstImages());
+		Uri fileUri = Uri.parse(SPrivacyApplication.getConstAnonymizedAuthorityPrefix()
+				+SPrivacyApplication.getConstAnnonymous()
+				+SPrivacyApplication.getConstFiles());
+		Uri videoUri = Uri.parse(SPrivacyApplication.getConstAnonymizedAuthorityPrefix()
+				+SPrivacyApplication.getConstAnnonymous()
+				+SPrivacyApplication.getConstVideos());
+		Uri audioUri = Uri.parse(SPrivacyApplication.getConstAnonymizedAuthorityPrefix()
+				+SPrivacyApplication.getConstAnnonymous()
+				+SPrivacyApplication.getConstAudios());
+		Uri contactUri = Uri.parse(SPrivacyApplication.getConstAnonymizedAuthorityPrefix()
+				+SPrivacyApplication.getConstAnnonymous()
+				+SPrivacyApplication.getConstContacts());
     }
 	/**
 	* Helper class that actually creates and manages 
@@ -96,14 +103,21 @@ public class SContentProvider extends ContentProvider {
      * This interface defines constants for the Cursor and CursorLoader
      */
 	private interface FakeURIsForQuery {
-		//Gets the images on external SD card
-		Uri imageUri = Images.Media.EXTERNAL_CONTENT_URI;
-		//Gets the files on external SD card
-		Uri fileUri = Files.getContentUri("external");
-		Uri videoUri = Video.Media.EXTERNAL_CONTENT_URI;
-		Uri audioUri = Audio.Media.EXTERNAL_CONTENT_URI;
-		//Gets the contacts on the device
-		Uri contactUri = Contacts.CONTENT_URI;
+		Uri imageUri = Uri.parse(SPrivacyApplication.getConstFakeAuthorityPrefix()
+				+SPrivacyApplication.getConstAnnonymous()
+				+SPrivacyApplication.getConstImages());
+		Uri fileUri = Uri.parse(SPrivacyApplication.getConstFakeAuthorityPrefix()
+				+SPrivacyApplication.getConstAnnonymous()
+				+SPrivacyApplication.getConstFiles());
+		Uri videoUri = Uri.parse(SPrivacyApplication.getConstFakeAuthorityPrefix()
+				+SPrivacyApplication.getConstAnnonymous()
+				+SPrivacyApplication.getConstVideos());
+		Uri audioUri = Uri.parse(SPrivacyApplication.getConstFakeAuthorityPrefix()
+				+SPrivacyApplication.getConstAnnonymous()
+				+SPrivacyApplication.getConstAudios());
+		Uri contactUri = Uri.parse(SPrivacyApplication.getConstFakeAuthorityPrefix()
+				+SPrivacyApplication.getConstAnnonymous()
+				+SPrivacyApplication.getConstContacts());
     }
 	/**
      * This interface defines constants for the Cursor and CursorLoader

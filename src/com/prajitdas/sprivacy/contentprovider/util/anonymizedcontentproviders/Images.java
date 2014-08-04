@@ -1,4 +1,4 @@
-package com.prajitdas.sprivacy.contentprovider.util.anonimyzedcontentproviders;
+package com.prajitdas.sprivacy.contentprovider.util.anonymizedcontentproviders;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;

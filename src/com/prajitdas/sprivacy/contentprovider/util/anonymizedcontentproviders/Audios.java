@@ -1,11 +1,11 @@
-package com.prajitdas.sprivacy.contentprovider.util.anonimyzedcontentproviders;
+package com.prajitdas.sprivacy.contentprovider.util.anonymizedcontentproviders;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 
-public class Videos extends ContentProvider {
+public class Audios extends ContentProvider {
 
 	@Override
 	public boolean onCreate() {
@@ -44,5 +44,5 @@ public class Videos extends ContentProvider {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
+	
 }

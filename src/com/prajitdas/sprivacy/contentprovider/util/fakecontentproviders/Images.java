@@ -3,19 +3,25 @@ package com.prajitdas.sprivacy.contentprovider.util.fakecontentproviders;
 import java.util.HashMap;
 
 import com.prajitdas.sprivacy.SPrivacyApplication;
+
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
 public class Images extends ContentProvider {
-	static final String PROVIDER_NAME = SPrivacyApplication.getConstFake()+SPrivacyApplication.getConstImages();
+	static final String PROVIDER_NAME = SPrivacyApplication.getConstFakeAuthorityPrefix()
+			+SPrivacyApplication.getConstFake()
+			+SPrivacyApplication.getConstImages();
 	static final String URL = "content://" + PROVIDER_NAME;
+	 static final Uri CONTENT_URI = Uri.parse(URL);
 
 	static final String _ID = "_id";
 	static final String IMAGE = "image";
@@ -113,8 +119,15 @@ public class Images extends ContentProvider {
 
 	@Override
 	public Uri insert(Uri uri, ContentValues values) {
-		// TODO Auto-generated method stub
-		return null;
+		long row = db.insert(TABLE_NAME, "", values);
+	      
+		// If record is added successfully
+	      if(row > 0) {
+	         Uri newUri = ContentUris.withAppendedId(CONTENT_URI, row);
+	         getContext().getContentResolver().notifyChange(newUri, null);
+	         return newUri;
+	      }
+	      throw new SQLException("Fail to add a new record into " + uri);
 	}
 
 	@Override
