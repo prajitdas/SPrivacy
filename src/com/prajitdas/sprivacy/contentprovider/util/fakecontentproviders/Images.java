@@ -2,8 +2,6 @@ package com.prajitdas.sprivacy.contentprovider.util.fakecontentproviders;
 
 import java.util.HashMap;
 
-import com.prajitdas.sprivacy.SPrivacyApplication;
-
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -15,6 +13,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+
+import com.prajitdas.sprivacy.SPrivacyApplication;
 
 public class Images extends ContentProvider {
 	static final String PROVIDER_NAME = SPrivacyApplication.getConstFakeAuthorityPrefix()
@@ -97,6 +97,7 @@ public class Images extends ContentProvider {
 		SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
 		// the TABLE_NAME to query on
 		queryBuilder.setTables(TABLE_NAME);
+
 		switch (uriMatcher.match(uri)) {
 			// maps all database column names
 			case IMAGES:
@@ -109,8 +110,9 @@ public class Images extends ContentProvider {
 			// No sorting-> sort on names by default
 			sortOrder = _ID;
 		}
-		Cursor cursor = queryBuilder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
-		/**
+		Cursor cursor = queryBuilder.query(db, projection, selection, 
+				selectionArgs, null, null, sortOrder);
+		/** 
 		* register to watch a content URI for changes
 		*/
 		cursor.setNotificationUri(getContext().getContentResolver(), uri);
@@ -120,27 +122,43 @@ public class Images extends ContentProvider {
 	@Override
 	public Uri insert(Uri uri, ContentValues values) {
 		long row = db.insert(TABLE_NAME, "", values);
-	      
 		// If record is added successfully
-	      if(row > 0) {
-	         Uri newUri = ContentUris.withAppendedId(CONTENT_URI, row);
-	         getContext().getContentResolver().notifyChange(newUri, null);
-	         return newUri;
-	      }
-	      throw new SQLException("Fail to add a new record into " + uri);
+		if(row > 0) {
+			Uri newUri = ContentUris.withAppendedId(CONTENT_URI, row);
+			getContext().getContentResolver().notifyChange(newUri, null);
+			return newUri;
+		}
+		throw new SQLException("Fail to add a new record into " + uri);
 	}
 
 	@Override
 	public int delete(Uri uri, String selection, String[] selectionArgs) {
-		// TODO Auto-generated method stub
-		return 0;
+		int count = 0;
+		switch (uriMatcher.match(uri)){
+			case IMAGES:
+				// delete all the records of the table
+				count = db.delete(TABLE_NAME, selection, selectionArgs);
+				break;
+			default: 
+				throw new IllegalArgumentException("Unsupported URI " + uri);
+		}
+
+		getContext().getContentResolver().notifyChange(uri, null);
+		return count;
 	}
 
 	@Override
 	public int update(Uri uri, ContentValues values, String selection,
 			String[] selectionArgs) {
-		// TODO Auto-generated method stub
-		return 0;
+		int count = 0;
+		switch (uriMatcher.match(uri)){
+			case IMAGES:
+				count = db.update(TABLE_NAME, values, selection, selectionArgs);
+				break;
+			default: 
+				throw new IllegalArgumentException("Unsupported URI " + uri );
+		}
+		getContext().getContentResolver().notifyChange(uri, null);
+		return count;
 	}
-
 }
