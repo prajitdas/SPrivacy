@@ -146,7 +146,7 @@ public class PolicyRuleChooserActivity extends Activity {
 	
 	private void addTableRow(PolicyInfo aPolicyRule) {
 		if(aPolicyRule!=null){
-			policyViewMap.append(viewCount++, aPolicyRule);
+			policyViewMap.put(viewCount++, aPolicyRule);
 			
 			TableRow tempTableRow = new TableRow(this);
 			
@@ -167,16 +167,27 @@ public class PolicyRuleChooserActivity extends Activity {
 			tempRadioButtonNoData.setText(R.string.radio_button_text_no_data);
 			tempRadioButtonFakeData.setText(R.string.radio_button_text_fake_data);
 			tempRadioButtonAnonymizedData.setText(R.string.radio_button_text_anonymous_data);
-			if(aPolicyRule.isRule()) {
-				tempRadioButtonNoData.setEnabled(false);
-				tempRadioButtonFakeData.setEnabled(false);
-				tempRadioButtonAnonymizedData.setEnabled(false);
-			}
 
 			tempViewPolGroup.setOrientation(RadioGroup.VERTICAL);
 			tempViewPolGroup.addView(tempRadioButtonNoData);
 			tempViewPolGroup.addView(tempRadioButtonFakeData);
 			tempViewPolGroup.addView(tempRadioButtonAnonymizedData);
+			tempViewPolGroup.clearCheck();
+			if(aPolicyRule.isRule()) {
+				tempRadioButtonNoData.setEnabled(false);
+				tempRadioButtonFakeData.setEnabled(false);
+				tempRadioButtonAnonymizedData.setEnabled(false);
+			} else {
+				tempRadioButtonNoData.setEnabled(true);
+				tempRadioButtonFakeData.setEnabled(true);
+				tempRadioButtonAnonymizedData.setEnabled(true);
+				if(aPolicyRule.getAccessLevel() == 1)
+					tempRadioButtonNoData.setChecked(true);
+				else if(aPolicyRule.getAccessLevel() == 2)
+					tempRadioButtonFakeData.setChecked(true);
+				else
+					tempRadioButtonAnonymizedData.setChecked(true);
+			}
 			
 			tempTableRow.addView(tempViewPolcStmt);
 			tempTableRow.addView(tempToggleButton);
@@ -199,9 +210,8 @@ public class PolicyRuleChooserActivity extends Activity {
 				+Integer.toString(indexOfPolicy));
 		PolicyInfo tempPolicyRule = db.findPolicyByID(database, policyViewMap.get(indexOfPolicy).getId());
 		tempPolicyRule.togglePolicy();
+		mRadioGroups.get(indexOfPolicy).clearCheck();
 		if(!tempPolicyRule.isRule()) {
-			mRadioGroups.get(indexOfPolicy).clearCheck();
-			
 			mRadioButtons.get(indexOfPolicy*3).setEnabled(true);
 			mRadioButtons.get((indexOfPolicy*3)+1).setEnabled(true);
 			mRadioButtons.get((indexOfPolicy*3)+2).setEnabled(true);
@@ -212,8 +222,6 @@ public class PolicyRuleChooserActivity extends Activity {
 			tempPolicyRule.changeAccessLevel(1);
 		}
 		else{
-			mRadioGroups.get(indexOfPolicy).clearCheck();
-
 			mRadioButtons.get(indexOfPolicy*3).setEnabled(false);
 			mRadioButtons.get((indexOfPolicy*3)+1).setEnabled(false);
 			mRadioButtons.get((indexOfPolicy*3)+2).setEnabled(false);

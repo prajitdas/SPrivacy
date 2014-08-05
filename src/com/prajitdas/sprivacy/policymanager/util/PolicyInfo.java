@@ -40,7 +40,7 @@ public class PolicyInfo {
 			if(getAccessLevel() == 1)
 				return "Access Denied, No Data";
 			else if(getAccessLevel() == 2)
-			return "Access Denied, Fake Data";
+				return "Access Denied, Fake Data";
 			else
 				return "Access Denied, Anonymous Data";
 		}
