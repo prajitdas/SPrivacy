@@ -37,9 +37,9 @@
     <string name="title_activity_display_all_providers">Providers</string>
     <string name="title_activity_display_all_applications">Applications</string>
     <string name="title_activity_dbops">Database Operations</string>
-    <string name="text_view_policy_conditions">Conditions</string>
+    <string name="text_view_policy_conditions">Policy Conditions</string>
     <string name="text_view_policy_setting">Permission</string>
-    <string name="text_view_policy_level">Access</string>
+    <string name="text_view_policy_level">Access Lvl</string>
     <string name="radio_button_text_no_data">No data</string>
     <string name="radio_button_text_fake_data">Fake data</string>
     <string name="radio_button_text_anonymous_data">Ano. data</string>
@@ -48,5 +48,4 @@
     <string name="dialog_resp_NO">No</string>
     <string name="largeSampleTextForListView">Large Text</string>
     <string name="smallSampleTextForListView">Small Text</string>
-    
 </resources>

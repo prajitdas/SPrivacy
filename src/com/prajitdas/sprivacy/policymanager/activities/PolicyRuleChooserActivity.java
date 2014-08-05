@@ -127,20 +127,24 @@ public class PolicyRuleChooserActivity extends Activity {
 		mTextViewPolicyStmt.setTextAppearance(this, android.R.style.TextAppearance_DeviceDefault_Small);
 		mTextViewPolicyStmt.setTypeface(Typeface.SERIF, Typeface.BOLD);
 		mTextViewPolicyStmt.setGravity(Gravity.CENTER);
+		mTextViewPolicyStmt.setTextColor(getResources().getColor(R.color.WhiteSmoke));
 		
 		mTextViewPolicyValu.setText(R.string.text_view_policy_setting);
 		mTextViewPolicyValu.setTextAppearance(this, android.R.style.TextAppearance_DeviceDefault_Small);
 		mTextViewPolicyValu.setTypeface(Typeface.SERIF, Typeface.BOLD);
 		mTextViewPolicyValu.setGravity(Gravity.CENTER);
+		mTextViewPolicyValu.setTextColor(getResources().getColor(R.color.WhiteSmoke));
 		
 		mTextViewPolicyLevl.setText(R.string.text_view_policy_level);
 		mTextViewPolicyLevl.setTextAppearance(this, android.R.style.TextAppearance_DeviceDefault_Small);
 		mTextViewPolicyLevl.setTypeface(Typeface.SERIF, Typeface.BOLD);
 		mTextViewPolicyLevl.setGravity(Gravity.CENTER);
+		mTextViewPolicyLevl.setTextColor(getResources().getColor(R.color.WhiteSmoke));
 		
 		tblRow.addView(mTextViewPolicyStmt);
 		tblRow.addView(mTextViewPolicyValu);
 		tblRow.addView(mTextViewPolicyLevl);
+		tblRow.setBackgroundColor(getResources().getColor(R.color.Black));
 		mTableOfPolicies.addView(tblRow);
 	}
 	
@@ -159,14 +163,31 @@ public class PolicyRuleChooserActivity extends Activity {
 			RadioGroup tempViewPolGroup = new RadioGroup(this);
 
 			tempViewPolcStmt.setText(aPolicyRule.toString());
+			tempViewPolcStmt.setTextColor(getResources().getColor(R.color.DarkBlue));
+			tempViewPolcStmt.setTypeface(Typeface.SERIF, Typeface.NORMAL);
+			tempViewPolcStmt.setGravity(Gravity.CENTER);
 			
 			tempToggleButton.setTextOn(SPrivacyApplication.getConstAccessGranted());
 			tempToggleButton.setTextOff(SPrivacyApplication.getConstAccessDenied());
 			tempToggleButton.setChecked(aPolicyRule.isRule());
+			if(aPolicyRule.isRule())
+				tempToggleButton.setBackgroundColor(getResources().getColor(R.color.Green));
+			else
+				tempToggleButton.setBackgroundColor(getResources().getColor(R.color.Red));
+			tempToggleButton.setTextColor(getResources().getColor(R.color.White));
+			tempToggleButton.setTypeface(Typeface.SERIF, Typeface.NORMAL);
 			
 			tempRadioButtonNoData.setText(R.string.radio_button_text_no_data);
+			tempRadioButtonNoData.setTextColor(getResources().getColor(R.color.DarkBlue));
+			tempRadioButtonNoData.setTypeface(Typeface.SERIF, Typeface.NORMAL);
+
 			tempRadioButtonFakeData.setText(R.string.radio_button_text_fake_data);
+			tempRadioButtonFakeData.setTextColor(getResources().getColor(R.color.DarkBlue));
+			tempRadioButtonFakeData.setTypeface(Typeface.SERIF, Typeface.NORMAL);
+
 			tempRadioButtonAnonymizedData.setText(R.string.radio_button_text_anonymous_data);
+			tempRadioButtonAnonymizedData.setTextColor(getResources().getColor(R.color.DarkBlue));
+			tempRadioButtonAnonymizedData.setTypeface(Typeface.SERIF, Typeface.NORMAL);
 
 			tempViewPolGroup.setOrientation(RadioGroup.VERTICAL);
 			tempViewPolGroup.addView(tempRadioButtonNoData);
@@ -193,6 +214,7 @@ public class PolicyRuleChooserActivity extends Activity {
 			tempTableRow.addView(tempToggleButton);
 			tempTableRow.addView(tempViewPolGroup);
 			tempTableRow.setGravity(Gravity.CENTER_VERTICAL);
+			tempTableRow.setBackgroundColor(getResources().getColor(R.color.LightBlue));
 
 			mTableOfPolicies.addView(tempTableRow);
 
@@ -206,8 +228,8 @@ public class PolicyRuleChooserActivity extends Activity {
 	}
 
 	private void togglePolicy(int indexOfPolicy) {
-		SPrivacyApplication.makeToast(this, "The index I am receiving is: "
-				+Integer.toString(indexOfPolicy));
+//		SPrivacyApplication.makeToast(this, "The index I am receiving is: "
+//				+Integer.toString(indexOfPolicy));
 		PolicyInfo tempPolicyRule = db.findPolicyByID(database, policyViewMap.get(indexOfPolicy).getId());
 		tempPolicyRule.togglePolicy();
 		mRadioGroups.get(indexOfPolicy).clearCheck();
@@ -231,14 +253,16 @@ public class PolicyRuleChooserActivity extends Activity {
 			mRadioButtons.get((indexOfPolicy*3)+2).setChecked(false);
 			tempPolicyRule.changeAccessLevel(0);
 		}
+		policyViewMap.put(indexOfPolicy, tempPolicyRule);
 		db.updatePolicyRule(database, tempPolicyRule);
 	}
 
 	private void changeAccessLevel(int indexOfPolicy, int accessLevel) {
-		SPrivacyApplication.makeToast(this, "The access level I am receiving is: "
-				+Integer.toString(accessLevel));
+//		SPrivacyApplication.makeToast(this, "The access level I am receiving is: "
+//				+Integer.toString(accessLevel));
 		PolicyInfo tempPolicyRule = db.findPolicyByID(database, policyViewMap.get(indexOfPolicy).getId());
 		tempPolicyRule.changeAccessLevel(accessLevel);
+		policyViewMap.put(indexOfPolicy, tempPolicyRule);
 		db.updatePolicyRule(database, tempPolicyRule);
 	}
 
@@ -259,6 +283,10 @@ public class PolicyRuleChooserActivity extends Activity {
 				//Toggle Button to identify which policy was modified
 				@Override
 				public void onClick(View v) {
+					if(policyViewMap.get(index).isRule())
+						v.setBackgroundColor(getResources().getColor(R.color.Red));
+					else
+						v.setBackgroundColor(getResources().getColor(R.color.Green));
 					togglePolicy(index);
 				}
 			});

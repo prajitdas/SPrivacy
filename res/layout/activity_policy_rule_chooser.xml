@@ -21,11 +21,11 @@
 
 	<Button
 	    android:id="@+id/btnDBOps"
-	    android:layout_width="wrap_content"
+	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    android:layout_alignLeft="@+id/tableOfPolicies"
 	    android:layout_alignParentBottom="true"
-	    android:layout_alignRight="@+id/tableOfPolicies"
+	    android:layout_alignParentLeft="true"
+	    android:layout_alignParentRight="true"
 	    android:text="@string/DBOps" />
 
 </RelativeLayout>
