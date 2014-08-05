@@ -37,9 +37,9 @@ public class PolicyInfo {
 		if(isRule())
 			return "Access Granted, Real Data";
 		else {
-			if(getAccessLevel() == 0)
+			if(getAccessLevel() == 1)
 				return "Access Denied, No Data";
-			else if(getAccessLevel() == 1)
+			else if(getAccessLevel() == 2)
 			return "Access Denied, Fake Data";
 			else
 				return "Access Denied, Anonymous Data";

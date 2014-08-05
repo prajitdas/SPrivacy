@@ -143,9 +143,9 @@ public class DefaultDataLoader {
 				anAppInfo.getLabel(),
 				tempRes.getId(),
 				tempRes.getLabel(),
-				false,
-				0,
-				new UserContext("*","*","*","*"));
+				true, // By default load the policy as granted
+				0, // By default load the access level as real data
+				new UserContext("*","*","*","*")); // By default load context as "under any circumstance"
 		policies.add(tempPolicy);
 	}
 

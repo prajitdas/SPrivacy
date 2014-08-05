@@ -91,7 +91,7 @@ public class SPrivacyApplication extends Application {
 	}
 
 	public static void makeToast(Context context, String someString) {
-		Toast.makeText(context, someString, Toast.LENGTH_LONG).show();
+		Toast.makeText(context, someString, Toast.LENGTH_SHORT).show();
 	}
 
 	public static void setSingleton(SPrivacyApplication singleton) {
