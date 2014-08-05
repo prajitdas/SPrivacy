@@ -10,7 +10,7 @@
     <string name="permdesc_write_policy">Write Policy</string>
     <string name="action_settings">Settings</string>
     <string name="toggle_button_access_text">Access Toggle Button</string>
-    <string name="policy_chooser_activity_name">Policy Chooser</string>
+    <string name="policy_chooser_activity_name">SPrivacy</string>
     <string name="policy_provider_label">Policy Provider</string>
     <string name="sprivacy_content_provider_label">SPrivacy Content Provider</string>
     <string name="sprivacy_fake_image_content_provider_label">SPrivacy Fake Image Content Provider</string>

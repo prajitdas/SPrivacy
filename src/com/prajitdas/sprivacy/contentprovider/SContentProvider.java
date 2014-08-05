@@ -59,26 +59,6 @@ public class SContentProvider extends ContentProvider {
 	}
 	
 	/**
-     * This interface defines constants for the Cursor and CursorLoader
-     */
-	private interface AnonimyzedURIsForQuery {
-		Uri imageUri = Uri.parse(SPrivacyApplication.getConstAnonymizedAuthorityPrefix()
-				+SPrivacyApplication.getConstAnnonymous()
-				+SPrivacyApplication.getConstImages());
-		Uri fileUri = Uri.parse(SPrivacyApplication.getConstAnonymizedAuthorityPrefix()
-				+SPrivacyApplication.getConstAnnonymous()
-				+SPrivacyApplication.getConstFiles());
-		Uri videoUri = Uri.parse(SPrivacyApplication.getConstAnonymizedAuthorityPrefix()
-				+SPrivacyApplication.getConstAnnonymous()
-				+SPrivacyApplication.getConstVideos());
-		Uri audioUri = Uri.parse(SPrivacyApplication.getConstAnonymizedAuthorityPrefix()
-				+SPrivacyApplication.getConstAnnonymous()
-				+SPrivacyApplication.getConstAudios());
-		Uri contactUri = Uri.parse(SPrivacyApplication.getConstAnonymizedAuthorityPrefix()
-				+SPrivacyApplication.getConstAnnonymous()
-				+SPrivacyApplication.getConstContacts());
-    }
-	/**
 	* Helper class that actually creates and manages 
 	* the provider's underlying data repository.
 	*/
@@ -102,6 +82,20 @@ public class SContentProvider extends ContentProvider {
 	/**
      * This interface defines constants for the Cursor and CursorLoader
      */
+	private interface RealURIsForQuery {
+		//Gets the images on external SD card
+		Uri imageUri = Images.Media.EXTERNAL_CONTENT_URI;
+		//Gets the files on external SD card
+		Uri fileUri = Files.getContentUri("external");
+		Uri videoUri = Video.Media.EXTERNAL_CONTENT_URI;
+		Uri audioUri = Audio.Media.EXTERNAL_CONTENT_URI;
+		//Gets the contacts on the device
+		Uri contactUri = Contacts.CONTENT_URI;
+    }
+
+	/**
+     * This interface defines constants for the Cursor and CursorLoader
+     */
 	private interface FakeURIsForQuery {
 		Uri imageUri = Uri.parse(SPrivacyApplication.getConstFakeAuthorityPrefix()
 				+SPrivacyApplication.getConstAnnonymous()
@@ -119,18 +113,26 @@ public class SContentProvider extends ContentProvider {
 				+SPrivacyApplication.getConstAnnonymous()
 				+SPrivacyApplication.getConstContacts());
     }
+
 	/**
      * This interface defines constants for the Cursor and CursorLoader
      */
-	private interface RealURIsForQuery {
-		//Gets the images on external SD card
-		Uri imageUri = Images.Media.EXTERNAL_CONTENT_URI;
-		//Gets the files on external SD card
-		Uri fileUri = Files.getContentUri("external");
-		Uri videoUri = Video.Media.EXTERNAL_CONTENT_URI;
-		Uri audioUri = Audio.Media.EXTERNAL_CONTENT_URI;
-		//Gets the contacts on the device
-		Uri contactUri = Contacts.CONTENT_URI;
+	private interface AnonimyzedURIsForQuery {
+		Uri imageUri = Uri.parse(SPrivacyApplication.getConstAnonymizedAuthorityPrefix()
+				+SPrivacyApplication.getConstAnnonymous()
+				+SPrivacyApplication.getConstImages());
+		Uri fileUri = Uri.parse(SPrivacyApplication.getConstAnonymizedAuthorityPrefix()
+				+SPrivacyApplication.getConstAnnonymous()
+				+SPrivacyApplication.getConstFiles());
+		Uri videoUri = Uri.parse(SPrivacyApplication.getConstAnonymizedAuthorityPrefix()
+				+SPrivacyApplication.getConstAnnonymous()
+				+SPrivacyApplication.getConstVideos());
+		Uri audioUri = Uri.parse(SPrivacyApplication.getConstAnonymizedAuthorityPrefix()
+				+SPrivacyApplication.getConstAnnonymous()
+				+SPrivacyApplication.getConstAudios());
+		Uri contactUri = Uri.parse(SPrivacyApplication.getConstAnonymizedAuthorityPrefix()
+				+SPrivacyApplication.getConstAnnonymous()
+				+SPrivacyApplication.getConstContacts());
     }
 
 	private static HashMap<String, String> PROJECTION_MAP;

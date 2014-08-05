@@ -30,13 +30,17 @@ import com.prajitdas.sprivacy.policymanager.util.PolicyInfo;
 public class PolicyRuleChooserActivity extends Activity {
 	private Button mBtnDBOps;
 	private TableLayout mTableOfPolicies;
+	
 	private PolicyDBHelper db;
 	private SQLiteDatabase database;
+	
 	private ArrayList<TableRow> mTableRows;
 	private ArrayList<ToggleButton> mToggleButtons;
 	private ArrayList<RadioButton> mRadioButtons;
 	private ArrayList<RadioGroup> mRadioGroups;
+	
 	private SparseArray<PolicyInfo> policyViewMap;
+	
 	private static int viewCount;
 
 	@Override
@@ -178,14 +182,17 @@ public class PolicyRuleChooserActivity extends Activity {
 			tempToggleButton.setTypeface(Typeface.SERIF, Typeface.NORMAL);
 			
 			tempRadioButtonNoData.setText(R.string.radio_button_text_no_data);
+			tempRadioButtonNoData.setTextAppearance(this, android.R.style.TextAppearance_DeviceDefault_Small);
 			tempRadioButtonNoData.setTextColor(getResources().getColor(R.color.DarkBlue));
 			tempRadioButtonNoData.setTypeface(Typeface.SERIF, Typeface.NORMAL);
 
 			tempRadioButtonFakeData.setText(R.string.radio_button_text_fake_data);
+			tempRadioButtonFakeData.setTextAppearance(this, android.R.style.TextAppearance_DeviceDefault_Small);
 			tempRadioButtonFakeData.setTextColor(getResources().getColor(R.color.DarkBlue));
 			tempRadioButtonFakeData.setTypeface(Typeface.SERIF, Typeface.NORMAL);
 
 			tempRadioButtonAnonymizedData.setText(R.string.radio_button_text_anonymous_data);
+			tempRadioButtonAnonymizedData.setTextAppearance(this, android.R.style.TextAppearance_DeviceDefault_Small);
 			tempRadioButtonAnonymizedData.setTextColor(getResources().getColor(R.color.DarkBlue));
 			tempRadioButtonAnonymizedData.setTypeface(Typeface.SERIF, Typeface.NORMAL);
 
