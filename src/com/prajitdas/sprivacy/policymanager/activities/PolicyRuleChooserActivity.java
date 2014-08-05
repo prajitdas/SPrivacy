@@ -14,6 +14,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -30,12 +33,19 @@ public class PolicyRuleChooserActivity extends Activity {
 	private PolicyDBHelper db;
 	private SQLiteDatabase database;
 	private ArrayList<ToggleButton> mToggleButtons;
+	private ArrayList<RadioGroup> mRadioGroups;
 
 	private void addDataRows() {
 		try {
-			addTableRow(db.findPolicyByApp(database, SPrivacyApplication.getConstAppname(), SPrivacyApplication.getConstImages()));
-			addTableRow(db.findPolicyByApp(database, SPrivacyApplication.getConstAppname(), SPrivacyApplication.getConstFiles()));
-			addTableRow(db.findPolicyByApp(database, SPrivacyApplication.getConstAppname(), SPrivacyApplication.getConstContacts()));
+			addTableRow(db.findPolicyByAppProv(database, 
+					SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
+					SPrivacyApplication.getConstImages()));
+			addTableRow(db.findPolicyByAppProv(database, 
+					SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
+					SPrivacyApplication.getConstFiles()));
+			addTableRow(db.findPolicyByAppProv(database, 
+					SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
+					SPrivacyApplication.getConstContacts()));
 		} catch(SQLException e) {
 			SPrivacyApplication.makeToast(this, "Seems like there is no data in the database");
 		}
@@ -61,12 +71,22 @@ public class PolicyRuleChooserActivity extends Activity {
 				}
 			});
 		}
+		for(int i = 0; i < mRadioGroups.size(); i++) {
+			mRadioGroups.get(i).setOnCheckedChangeListener(new OnCheckedChangeListener() {
+				
+				@Override
+				public void onCheckedChanged(RadioGroup group, int checkedId) {
+					changeAccessLevel(mRadioGroups.indexOf(group), checkedId);
+				}
+			});
+		}
 	}
 	
 	private void addTableRow() {
 		TableRow tblRow = new TableRow(this);
 		TextView mTextViewPolicyStmt = new TextView(this);
 		TextView mTextViewPolicyValu = new TextView(this);
+		TextView mTextViewPolicyLevl = new TextView(this);
 		
 		mTextViewPolicyStmt.setText(R.string.text_view_policy_conditions);
 		mTextViewPolicyStmt.setTextAppearance(this, android.R.style.TextAppearance_DeviceDefault_Small);
@@ -78,28 +98,52 @@ public class PolicyRuleChooserActivity extends Activity {
 		mTextViewPolicyValu.setTypeface(Typeface.SERIF, Typeface.BOLD);
 		mTextViewPolicyValu.setGravity(Gravity.CENTER);
 		
+		mTextViewPolicyLevl.setText(R.string.text_view_policy_level);
+		mTextViewPolicyLevl.setTextAppearance(this, android.R.style.TextAppearance_DeviceDefault_Small);
+		mTextViewPolicyLevl.setTypeface(Typeface.SERIF, Typeface.BOLD);
+		mTextViewPolicyLevl.setGravity(Gravity.CENTER);
+		
 		tblRow.addView(mTextViewPolicyStmt);
 		tblRow.addView(mTextViewPolicyValu);
+		tblRow.addView(mTextViewPolicyLevl);
 		mTableOfPolicies.addView(tblRow);
 	}
 	
 	private void addTableRow(PolicyInfo aPolicyRule) {
 		if(aPolicyRule!=null){
 			TableRow tblRow = new TableRow(this);
-			TextView mTextViewPolicyStmt = new TextView(this);
+			
+			TextView tempViewPolcStmt = new TextView(this);
 			ToggleButton tempToggleButton = new ToggleButton(this);
+			
+			RadioButton tempRadioButtonNoData = new RadioButton(this);
+			RadioButton tempRadioButtonFakeData = new RadioButton(this);
+			RadioButton tempRadioButtonAnonymizedData = new RadioButton(this);
+			RadioGroup tempViewPolGroup = new RadioGroup(this);
+
+			tempViewPolcStmt.setText(aPolicyRule.toString());
+			
 			tempToggleButton.setTextOn(SPrivacyApplication.getConstAccessGranted());
 			tempToggleButton.setTextOff(SPrivacyApplication.getConstAccessDenied());
-			
-			mTextViewPolicyStmt.setText(aPolicyRule.toString());
-			
 			tempToggleButton.setChecked(aPolicyRule.isRule());
 			tempToggleButton.setId(aPolicyRule.getId());
 			
-			tblRow.addView(mTextViewPolicyStmt);
+			tempRadioButtonNoData.setText(R.string.radio_button_text_no_data);
+			tempRadioButtonFakeData.setText(R.string.radio_button_text_fake_data);
+			tempRadioButtonAnonymizedData.setText(R.string.radio_button_text_anonymous_data);
+
+			tempViewPolGroup.setOrientation(RadioGroup.VERTICAL);
+			tempViewPolGroup.addView(tempRadioButtonNoData);
+			tempViewPolGroup.addView(tempRadioButtonFakeData);
+			tempViewPolGroup.addView(tempRadioButtonAnonymizedData);
+			tempViewPolGroup.setEnabled(false);
+			
+			tblRow.addView(tempViewPolcStmt);
 			tblRow.addView(tempToggleButton);
+			tblRow.addView(tempViewPolGroup);
 			mTableOfPolicies.addView(tblRow);
 			
+			mRadioGroups.add(tempViewPolGroup);
 			mToggleButtons.add(tempToggleButton);
 		}
 	}
@@ -116,6 +160,7 @@ public class PolicyRuleChooserActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_policy_rule_chooser);
 		mToggleButtons = new ArrayList<ToggleButton>();
+		mRadioGroups = new ArrayList<RadioGroup>();
 		db = new PolicyDBHelper(this);
 		database = db.getWritableDatabase();
 		instantiateViews();
@@ -159,8 +204,24 @@ public class PolicyRuleChooserActivity extends Activity {
 	}
 	
 	private void togglePolicy(int idOfPolicy) {
+		SPrivacyApplication.makeToast(this, "The id of policy is "+Integer.toString(idOfPolicy));
 		PolicyInfo tempPolicyRule = db.findPolicyByID(database, idOfPolicy);
-		tempPolicyRule.togglePolicyRule();
+		tempPolicyRule.togglePolicy();
 		db.updatePolicyRule(database, tempPolicyRule);
+		if(!tempPolicyRule.isRule())
+			mRadioGroups.get(idOfPolicy).setEnabled(true);
+		else
+			mRadioGroups.get(idOfPolicy).setEnabled(false);
+	}
+	private void changeAccessLevel(int idOfPolicy, int accessLevel) {
+		SPrivacyApplication.makeToast(this, "checked radio button is "+Integer.toString(accessLevel)
+				+" and the id of policy is "+Integer.toString(idOfPolicy));
+		PolicyInfo tempPolicyRule = db.findPolicyByID(database, idOfPolicy);
+		tempPolicyRule.changeAccessLevel(accessLevel);
+		db.updatePolicyRule(database, tempPolicyRule);
+		if(!tempPolicyRule.isRule())
+			mRadioGroups.get(idOfPolicy).setEnabled(true);
+		else
+			mRadioGroups.get(idOfPolicy).setEnabled(false);
 	}
 }

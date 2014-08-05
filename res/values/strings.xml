@@ -37,8 +37,12 @@
     <string name="title_activity_display_all_providers">Providers</string>
     <string name="title_activity_display_all_applications">Applications</string>
     <string name="title_activity_dbops">Database Operations</string>
-    <string name="text_view_policy_conditions">Policy Conditions</string>
-    <string name="text_view_policy_setting">Policy Setting</string>
+    <string name="text_view_policy_conditions">Conditions</string>
+    <string name="text_view_policy_setting">Permission</string>
+    <string name="text_view_policy_level">Access</string>
+    <string name="radio_button_text_no_data">None</string>
+    <string name="radio_button_text_fake_data">Fake</string>
+    <string name="radio_button_text_anonymous_data">Anon</string>
     <string name="dialog_delete_data">Delete and reload default data?</string>
     <string name="dialog_resp_delete">Yes</string>
     <string name="dialog_resp_NO">No</string>

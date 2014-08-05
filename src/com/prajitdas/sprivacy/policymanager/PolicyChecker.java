@@ -17,8 +17,10 @@ public class PolicyChecker {
 		getCurrentContext(policyQuery);
 		PolicyDBHelper policyDBHelper = new PolicyDBHelper(context);
 		SQLiteDatabase policyDB = policyDBHelper.getWritableDatabase();
-		PolicyInfo tempPolicyRule = policyDBHelper.findPolicyByApp(policyDB, SPrivacyApplication.getConstAppname(), policyQuery.getProviderAuthority());
-		return new AccessControl(tempPolicyRule.isRule(), tempPolicyRule.getAccessLevel());
+		PolicyInfo tempPolicyInfo = policyDBHelper.findPolicyByAppProv(policyDB, 
+				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
+				policyQuery.getProviderAuthority());
+		return new AccessControl(tempPolicyInfo.isRule(), tempPolicyInfo.getAccessLevel());
 	}
 
 	private static void getCurrentContext(PolicyQuery policyQuery) {

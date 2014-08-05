@@ -34,7 +34,16 @@ public class PolicyInfo {
 		return appLabel;
 	}
 	public String getDetailData() {
-		return isRule() ? "Access Granted" : "Access Denied";
+		if(isRule())
+			return "Access Granted, Real Data";
+		else {
+			if(getAccessLevel() == 0)
+				return "Access Denied, No Data";
+			else if(getAccessLevel() == 1)
+			return "Access Denied, Fake Data";
+			else
+				return "Access Denied, Anonymous Data";
+		}
 	}
 	public int getId() {
 		return id;
@@ -81,14 +90,19 @@ public class PolicyInfo {
 	public void setUserContext(UserContext userContext) {
 		this.userContext = userContext;
 	}
-	public void togglePolicyRule() {
+	public void togglePolicy() {
 		if(isRule())
 			setRule(false);
-		else
+		else {
 			setRule(true);
+			setAccessLevel(0);
+		}
 	}
 	@Override
 	public String toString() {
 		return 	appLabel + " | " + provLabel;
+	}
+	public void changeAccessLevel(int accessLevel) {
+		setAccessLevel(accessLevel);
 	}
 }

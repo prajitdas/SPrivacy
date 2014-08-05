@@ -279,7 +279,7 @@ public class SContentProvider extends ContentProvider {
 		//TODO Have to figure out how to return dummy data based on access levels.
 		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
 				SPrivacyApplication.getConstAudios(), 
-				SPrivacyApplication.getConstAppname(), 
+				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
 				null), getContext());
 		return dataControl(uri, projection, selection, selectionArgs, sortOrder, 
 				RealURIsForQuery.audioUri, FakeURIsForQuery.audioUri, AnonimyzedURIsForQuery.audioUri);
@@ -290,7 +290,7 @@ public class SContentProvider extends ContentProvider {
 		//TODO Have to figure out how to return dummy data based on access levels.
 		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
 				SPrivacyApplication.getConstContacts(), 
-				SPrivacyApplication.getConstAppname(), 
+				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
 				null), getContext());
 		return dataControl(uri, projection, selection, selectionArgs, sortOrder, 
 				RealURIsForQuery.contactUri, FakeURIsForQuery.contactUri, AnonimyzedURIsForQuery.contactUri);
@@ -301,7 +301,7 @@ public class SContentProvider extends ContentProvider {
 		//TODO Have to figure out how to return dummy data based on access levels.
 		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
 				SPrivacyApplication.getConstFiles(), 
-				SPrivacyApplication.getConstAppname(), 
+				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
 				null), getContext());
 		return dataControl(uri, projection, selection, selectionArgs, sortOrder, 
 				RealURIsForQuery.fileUri, FakeURIsForQuery.fileUri, AnonimyzedURIsForQuery.fileUri);
@@ -312,7 +312,7 @@ public class SContentProvider extends ContentProvider {
 		//TODO Have to figure out how to return dummy data based on access levels.
 		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
 				SPrivacyApplication.getConstImages(), 
-				SPrivacyApplication.getConstAppname(), 
+				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
 				null), getContext());
 		return dataControl(uri, projection, selection, selectionArgs, sortOrder, 
 				RealURIsForQuery.imageUri, FakeURIsForQuery.imageUri, AnonimyzedURIsForQuery.imageUri);
@@ -323,7 +323,7 @@ public class SContentProvider extends ContentProvider {
 		//TODO Have to figure out how to return dummy data based on access levels.
 		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
 				SPrivacyApplication.getConstVideos(), 
-				SPrivacyApplication.getConstAppname(), 
+				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
 				null), getContext());
 		return dataControl(uri, projection, selection, selectionArgs, sortOrder, 
 				RealURIsForQuery.videoUri, FakeURIsForQuery.videoUri, AnonimyzedURIsForQuery.videoUri);

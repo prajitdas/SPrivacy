@@ -14,7 +14,7 @@ public class SPrivacyApplication extends Application {
 
 	private static final String CONST_ANONYMIZED_AUTHORITY_PREFIX = "com.prajitdas.sprivacy.anonymizedcontentprovider.Content.";
 
-	private static final String CONST_APPNAME = "com.prajitdas.sprivacy";
+	private static final String CONST_APP_FOR_WHICH_WE_ARE_SETTING_POLICIES = "com.prajitdas.parserapp";
 
 	private static final String CONST_AUDIOS = "audios";
 
@@ -35,7 +35,7 @@ public class SPrivacyApplication extends Application {
 	private static final String CONST_VIDEOS = "videos";
 
 	private static final String DEBUG_TAG = "SPrivacyApplicationDebugTag";
-	
+
 	private static SPrivacyApplication singleton;
 
 	public static String getConstAccessDenied() {
@@ -50,10 +50,6 @@ public class SPrivacyApplication extends Application {
 		return CONST_ANNONYMOUS;
 	}
 	
-	public static String getConstAppname() {
-		return CONST_APPNAME;
-	}
-
 	public static String getConstAudios() {
 		return CONST_AUDIOS;
 	}
@@ -129,5 +125,9 @@ public class SPrivacyApplication extends Application {
 
 	public static String getConstFakeAuthorityPrefix() {
 		return CONST_FAKE_AUTHORITY_PREFIX;
+	}
+
+	public static String getConstAppForWhichWeAreSettingPolicies() {
+		return CONST_APP_FOR_WHICH_WE_ARE_SETTING_POLICIES;
 	}
 }

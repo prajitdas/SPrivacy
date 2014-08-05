@@ -117,7 +117,7 @@ public class DefaultDataLoader {
 	private int findTheIndex() {
 		int i = 0;
 		for(AppInfo app : applications) {
-			if(app.isMatch(SPrivacyApplication.getConstAppname()))
+			if(app.isMatch(SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies()))
 				return i;
 			i++;
 		}
