@@ -275,7 +275,6 @@ public class PolicyRuleChooserActivity extends Activity {
 
 	private void addOnClickListener() {
 		mBtnDBOps.setOnClickListener(new OnClickListener() {
-
 			//Button to show all the policies at the same time
 			@Override
 			public void onClick(View v) {
@@ -302,7 +301,6 @@ public class PolicyRuleChooserActivity extends Activity {
 		for(int i = 0; i < mRadioButtons.size(); i++) {
 			final int index = i;
 			mRadioButtons.get(i).setOnClickListener(new OnClickListener() {
-				
 				@Override
 				public void onClick(View v) {
 					changeAccessLevel(index/3, index%3+1);

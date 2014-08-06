@@ -176,6 +176,9 @@ public class SContentProvider extends ContentProvider {
 		}
 		else {
 			if(accessControl.getLevel()==1) {
+				c = null;
+			}
+			else if(accessControl.getLevel()==2) {
 				c = getContext().getContentResolver()
 						.query(fakeURI,
 								null, 
@@ -183,16 +186,13 @@ public class SContentProvider extends ContentProvider {
 								null, 
 								null);
 			}
-			else if(accessControl.getLevel()==2) {
+			else {
 				c = getContext().getContentResolver()
 						.query(anonimyzedURI,
 								null, 
 								null, 
 								null, 
 								null);
-			}
-			else {
-				c = null;
 			}
 		}
 		return c;

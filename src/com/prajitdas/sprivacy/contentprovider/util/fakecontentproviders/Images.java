@@ -60,6 +60,11 @@ public class Images extends ContentProvider {
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			db.execSQL(CREATE_DB_TABLE);
+//			ByteArrayOutputStream baos = new ByteArrayOutputStream();  
+//			Bitmap bitmap = ((BitmapDrawable)getResources().getDrawable(R.drawable.common)).getBitmap();
+//			bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);   
+//			byte[] photo = baos.toByteArray(); 
+//			db.insertUserDetails(value1,value2, value3, photo,value2);
 		}
 		
 		@Override
@@ -78,7 +83,7 @@ public class Images extends ContentProvider {
 		* creation if it doesn't already exist.
 		*/
 		db = dbHelper.getWritableDatabase();
-		return (db == null)? false:true;
+		return (db == null) ? false : true;
 	}
 
 	@Override
