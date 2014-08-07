@@ -75,7 +75,7 @@ public class Images extends ContentProvider {
 			db.execSQL(CREATE_DB_TABLE);
 			saveImageToExternalStorage(((BitmapDrawable) context.getResources().getDrawable(R.drawable.dummy)).getBitmap());
 		    if(MediaScannerBroadcastReceiver.mMediaScanning)
-		    	addDefaultData(db, "585");//imageUri.getLastPathSegment().toString());
+		    	addDefaultData(db, "712");//imageUri.getLastPathSegment().toString());
 //		    	addDefaultData(db, "1535");//imageUri.getLastPathSegment().toString());
 //		    	addDefaultData(db, imageUri.getLastPathSegment().toString());
 		}
