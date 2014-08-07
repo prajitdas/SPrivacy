@@ -17,6 +17,8 @@ import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.Files;
 import android.provider.MediaStore.Images;
 import android.provider.MediaStore.Video;
+import android.util.Log;
+
 import com.prajitdas.sprivacy.SPrivacyApplication;
 import com.prajitdas.sprivacy.policymanager.PolicyChecker;
 import com.prajitdas.sprivacy.policymanager.util.AccessControl;
@@ -97,20 +99,35 @@ public class SContentProvider extends ContentProvider {
      * This interface defines constants for the Cursor and CursorLoader
      */
 	private interface FakeURIsForQuery {
-		Uri imageUri = Uri.parse(SPrivacyApplication.getConstFakeAuthorityPrefix()
-				+SPrivacyApplication.getConstAnnonymous()
+		Uri imageUri = Uri.parse(SPrivacyApplication.getConstScheme()
+				+SPrivacyApplication.getConstFakeAuthorityPrefix()
+				+SPrivacyApplication.getConstFake()
+				+SPrivacyApplication.getConstImages()
+				+SPrivacyApplication.getConstSlash()
 				+SPrivacyApplication.getConstImages());
-		Uri fileUri = Uri.parse(SPrivacyApplication.getConstFakeAuthorityPrefix()
-				+SPrivacyApplication.getConstAnnonymous()
+		Uri fileUri = Uri.parse(SPrivacyApplication.getConstScheme()
+				+SPrivacyApplication.getConstFakeAuthorityPrefix()
+				+SPrivacyApplication.getConstFake()
+				+SPrivacyApplication.getConstFiles()
+				+SPrivacyApplication.getConstSlash()
 				+SPrivacyApplication.getConstFiles());
-		Uri videoUri = Uri.parse(SPrivacyApplication.getConstFakeAuthorityPrefix()
-				+SPrivacyApplication.getConstAnnonymous()
+		Uri videoUri = Uri.parse(SPrivacyApplication.getConstScheme()
+				+SPrivacyApplication.getConstFakeAuthorityPrefix()
+				+SPrivacyApplication.getConstFake()
+				+SPrivacyApplication.getConstVideos()
+				+SPrivacyApplication.getConstSlash()
 				+SPrivacyApplication.getConstVideos());
-		Uri audioUri = Uri.parse(SPrivacyApplication.getConstFakeAuthorityPrefix()
-				+SPrivacyApplication.getConstAnnonymous()
+		Uri audioUri = Uri.parse(SPrivacyApplication.getConstScheme()
+				+SPrivacyApplication.getConstFakeAuthorityPrefix()
+				+SPrivacyApplication.getConstFake()
+				+SPrivacyApplication.getConstAudios()
+				+SPrivacyApplication.getConstSlash()
 				+SPrivacyApplication.getConstAudios());
-		Uri contactUri = Uri.parse(SPrivacyApplication.getConstFakeAuthorityPrefix()
-				+SPrivacyApplication.getConstAnnonymous()
+		Uri contactUri = Uri.parse(SPrivacyApplication.getConstScheme()
+				+SPrivacyApplication.getConstFakeAuthorityPrefix()
+				+SPrivacyApplication.getConstFake()
+				+SPrivacyApplication.getConstContacts()
+				+SPrivacyApplication.getConstSlash()
 				+SPrivacyApplication.getConstContacts());
     }
 
@@ -118,20 +135,35 @@ public class SContentProvider extends ContentProvider {
      * This interface defines constants for the Cursor and CursorLoader
      */
 	private interface AnonimyzedURIsForQuery {
-		Uri imageUri = Uri.parse(SPrivacyApplication.getConstAnonymizedAuthorityPrefix()
+		Uri imageUri = Uri.parse(SPrivacyApplication.getConstScheme()
+				+SPrivacyApplication.getConstAnonymizedAuthorityPrefix()
 				+SPrivacyApplication.getConstAnnonymous()
+				+SPrivacyApplication.getConstImages()
+				+SPrivacyApplication.getConstSlash()
 				+SPrivacyApplication.getConstImages());
-		Uri fileUri = Uri.parse(SPrivacyApplication.getConstAnonymizedAuthorityPrefix()
+		Uri fileUri = Uri.parse(SPrivacyApplication.getConstScheme()
+				+SPrivacyApplication.getConstAnonymizedAuthorityPrefix()
 				+SPrivacyApplication.getConstAnnonymous()
+				+SPrivacyApplication.getConstFiles()
+				+SPrivacyApplication.getConstSlash()
 				+SPrivacyApplication.getConstFiles());
-		Uri videoUri = Uri.parse(SPrivacyApplication.getConstAnonymizedAuthorityPrefix()
+		Uri videoUri = Uri.parse(SPrivacyApplication.getConstScheme()
+				+SPrivacyApplication.getConstAnonymizedAuthorityPrefix()
 				+SPrivacyApplication.getConstAnnonymous()
+				+SPrivacyApplication.getConstVideos()
+				+SPrivacyApplication.getConstSlash()
 				+SPrivacyApplication.getConstVideos());
-		Uri audioUri = Uri.parse(SPrivacyApplication.getConstAnonymizedAuthorityPrefix()
+		Uri audioUri = Uri.parse(SPrivacyApplication.getConstScheme()
+				+SPrivacyApplication.getConstAnonymizedAuthorityPrefix()
 				+SPrivacyApplication.getConstAnnonymous()
+				+SPrivacyApplication.getConstAudios()
+				+SPrivacyApplication.getConstSlash()
 				+SPrivacyApplication.getConstAudios());
-		Uri contactUri = Uri.parse(SPrivacyApplication.getConstAnonymizedAuthorityPrefix()
+		Uri contactUri = Uri.parse(SPrivacyApplication.getConstScheme()
+				+SPrivacyApplication.getConstAnonymizedAuthorityPrefix()
 				+SPrivacyApplication.getConstAnnonymous()
+				+SPrivacyApplication.getConstContacts()
+				+SPrivacyApplication.getConstSlash()
 				+SPrivacyApplication.getConstContacts());
     }
 
@@ -158,9 +190,56 @@ public class SContentProvider extends ContentProvider {
 		return extras;
 	}
 
-	private Cursor dataControl(Uri uri, String[] projection, String selection, 
+//	private Uri getRealUri(int choice) {
+//		switch(choice) {
+//			case 1:
+//				return Uri.parse("content://media/external/images/media");
+//			case 2:
+//				return Uri.parse("content://media/external/files/media");
+//			case 3:
+//				return Uri.parse("content://media/external/videos/media");
+//			case 4:
+//				return Uri.parse("content://media/external/audios/media");
+//			default:
+//				return Uri.parse("content://contacts");
+//		}
+//	}
+//
+//	private Uri getFakeUri(int choice) {
+//		switch(choice) {
+//			case 1:
+//				return Uri.parse("content://media/external/images/media");
+//			case 2:
+//				return Uri.parse("content://media/external/files/media");
+//			case 3:
+//				return Uri.parse("content://media/external/videos/media");
+//			case 4:
+//				return Uri.parse("content://media/external/audios/media");
+//			default:
+//				return Uri.parse("content://contacts");
+//		}
+//	}
+//
+//	private Uri getAnonymousUri(int choice) {
+//		switch(choice) {
+//			case 1:
+//				return Uri.parse("content://media/external/images/media");
+//			case 2:
+//				return Uri.parse("content://media/external/files/media");
+//			case 3:
+//				return Uri.parse("content://media/external/videos/media");
+//			case 4:
+//				return Uri.parse("content://media/external/audios/media");
+//			default:
+//				return Uri.parse("content://contacts");
+//		}
+//	}
+
+	private Cursor dataControl(int provider, Uri uri, String[] projection, String selection, 
 			String[] selectionArgs, String sortOrder, 
 			Uri realURI, Uri fakeURI, Uri anonimyzedURI) {
+		Log.v(SPrivacyApplication.getDebugTag(), 
+				realURI.toString()+" "+fakeURI.toString()+" "+anonimyzedURI.toString());
 		Cursor c;
 		if(accessControl.isPolicy()) {
 			c = getContext().getContentResolver()
@@ -173,6 +252,7 @@ public class SContentProvider extends ContentProvider {
 			* register to watch a content URI for changes
 			*/
 			c.setNotificationUri(getContext().getContentResolver(), uri);
+//			Media.setUri(getRealUri(provider));
 		}
 		else {
 			if(accessControl.getLevel()==1) {
@@ -185,6 +265,7 @@ public class SContentProvider extends ContentProvider {
 								null, 
 								null, 
 								null);
+//				Media.setUri(getFakeUri(provider));
 			}
 			else {
 				c = getContext().getContentResolver()
@@ -193,6 +274,7 @@ public class SContentProvider extends ContentProvider {
 								null, 
 								null, 
 								null);
+//				Media.setUri(getAnonymousUri(provider));
 			}
 		}
 		return c;
@@ -283,7 +365,7 @@ public class SContentProvider extends ContentProvider {
 				SPrivacyApplication.getConstAudios(), 
 				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
 				null), getContext());
-		return dataControl(uri, projection, selection, selectionArgs, sortOrder, 
+		return dataControl(AUDIOS, uri, projection, selection, selectionArgs, sortOrder, 
 				RealURIsForQuery.audioUri, FakeURIsForQuery.audioUri, AnonimyzedURIsForQuery.audioUri);
 	}
 	
@@ -294,7 +376,7 @@ public class SContentProvider extends ContentProvider {
 				SPrivacyApplication.getConstContacts(), 
 				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
 				null), getContext());
-		return dataControl(uri, projection, selection, selectionArgs, sortOrder, 
+		return dataControl(CONTACTS, uri, projection, selection, selectionArgs, sortOrder, 
 				RealURIsForQuery.contactUri, FakeURIsForQuery.contactUri, AnonimyzedURIsForQuery.contactUri);
 	}
 	
@@ -305,7 +387,7 @@ public class SContentProvider extends ContentProvider {
 				SPrivacyApplication.getConstFiles(), 
 				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
 				null), getContext());
-		return dataControl(uri, projection, selection, selectionArgs, sortOrder, 
+		return dataControl(FILES, uri, projection, selection, selectionArgs, sortOrder, 
 				RealURIsForQuery.fileUri, FakeURIsForQuery.fileUri, AnonimyzedURIsForQuery.fileUri);
 	}
 
@@ -316,7 +398,7 @@ public class SContentProvider extends ContentProvider {
 				SPrivacyApplication.getConstImages(), 
 				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
 				null), getContext());
-		return dataControl(uri, projection, selection, selectionArgs, sortOrder, 
+		return dataControl(IMAGES, uri, projection, selection, selectionArgs, sortOrder, 
 				RealURIsForQuery.imageUri, FakeURIsForQuery.imageUri, AnonimyzedURIsForQuery.imageUri);
 	}
 	
@@ -327,7 +409,7 @@ public class SContentProvider extends ContentProvider {
 				SPrivacyApplication.getConstVideos(), 
 				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
 				null), getContext());
-		return dataControl(uri, projection, selection, selectionArgs, sortOrder, 
+		return dataControl(VIDEOS, uri, projection, selection, selectionArgs, sortOrder, 
 				RealURIsForQuery.videoUri, FakeURIsForQuery.videoUri, AnonimyzedURIsForQuery.videoUri);
 	}
 	
@@ -335,4 +417,13 @@ public class SContentProvider extends ContentProvider {
 	public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
 		return 0;
 	}	
+//	public static class Media {
+//		public static void setUri(Uri uri){
+//			EXTERNAL_CONTENT_URI = uri;
+//		}
+//		public static Uri EXTERNAL_CONTENT_URI;// = Uri.parse("content://media/external/images/media");
+//		public static Bitmap getBitmap(ContentResolver cr, Uri url) throws FileNotFoundException, IOException {
+//			return Images.Media.getBitmap(cr, url);
+//		}
+//	}
 }

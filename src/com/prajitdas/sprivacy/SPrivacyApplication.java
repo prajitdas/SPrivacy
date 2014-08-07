@@ -11,6 +11,8 @@ public class SPrivacyApplication extends Application {
 	private static final String CONST_ACCESS_GRANTED = "Granted";
 
 	private static final String CONST_ANNONYMOUS = "anonymized";
+	
+	private static final String CONST_SCHEME = "content://";
 
 	private static final String CONST_ANONYMIZED_AUTHORITY_PREFIX = "com.prajitdas.sprivacy.anonymizedcontentprovider.Content.";
 
@@ -129,5 +131,9 @@ public class SPrivacyApplication extends Application {
 
 	public static String getConstAppForWhichWeAreSettingPolicies() {
 		return CONST_APP_FOR_WHICH_WE_ARE_SETTING_POLICIES;
+	}
+
+	public static String getConstScheme() {
+		return CONST_SCHEME;
 	}
 }

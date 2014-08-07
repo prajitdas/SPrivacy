@@ -9,16 +9,23 @@
         android:description="@string/permdesc_read_write_content"
         android:label="@string/permlabel_read_write_content"
         android:protectionLevel="normal" />
-
+    
+    <permission
+        android:name="android.permission.sprivacy.READ_WRITE_FAKE_IMAGE_CONTENT"
+        android:description="@string/permdesc_read_write_fake_image_content"
+        android:label="@string/permlabel_read_write_fake_image_content"
+        android:protectionLevel="normal" />
+    
     <uses-sdk
         android:minSdkVersion="16"
         android:targetSdkVersion="21" />
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- Required permission not required at or below Android 4.3 API level -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <!-- Unusual but true! -->
-
+	
     <application
         android:name=".SPrivacyApplication"
         android:allowBackup="true"
@@ -130,6 +137,13 @@
             android:label="@string/sprivacy_anonymized_file_content_provider_label"
             android:permission="android.permission.sprivacy.READ_WRITE_anonymized_FILE_CONTENT" >
         </provider>
+		<receiver android:name=".contentprovider.util.MediaScannerBroadcastReceiver">
+			<intent-filter>
+				<action android:name="android.intent.action.MEDIA_SCANNER_FINISHED"></action>
+				<action android:name="android.intent.action.MEDIA_SCANNER_STARTED"></action>
+				<data android:scheme="file"></data>	
+			</intent-filter>
+		</receiver>
 	</application>
 
 </manifest>

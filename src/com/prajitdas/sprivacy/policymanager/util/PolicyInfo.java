@@ -24,6 +24,9 @@ public class PolicyInfo {
 		setAccessLevel(accessLevel);
 		setUserContext(userContext);
 	}
+	public void changeAccessLevel(int accessLevel) {
+		setAccessLevel(accessLevel);
+	}
 	public int getAccessLevel() {
 		return accessLevel;
 	}
@@ -101,8 +104,5 @@ public class PolicyInfo {
 	@Override
 	public String toString() {
 		return 	appLabel + " | " + provLabel;
-	}
-	public void changeAccessLevel(int accessLevel) {
-		setAccessLevel(accessLevel);
 	}
 }

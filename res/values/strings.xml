@@ -4,10 +4,8 @@
     <string name="app_name">SPrivacy</string>
     <string name="permlabel_read_write_content">Read/Write any content providers on the device</string>
     <string name="permdesc_read_write_content">Pseudo permission to allow access to any content on the mobile device.</string>
-    <string name="permlabel_read_policy">Read Policy</string>
-    <string name="permdesc_read_policy">Read Policy</string>
-    <string name="permlabel_write_policy">Write Policy</string>
-    <string name="permdesc_write_policy">Write Policy</string>
+    <string name="permlabel_read_write_fake_image_content">Pseudo permission to allow access to fake image content on the mobile device.</string>
+    <string name="permdesc_read_write_fake_image_content">Read/Write fake image content providers on the device</string>
     <string name="action_settings">Settings</string>
     <string name="toggle_button_access_text">Access Toggle Button</string>
     <string name="policy_chooser_activity_name">SPrivacy</string>

@@ -1,5 +1,7 @@
 package com.prajitdas.sprivacy.contentprovider.util.fakecontentproviders;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.HashMap;
 
 import android.content.ContentProvider;
@@ -12,19 +14,29 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore.Images.ImageColumns;
+import android.util.Log;
 
+import com.prajitdas.sprivacy.R;
 import com.prajitdas.sprivacy.SPrivacyApplication;
+import com.prajitdas.sprivacy.contentprovider.util.MediaScannerBroadcastReceiver;
 
 public class Images extends ContentProvider {
 	static final String PROVIDER_NAME = SPrivacyApplication.getConstFakeAuthorityPrefix()
 			+SPrivacyApplication.getConstFake()
 			+SPrivacyApplication.getConstImages();
 	static final String URL = "content://" + PROVIDER_NAME;
-	 static final Uri CONTENT_URI = Uri.parse(URL);
+	static final Uri CONTENT_URI = Uri.parse(URL);
 
-	static final String _ID = "_id";
-	static final String IMAGE = "image";
+	static Uri imageUri;
+
+	static final String ID = "id";
+	static final String _ID = ImageColumns._ID;
 
 	static final int IMAGES = 1;
 	
@@ -44,9 +56,9 @@ public class Images extends ContentProvider {
 	static final String TABLE_NAME = "fakeImage";
 	static final int DATABASE_VERSION = 1;
 	static final String CREATE_DB_TABLE =
-			" CREATE TABLE " + TABLE_NAME +
-			" (_id INTEGER PRIMARY KEY AUTOINCREMENT, " + 
-			IMAGE + " BLOB NOT NULL);";
+			" CREATE TABLE " + TABLE_NAME + " (" + 
+			ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
+			_ID + " TEXT NOT NULL);";
 
 	/**
 	* Helper class that actually creates and manages 
@@ -60,13 +72,8 @@ public class Images extends ContentProvider {
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			db.execSQL(CREATE_DB_TABLE);
-//			ByteArrayOutputStream baos = new ByteArrayOutputStream();  
-//			Bitmap bitmap = ((BitmapDrawable)getResources().getDrawable(R.drawable.common)).getBitmap();
-//			bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);   
-//			byte[] photo = baos.toByteArray(); 
-//			db.insertUserDetails(value1,value2, value3, photo,value2);
 		}
-		
+			    
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			db.execSQL("DROP TABLE IF EXISTS " +  TABLE_NAME);
@@ -83,10 +90,58 @@ public class Images extends ContentProvider {
 		* creation if it doesn't already exist.
 		*/
 		db = dbHelper.getWritableDatabase();
+		saveImageToExternalStorage(((BitmapDrawable) getContext().getResources().getDrawable(R.drawable.dummy)).getBitmap());
+	    if(MediaScannerBroadcastReceiver.mMediaScanning)
+	    	addDefaultData(db, "585");//imageUri.getLastPathSegment().toString());
 		return (db == null) ? false : true;
 	}
 
-	@Override
+	private int addDefaultData(SQLiteDatabase db, String dataToInsert) {
+		ContentValues values = new ContentValues();
+		values.put(_ID, dataToInsert);
+		try{
+			db.insert(TABLE_NAME, null, values);
+		} catch (SQLException e) {
+            Log.e("error", "Error inserting " + values, e);
+            return -1;
+		}
+		return 1;
+	}
+    
+    private void saveImageToExternalStorage(Bitmap finalBitmap) {
+	    String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
+	    File myDir = new File(root + "/saved_images");
+	    myDir.mkdirs();
+	    String fname = "image.png";
+	    File file = new File(myDir, fname);
+	    if (file.exists())
+	        file.delete();
+	    try {
+	        FileOutputStream out = new FileOutputStream(file);
+	        finalBitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
+	        out.flush();
+	        out.close();
+	    }
+	    catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    
+	    // Tell the media scanner about the new file so that it is
+	    // immediately available to the user.
+	    MediaScannerConnection.scanFile(getContext(), new String[] { file.toString() }, null,
+	            new MediaScannerConnection.OnScanCompletedListener() {
+	                public void onScanCompleted(String path, Uri uri) {
+	                    Log.i("ExternalStorage", "Scanned " + path + ":");
+	                    Log.i("ExternalStorage", "-> getEncodedPath=" + uri.getEncodedPath());
+	                    Log.i("ExternalStorage", "-> uri=" + uri);
+	                    Log.i("ExternalStorage", "-> getAuthority=" + uri.getAuthority());
+	                    Log.i("ExternalStorage", "-> getLastPathSegment=" + uri.getLastPathSegment());
+	                    imageUri = uri;
+	                }
+	    });
+	}
+
+    @Override
 	public String getType(Uri uri) {
 		switch (uriMatcher.match(uri)){
 			case IMAGES:
@@ -131,6 +186,7 @@ public class Images extends ContentProvider {
 		if(row > 0) {
 			Uri newUri = ContentUris.withAppendedId(CONTENT_URI, row);
 			getContext().getContentResolver().notifyChange(newUri, null);
+			Log.v(SPrivacyApplication.getDebugTag(), "URI is: "+newUri.toString());
 			return newUri;
 		}
 		throw new SQLException("Fail to add a new record into " + uri);

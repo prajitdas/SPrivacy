@@ -19,4 +19,17 @@ public class AccessControl {
 	public void setPolicy(boolean policy) {
 		this.policy = policy;
 	}
+	@Override
+	public String toString() {
+		if(isPolicy())
+			return "Access Granted, Real Data";
+		else {
+			if(getLevel() == 1)
+				return "Access Denied, No Data";
+			else if(getLevel() == 2)
+				return "Access Denied, Fake Data";
+			else
+				return "Access Denied, Anonymous Data";
+		}
+	}
 }
