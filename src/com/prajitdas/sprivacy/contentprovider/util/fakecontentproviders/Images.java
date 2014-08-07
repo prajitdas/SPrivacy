@@ -24,7 +24,6 @@ import android.util.Log;
 
 import com.prajitdas.sprivacy.R;
 import com.prajitdas.sprivacy.SPrivacyApplication;
-import com.prajitdas.sprivacy.contentprovider.util.MediaScannerBroadcastReceiver;
 
 public class Images extends ContentProvider {
 	static final String PROVIDER_NAME = SPrivacyApplication.getConstFakeAuthorityPrefix()
@@ -73,9 +72,9 @@ public class Images extends ContentProvider {
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			db.execSQL(CREATE_DB_TABLE);
-			saveImageToExternalStorage(((BitmapDrawable) context.getResources().getDrawable(R.drawable.dummy)).getBitmap());
-		    if(MediaScannerBroadcastReceiver.mMediaScanning)
-		    	addDefaultData(db, "712");//imageUri.getLastPathSegment().toString());
+			saveImageToExternalStorage(db, ((BitmapDrawable) context.getResources().getDrawable(R.drawable.dummy)).getBitmap());
+//		    if(MediaScannerBroadcastReceiver.mMediaScanning)
+//		    	addDefaultData(db, "712");//imageUri.getLastPathSegment().toString());
 //		    	addDefaultData(db, "1535");//imageUri.getLastPathSegment().toString());
 //		    	addDefaultData(db, imageUri.getLastPathSegment().toString());
 		}
@@ -92,8 +91,9 @@ public class Images extends ContentProvider {
 			return 1;
 		}
 	    
-	    private void saveImageToExternalStorage(Bitmap finalBitmap) {
+	    private void saveImageToExternalStorage(SQLiteDatabase databaseRef, Bitmap finalBitmap) {
 		    String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
+		    final SQLiteDatabase db = databaseRef;
 		    File myDir = new File(root + "/saved_images");
 		    myDir.mkdirs();
 		    String fname = "image.png";
@@ -121,6 +121,7 @@ public class Images extends ContentProvider {
 		                    Log.i("ExternalStorage", "-> getAuthority=" + uri.getAuthority());
 		                    Log.i("ExternalStorage", "-> getLastPathSegment=" + uri.getLastPathSegment());
 		                    imageUri = uri;
+		    		    	addDefaultData(db, imageUri.getLastPathSegment().toString());
 		                }
 		    });
 		}

@@ -1,5 +1,9 @@
 package com.prajitdas.sprivacy.contentprovider.util;
 
+/**
+ * #unusedclass
+ */
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;

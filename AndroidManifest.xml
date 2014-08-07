@@ -137,13 +137,13 @@
             android:label="@string/sprivacy_anonymized_file_content_provider_label"
             android:permission="android.permission.sprivacy.READ_WRITE_anonymized_FILE_CONTENT" >
         </provider>
-		<receiver android:name=".contentprovider.util.MediaScannerBroadcastReceiver">
+<!-- 		<receiver android:name=".contentprovider.util.MediaScannerBroadcastReceiver">
 			<intent-filter>
 				<action android:name="android.intent.action.MEDIA_SCANNER_FINISHED"></action>
 				<action android:name="android.intent.action.MEDIA_SCANNER_STARTED"></action>
 				<data android:scheme="file"></data>	
 			</intent-filter>
 		</receiver>
-	</application>
+ -->	</application>
 
 </manifest>
