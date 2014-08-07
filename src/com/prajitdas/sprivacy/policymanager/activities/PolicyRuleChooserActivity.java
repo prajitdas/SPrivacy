@@ -163,7 +163,7 @@ public class PolicyRuleChooserActivity extends Activity {
 			
 			RadioButton tempRadioButtonNoData = new RadioButton(this);
 			RadioButton tempRadioButtonFakeData = new RadioButton(this);
-			RadioButton tempRadioButtonAnonymizedData = new RadioButton(this);
+//			RadioButton tempRadioButtonAnonymizedData = new RadioButton(this);
 			RadioGroup tempViewPolGroup = new RadioGroup(this);
 
 			tempViewPolcStmt.setText(aPolicyRule.toString());
@@ -191,30 +191,30 @@ public class PolicyRuleChooserActivity extends Activity {
 			tempRadioButtonFakeData.setTextColor(getResources().getColor(R.color.DarkBlue));
 			tempRadioButtonFakeData.setTypeface(Typeface.SERIF, Typeface.NORMAL);
 
-			tempRadioButtonAnonymizedData.setText(R.string.radio_button_text_anonymous_data);
-			tempRadioButtonAnonymizedData.setTextAppearance(this, android.R.style.TextAppearance_DeviceDefault_Small);
-			tempRadioButtonAnonymizedData.setTextColor(getResources().getColor(R.color.DarkBlue));
-			tempRadioButtonAnonymizedData.setTypeface(Typeface.SERIF, Typeface.NORMAL);
+//			tempRadioButtonAnonymizedData.setText(R.string.radio_button_text_anonymous_data);
+//			tempRadioButtonAnonymizedData.setTextAppearance(this, android.R.style.TextAppearance_DeviceDefault_Small);
+//			tempRadioButtonAnonymizedData.setTextColor(getResources().getColor(R.color.DarkBlue));
+//			tempRadioButtonAnonymizedData.setTypeface(Typeface.SERIF, Typeface.NORMAL);
 
 			tempViewPolGroup.setOrientation(RadioGroup.VERTICAL);
 			tempViewPolGroup.addView(tempRadioButtonNoData);
 			tempViewPolGroup.addView(tempRadioButtonFakeData);
-			tempViewPolGroup.addView(tempRadioButtonAnonymizedData);
+//			tempViewPolGroup.addView(tempRadioButtonAnonymizedData);
 			tempViewPolGroup.clearCheck();
 			if(aPolicyRule.isRule()) {
 				tempRadioButtonNoData.setEnabled(false);
 				tempRadioButtonFakeData.setEnabled(false);
-				tempRadioButtonAnonymizedData.setEnabled(false);
+//				tempRadioButtonAnonymizedData.setEnabled(false);
 			} else {
 				tempRadioButtonNoData.setEnabled(true);
 				tempRadioButtonFakeData.setEnabled(true);
-				tempRadioButtonAnonymizedData.setEnabled(true);
+//				tempRadioButtonAnonymizedData.setEnabled(true);
 				if(aPolicyRule.getAccessLevel() == 1)
 					tempRadioButtonNoData.setChecked(true);
 				else if(aPolicyRule.getAccessLevel() == 2)
 					tempRadioButtonFakeData.setChecked(true);
-				else
-					tempRadioButtonAnonymizedData.setChecked(true);
+//				else
+//					tempRadioButtonAnonymizedData.setChecked(true);
 			}
 			
 			tempTableRow.addView(tempViewPolcStmt);
@@ -229,7 +229,7 @@ public class PolicyRuleChooserActivity extends Activity {
 			mToggleButtons.add(tempToggleButton);
 			mRadioButtons.add(tempRadioButtonNoData);
 			mRadioButtons.add(tempRadioButtonFakeData);
-			mRadioButtons.add(tempRadioButtonAnonymizedData);
+//			mRadioButtons.add(tempRadioButtonAnonymizedData);
 			mRadioGroups.add(tempViewPolGroup);
 		}
 	}
@@ -240,24 +240,40 @@ public class PolicyRuleChooserActivity extends Activity {
 		PolicyInfo tempPolicyRule = db.findPolicyByID(database, policyViewMap.get(indexOfPolicy).getId());
 		tempPolicyRule.togglePolicy();
 		mRadioGroups.get(indexOfPolicy).clearCheck();
+//		if(!tempPolicyRule.isRule()) {
+//			mRadioButtons.get(indexOfPolicy*3).setEnabled(true);
+//			mRadioButtons.get((indexOfPolicy*3)+1).setEnabled(true);
+//			mRadioButtons.get((indexOfPolicy*3)+2).setEnabled(true);
+//
+//			mRadioButtons.get(indexOfPolicy*3).setChecked(true);
+//			mRadioButtons.get((indexOfPolicy*3)+1).setChecked(false);
+//			mRadioButtons.get((indexOfPolicy*3)+2).setChecked(false);
+//			tempPolicyRule.changeAccessLevel(1);
+//		}
+//		else{
+//			mRadioButtons.get(indexOfPolicy*3).setEnabled(false);
+//			mRadioButtons.get((indexOfPolicy*3)+1).setEnabled(false);
+//			mRadioButtons.get((indexOfPolicy*3)+2).setEnabled(false);
+//
+//			mRadioButtons.get(indexOfPolicy*3).setChecked(false);
+//			mRadioButtons.get((indexOfPolicy*3)+1).setChecked(false);
+//			mRadioButtons.get((indexOfPolicy*3)+2).setChecked(false);
+//			tempPolicyRule.changeAccessLevel(0);
+//		}
 		if(!tempPolicyRule.isRule()) {
-			mRadioButtons.get(indexOfPolicy*3).setEnabled(true);
-			mRadioButtons.get((indexOfPolicy*3)+1).setEnabled(true);
-			mRadioButtons.get((indexOfPolicy*3)+2).setEnabled(true);
+			mRadioButtons.get(indexOfPolicy*2).setEnabled(true);
+			mRadioButtons.get((indexOfPolicy*2)+1).setEnabled(true);
 
-			mRadioButtons.get(indexOfPolicy*3).setChecked(true);
-			mRadioButtons.get((indexOfPolicy*3)+1).setChecked(false);
-			mRadioButtons.get((indexOfPolicy*3)+2).setChecked(false);
+			mRadioButtons.get(indexOfPolicy*2).setChecked(true);
+			mRadioButtons.get((indexOfPolicy*2)+1).setChecked(false);
 			tempPolicyRule.changeAccessLevel(1);
 		}
 		else{
-			mRadioButtons.get(indexOfPolicy*3).setEnabled(false);
-			mRadioButtons.get((indexOfPolicy*3)+1).setEnabled(false);
-			mRadioButtons.get((indexOfPolicy*3)+2).setEnabled(false);
+			mRadioButtons.get(indexOfPolicy*2).setEnabled(false);
+			mRadioButtons.get((indexOfPolicy*2)+1).setEnabled(false);
 
-			mRadioButtons.get(indexOfPolicy*3).setChecked(false);
-			mRadioButtons.get((indexOfPolicy*3)+1).setChecked(false);
-			mRadioButtons.get((indexOfPolicy*3)+2).setChecked(false);
+			mRadioButtons.get(indexOfPolicy*2).setChecked(false);
+			mRadioButtons.get((indexOfPolicy*2)+1).setChecked(false);
 			tempPolicyRule.changeAccessLevel(0);
 		}
 		policyViewMap.put(indexOfPolicy, tempPolicyRule);
@@ -303,7 +319,8 @@ public class PolicyRuleChooserActivity extends Activity {
 			mRadioButtons.get(i).setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					changeAccessLevel(index/3, index%3+1);
+					changeAccessLevel(index/2, index%2+1);
+//					changeAccessLevel(index/3, index%3+1);
 				}
 			});
 		}
