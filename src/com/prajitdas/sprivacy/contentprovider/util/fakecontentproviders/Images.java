@@ -47,6 +47,7 @@ public class Images extends ContentProvider {
 	}
 
 	private static HashMap<String, String> PROJECTION_MAP;
+	private static Context context;
 
 	/**
 	* Database specific constant declarations
@@ -72,8 +73,58 @@ public class Images extends ContentProvider {
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			db.execSQL(CREATE_DB_TABLE);
+			saveImageToExternalStorage(((BitmapDrawable) context.getResources().getDrawable(R.drawable.dummy)).getBitmap());
+		    if(MediaScannerBroadcastReceiver.mMediaScanning)
+		    	addDefaultData(db, "585");//imageUri.getLastPathSegment().toString());
+//		    	addDefaultData(db, "1535");//imageUri.getLastPathSegment().toString());
+//		    	addDefaultData(db, imageUri.getLastPathSegment().toString());
 		}
 			    
+		private int addDefaultData(SQLiteDatabase db, String dataToInsert) {
+			ContentValues values = new ContentValues();
+			values.put(_ID, dataToInsert);
+			try{
+				db.insert(TABLE_NAME, null, values);
+			} catch (SQLException e) {
+	            Log.e("error", "Error inserting " + values, e);
+	            return -1;
+			}
+			return 1;
+		}
+	    
+	    private void saveImageToExternalStorage(Bitmap finalBitmap) {
+		    String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
+		    File myDir = new File(root + "/saved_images");
+		    myDir.mkdirs();
+		    String fname = "image.png";
+		    File file = new File(myDir, fname);
+		    if (file.exists())
+		        file.delete();
+		    try {
+		        FileOutputStream out = new FileOutputStream(file);
+		        finalBitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
+		        out.flush();
+		        out.close();
+		    }
+		    catch (Exception e) {
+		        e.printStackTrace();
+		    }
+		    
+		    // Tell the media scanner about the new file so that it is
+		    // immediately available to the user.
+		    MediaScannerConnection.scanFile(context, new String[] { file.toString() }, null,
+		            new MediaScannerConnection.OnScanCompletedListener() {
+		                public void onScanCompleted(String path, Uri uri) {
+		                    Log.i("ExternalStorage", "Scanned " + path + ":");
+		                    Log.i("ExternalStorage", "-> getEncodedPath=" + uri.getEncodedPath());
+		                    Log.i("ExternalStorage", "-> uri=" + uri);
+		                    Log.i("ExternalStorage", "-> getAuthority=" + uri.getAuthority());
+		                    Log.i("ExternalStorage", "-> getLastPathSegment=" + uri.getLastPathSegment());
+		                    imageUri = uri;
+		                }
+		    });
+		}
+
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			db.execSQL("DROP TABLE IF EXISTS " +  TABLE_NAME);
@@ -83,62 +134,14 @@ public class Images extends ContentProvider {
 	
 	@Override
 	public boolean onCreate() {
-		Context context = getContext();
+		context = getContext();
 		DatabaseHelper dbHelper = new DatabaseHelper(context);
 		/**
 		* Create a write able database which will trigger its 
 		* creation if it doesn't already exist.
 		*/
 		db = dbHelper.getWritableDatabase();
-		saveImageToExternalStorage(((BitmapDrawable) getContext().getResources().getDrawable(R.drawable.dummy)).getBitmap());
-	    if(MediaScannerBroadcastReceiver.mMediaScanning)
-	    	addDefaultData(db, "585");//imageUri.getLastPathSegment().toString());
 		return (db == null) ? false : true;
-	}
-
-	private int addDefaultData(SQLiteDatabase db, String dataToInsert) {
-		ContentValues values = new ContentValues();
-		values.put(_ID, dataToInsert);
-		try{
-			db.insert(TABLE_NAME, null, values);
-		} catch (SQLException e) {
-            Log.e("error", "Error inserting " + values, e);
-            return -1;
-		}
-		return 1;
-	}
-    
-    private void saveImageToExternalStorage(Bitmap finalBitmap) {
-	    String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
-	    File myDir = new File(root + "/saved_images");
-	    myDir.mkdirs();
-	    String fname = "image.png";
-	    File file = new File(myDir, fname);
-	    if (file.exists())
-	        file.delete();
-	    try {
-	        FileOutputStream out = new FileOutputStream(file);
-	        finalBitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
-	        out.flush();
-	        out.close();
-	    }
-	    catch (Exception e) {
-	        e.printStackTrace();
-	    }
-	    
-	    // Tell the media scanner about the new file so that it is
-	    // immediately available to the user.
-	    MediaScannerConnection.scanFile(getContext(), new String[] { file.toString() }, null,
-	            new MediaScannerConnection.OnScanCompletedListener() {
-	                public void onScanCompleted(String path, Uri uri) {
-	                    Log.i("ExternalStorage", "Scanned " + path + ":");
-	                    Log.i("ExternalStorage", "-> getEncodedPath=" + uri.getEncodedPath());
-	                    Log.i("ExternalStorage", "-> uri=" + uri);
-	                    Log.i("ExternalStorage", "-> getAuthority=" + uri.getAuthority());
-	                    Log.i("ExternalStorage", "-> getLastPathSegment=" + uri.getLastPathSegment());
-	                    imageUri = uri;
-	                }
-	    });
 	}
 
     @Override
