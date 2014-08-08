@@ -24,7 +24,16 @@ public class Contacts extends ContentProvider {
 	 static final Uri CONTENT_URI = Uri.parse(URL);
 
 	static final String _ID = "_id";
-	static final String CONTACT = "contact";
+	static final String DISPLAY_NAME = "display_name";
+	static final String IN_VISIBLE_GROUP = "in_visible_group";
+	static final String CONTACT_LAST_UPDATED_TIMESTAMP = "";
+	static final String HAS_PHONE_NUMBER = "";
+	static final String IS_USER_PROFILE = "";
+	static final String LOOKUP_KEY = "";
+	static final String PHOTO_FILE_ID = "";
+	static final String PHOTO_ID = "";
+	static final String PHOTO_THUMBNAIL_URI = "";
+	static final String PHOTO_URI = "";
 
 	static final int CONTACTS = 1;
 	
@@ -46,7 +55,7 @@ public class Contacts extends ContentProvider {
 	static final String CREATE_DB_TABLE =
 			" CREATE TABLE " + TABLE_NAME +
 			" (_id INTEGER PRIMARY KEY AUTOINCREMENT, " + 
-			CONTACT + " BLOB NOT NULL);";
+			DISPLAY_NAME + " TEXT NOT NULL);";
 
 	/**
 	* Helper class that actually creates and manages 
