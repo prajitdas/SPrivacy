@@ -24,18 +24,97 @@ public class Contacts extends ContentProvider {
 	 static final Uri CONTENT_URI = Uri.parse(URL);
 
 	static final String _ID = "_id";
-	static final String DISPLAY_NAME = "display_name";
-	static final String IN_VISIBLE_GROUP = "in_visible_group";
-	static final String CONTACT_LAST_UPDATED_TIMESTAMP = "";
-	static final String HAS_PHONE_NUMBER = "";
-	static final String IS_USER_PROFILE = "";
-	static final String LOOKUP_KEY = "";
-	static final String PHOTO_FILE_ID = "";
-	static final String PHOTO_ID = "";
-	static final String PHOTO_THUMBNAIL_URI = "";
-	static final String PHOTO_URI = "";
+    /**
+     * The display name for the contact.
+     * <P>Type: TEXT</P>
+     */
+    static final String DISPLAY_NAME = "display_name";
 
-	static final int CONTACTS = 1;
+    /**
+     * Reference to the row in the data table holding the photo.  A photo can
+     * be referred to either by ID (this field) or by URI (see {@link #PHOTO_THUMBNAIL_URI}
+     * and {@link #PHOTO_URI}).
+     * If PHOTO_ID is null, consult {@link #PHOTO_URI} or {@link #PHOTO_THUMBNAIL_URI},
+     * which is a more generic mechanism for referencing the contact photo, especially for
+     * contacts returned by non-local directories (see {@link Directory}).
+     *
+     * <P>Type: INTEGER REFERENCES data(_id)</P>
+     */
+    public static final String PHOTO_ID = "photo_id";
+
+    /**
+     * Photo file ID of the full-size photo.  If present, this will be used to populate
+     * {@link #PHOTO_URI}.  The ID can also be used with
+     * {@link FakeContract.DisplayPhoto#CONTENT_URI} to create a URI to the photo.
+     * If this is present, {@link #PHOTO_ID} is also guaranteed to be populated.
+     *
+     * <P>Type: INTEGER</P>
+     */
+    static final String PHOTO_FILE_ID = "photo_file_id";
+
+    /**
+     * A URI that can be used to retrieve the contact's full-size photo.
+     * If PHOTO_FILE_ID is not null, this will be populated with a URI based off
+     * {@link FakeContract.DisplayPhoto#CONTENT_URI}.  Otherwise, this will
+     * be populated with the same value as {@link #PHOTO_THUMBNAIL_URI}.
+     * A photo can be referred to either by a URI (this field) or by ID
+     * (see {@link #PHOTO_ID}). If either PHOTO_FILE_ID or PHOTO_ID is not null,
+     * PHOTO_URI and PHOTO_THUMBNAIL_URI shall not be null (but not necessarily
+     * vice versa).  Thus using PHOTO_URI is a more robust method of retrieving
+     * contact photos.
+     *
+     * <P>Type: TEXT</P>
+     */
+    static final String PHOTO_URI = "photo_uri";
+
+    /**
+     * A URI that can be used to retrieve a thumbnail of the contact's photo.
+     * A photo can be referred to either by a URI (this field or {@link #PHOTO_URI})
+     * or by ID (see {@link #PHOTO_ID}). If PHOTO_ID is not null, PHOTO_URI and
+     * PHOTO_THUMBNAIL_URI shall not be null (but not necessarily vice versa).
+     * If the content provider does not differentiate between full-size photos
+     * and thumbnail photos, PHOTO_THUMBNAIL_URI and {@link #PHOTO_URI} can contain
+     * the same value, but either both shall be null or both not null.
+     *
+     * <P>Type: TEXT</P>
+     */
+    static final String PHOTO_THUMBNAIL_URI = "photo_thumb_uri";
+
+    /**
+     * Flag that reflects the {@link Groups#GROUP_VISIBLE} state of any
+     * {@link CommonDataKinds.GroupMembership} for this contact.
+     */
+    static final String IN_VISIBLE_GROUP = "in_visible_group";
+
+    /**
+     * Flag that reflects whether this contact represents the user's
+     * personal profile entry.
+     */
+    static final String IS_USER_PROFILE = "is_user_profile";
+
+    /**
+     * An indicator of whether this contact has at least one phone number. "1" if there is
+     * at least one phone number, "0" otherwise.
+     * <P>Type: INTEGER</P>
+     */
+    static final String HAS_PHONE_NUMBER = "has_phone_number";
+
+    /**
+     * An opaque value that contains hints on how to find the contact if
+     * its row id changed as a result of a sync or aggregation.
+     */
+    static final String LOOKUP_KEY = "lookup";
+
+    /**
+     * Timestamp (milliseconds since epoch) of when this contact was last updated.  This
+     * includes updates to all data associated with this contact including raw contacts.  Any
+     * modification (including deletes and inserts) of underlying contact data are also
+     * reflected in this timestamp.
+     */
+    static final String CONTACT_LAST_UPDATED_TIMESTAMP =
+            "contact_last_updated_timestamp";
+    
+    static final int CONTACTS = 1;
 	
 	static final UriMatcher uriMatcher;
 	static{
@@ -52,10 +131,18 @@ public class Contacts extends ContentProvider {
 	static final String DATABASE_NAME = "Content";
 	static final String TABLE_NAME = "fakeContact";
 	static final int DATABASE_VERSION = 1;
-	static final String CREATE_DB_TABLE =
-			" CREATE TABLE " + TABLE_NAME +
-			" (_id INTEGER PRIMARY KEY AUTOINCREMENT, " + 
-			DISPLAY_NAME + " TEXT NOT NULL);";
+	static final String CREATE_DB_TABLE = " CREATE TABLE " + TABLE_NAME + " (" + 
+			_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
+			DISPLAY_NAME + " TEXT NOT NULL, " +
+			PHOTO_ID + " INTEGER, " +
+			PHOTO_FILE_ID + " INTEGER, " +
+			PHOTO_URI + " TEXT, " +
+			PHOTO_THUMBNAIL_URI + " TEXT, " +
+			IN_VISIBLE_GROUP + " INTEGER, " +
+			IS_USER_PROFILE + "INTEGER, " +
+			HAS_PHONE_NUMBER + " INTEGER, " +
+			LOOKUP_KEY + " TEXT, " +
+			CONTACT_LAST_UPDATED_TIMESTAMP + " INTEGER);";
 
 	/**
 	* Helper class that actually creates and manages 
