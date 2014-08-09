@@ -15,13 +15,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.util.Log;
 
 public class Contacts extends ContentProvider {
 	static final String PROVIDER_NAME = SPrivacyApplication.getConstFakeAuthorityPrefix()
 			+SPrivacyApplication.getConstFake()
 			+SPrivacyApplication.getConstContacts();
 	static final String URL = "content://" + PROVIDER_NAME;
-	 static final Uri CONTENT_URI = Uri.parse(URL);
+	static final Uri CONTENT_URI = Uri.parse(URL);
 
 	static final String _ID = "_id";
     /**
@@ -156,12 +157,34 @@ public class Contacts extends ContentProvider {
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			db.execSQL(CREATE_DB_TABLE);
+			addDefaultData(db);
 		}
 		
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			db.execSQL("DROP TABLE IF EXISTS " +  TABLE_NAME);
 			onCreate(db);
+		}
+		
+		private int addDefaultData(SQLiteDatabase db) {
+			ContentValues values = new ContentValues();
+			values.put(DISPLAY_NAME,"John Doe");
+			values.put(PHOTO_ID,"");
+			values.put(PHOTO_FILE_ID,"");
+			values.put(PHOTO_URI,"");
+			values.put(PHOTO_THUMBNAIL_URI,"");
+			values.put(IN_VISIBLE_GROUP,"1");
+			values.put(IS_USER_PROFILE,"");
+			values.put(HAS_PHONE_NUMBER,"4567890123");
+			values.put(LOOKUP_KEY,"");
+			values.put(CONTACT_LAST_UPDATED_TIMESTAMP,"1407544837");
+			try{
+				db.insert(TABLE_NAME, null, values);
+			} catch (SQLException e) {
+	            Log.e("error", "Error inserting " + values, e);
+	            return -1;
+			}
+			return 1;
 		}
 	}
 	

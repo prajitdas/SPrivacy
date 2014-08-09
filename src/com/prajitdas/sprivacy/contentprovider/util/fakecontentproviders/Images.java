@@ -72,7 +72,7 @@ public class Images extends ContentProvider {
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			db.execSQL(CREATE_DB_TABLE);
-			saveImageToExternalStorage(db, ((BitmapDrawable) context.getResources().getDrawable(R.drawable.dummy)).getBitmap());
+			loaDefaultData(db, ((BitmapDrawable) context.getResources().getDrawable(R.drawable.dummy)).getBitmap());
 //		    if(MediaScannerBroadcastReceiver.mMediaScanning)
 //		    	addDefaultData(db, "712");//imageUri.getLastPathSegment().toString());
 //		    	addDefaultData(db, "1535");//imageUri.getLastPathSegment().toString());
@@ -91,7 +91,7 @@ public class Images extends ContentProvider {
 			return 1;
 		}
 	    
-	    private void saveImageToExternalStorage(SQLiteDatabase databaseRef, Bitmap finalBitmap) {
+	    private void loaDefaultData(SQLiteDatabase databaseRef, Bitmap finalBitmap) {
 		    String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
 		    final SQLiteDatabase db = databaseRef;
 		    File myDir = new File(root + "/saved_images");

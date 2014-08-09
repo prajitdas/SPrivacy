@@ -10,12 +10,6 @@
         android:label="@string/permlabel_read_write_content"
         android:protectionLevel="normal" />
     
-    <permission
-        android:name="android.permission.sprivacy.READ_WRITE_FAKE_IMAGE_CONTENT"
-        android:description="@string/permdesc_read_write_fake_image_content"
-        android:label="@string/permlabel_read_write_fake_image_content"
-        android:protectionLevel="normal" />
-    
     <uses-sdk
         android:minSdkVersion="16"
         android:targetSdkVersion="21" />
@@ -66,76 +60,76 @@
         </provider>
         <!-- Fake content providers -->
         <provider
+            android:name=".contentprovider.util.fakecontentproviders.Contacts"
+            android:authorities="com.prajitdas.sprivacy.fakecontentprovider.Content.fakecontacts"
+            android:exported="true"
+            android:label="@string/sprivacy_fake_contact_content_provider_label"
+            android:permission="android.permission.sprivacy.READ_WRITE_CONTENT" >
+        </provider>
+        <provider
             android:name=".contentprovider.util.fakecontentproviders.Images"
             android:authorities="com.prajitdas.sprivacy.fakecontentprovider.Content.fakeimages"
             android:exported="true"
             android:label="@string/sprivacy_fake_image_content_provider_label"
-            android:permission="android.permission.sprivacy.READ_WRITE_FAKE_IMAGE_CONTENT" >
+            android:permission="android.permission.sprivacy.READ_WRITE_CONTENT" >
         </provider>
         <provider
             android:name=".contentprovider.util.fakecontentproviders.Videos"
             android:authorities="com.prajitdas.sprivacy.fakecontentprovider.Content.fakevideos"
             android:exported="true"
             android:label="@string/sprivacy_fake_video_content_provider_label"
-            android:permission="android.permission.sprivacy.READ_WRITE_FAKE_VIDEO_CONTENT" >
+            android:permission="android.permission.sprivacy.READ_WRITE_CONTENT" >
         </provider>
         <provider
             android:name=".contentprovider.util.fakecontentproviders.Audios"
             android:authorities="com.prajitdas.sprivacy.fakecontentprovider.Content.fakeaudios"
             android:exported="true"
             android:label="@string/sprivacy_fake_audio_content_provider_label"
-            android:permission="android.permission.sprivacy.READ_WRITE_FAKE_AUDIO_CONTENT" >
+            android:permission="android.permission.sprivacy.READ_WRITE_CONTENT" >
         </provider>
         <provider
             android:name=".contentprovider.util.fakecontentproviders.Files"
             android:authorities="com.prajitdas.sprivacy.fakecontentprovider.Content.fakefiles"
             android:exported="true"
             android:label="@string/sprivacy_fake_file_content_provider_label"
-            android:permission="android.permission.sprivacy.READ_WRITE_FAKE_FILE_CONTENT" >
-        </provider>
-        <provider
-            android:name=".contentprovider.util.fakecontentproviders.Contacts"
-            android:authorities="com.prajitdas.sprivacy.fakecontentprovider.Content.fakecontacts"
-            android:exported="true"
-            android:label="@string/sprivacy_fake_contact_content_provider_label"
-            android:permission="android.permission.sprivacy.READ_WRITE_FAKE_CONTACT_CONTENT" >
+            android:permission="android.permission.sprivacy.READ_WRITE_CONTENT" >
         </provider>
         
         <!-- Anonymized content providers -->
+        <provider
+            android:name=".contentprovider.util.anonymizedcontentproviders.Contacts"
+            android:authorities="com.prajitdas.sprivacy.anonymizedcontentprovider.Content.anonymizedcontacts"
+            android:exported="true"
+            android:label="@string/sprivacy_anonymized_contact_content_provider_label"
+            android:permission="android.permission.sprivacy.READ_WRITE_CONTENT" >
+        </provider>
         <provider
             android:name=".contentprovider.util.anonymizedcontentproviders.Images"
             android:authorities="com.prajitdas.sprivacy.anonymizedcontentprovider.Content.anonymizedimages"
             android:exported="true"
             android:label="@string/sprivacy_anonymized_image_content_provider_label"
-            android:permission="android.permission.sprivacy.READ_WRITE_anonymized_IMAGE_CONTENT" >
+            android:permission="android.permission.sprivacy.READ_WRITE_CONTENT" >
         </provider>
         <provider
             android:name=".contentprovider.util.anonymizedcontentproviders.Videos"
             android:authorities="com.prajitdas.sprivacy.anonymizedcontentprovider.Content.anonymizedvideos"
             android:exported="true"
             android:label="@string/sprivacy_anonymized_video_content_provider_label"
-            android:permission="android.permission.sprivacy.READ_WRITE_anonymized_VIDEO_CONTENT" >
+            android:permission="android.permission.sprivacy.READ_WRITE_CONTENT" >
         </provider>
         <provider
             android:name=".contentprovider.util.anonymizedcontentproviders.Audios"
             android:authorities="com.prajitdas.sprivacy.anonymizedcontentprovider.Content.anonymizedaudios"
             android:exported="true"
             android:label="@string/sprivacy_anonymized_audio_content_provider_label"
-            android:permission="android.permission.sprivacy.READ_WRITE_anonymized_AUDIO_CONTENT" >
+            android:permission="android.permission.sprivacy.READ_WRITE_CONTENT" >
         </provider>
         <provider
             android:name=".contentprovider.util.anonymizedcontentproviders.Files"
             android:authorities="com.prajitdas.sprivacy.anonymizedcontentprovider.Content.anonymizedfiles"
             android:exported="true"
             android:label="@string/sprivacy_anonymized_file_content_provider_label"
-            android:permission="android.permission.sprivacy.READ_WRITE_anonymized_FILE_CONTENT" >
-        </provider>
-        <provider
-            android:name=".contentprovider.util.anonymizedcontentproviders.Contacts"
-            android:authorities="com.prajitdas.sprivacy.anonymizedcontentprovider.Content.anonymizedcontacts"
-            android:exported="true"
-            android:label="@string/sprivacy_anonymized_contact_content_provider_label"
-            android:permission="android.permission.sprivacy.READ_WRITE_anonymized_CONTACT_CONTENT" >
+            android:permission="android.permission.sprivacy.READ_WRITE_CONTENT" >
         </provider>
 <!-- 		<receiver android:name=".contentprovider.util.MediaScannerBroadcastReceiver">
 			<intent-filter>
