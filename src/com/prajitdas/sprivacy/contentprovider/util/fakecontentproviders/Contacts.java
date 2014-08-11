@@ -30,7 +30,6 @@ public class Contacts extends ContentProvider {
      * <P>Type: TEXT</P>
      */
     static final String DISPLAY_NAME = "display_name";
-
     /**
      * Reference to the row in the data table holding the photo.  A photo can
      * be referred to either by ID (this field) or by URI (see {@link #PHOTO_THUMBNAIL_URI}
@@ -42,7 +41,6 @@ public class Contacts extends ContentProvider {
      * <P>Type: INTEGER REFERENCES data(_id)</P>
      */
     public static final String PHOTO_ID = "photo_id";
-
     /**
      * Photo file ID of the full-size photo.  If present, this will be used to populate
      * {@link #PHOTO_URI}.  The ID can also be used with
@@ -52,7 +50,6 @@ public class Contacts extends ContentProvider {
      * <P>Type: INTEGER</P>
      */
     static final String PHOTO_FILE_ID = "photo_file_id";
-
     /**
      * A URI that can be used to retrieve the contact's full-size photo.
      * If PHOTO_FILE_ID is not null, this will be populated with a URI based off
@@ -67,7 +64,6 @@ public class Contacts extends ContentProvider {
      * <P>Type: TEXT</P>
      */
     static final String PHOTO_URI = "photo_uri";
-
     /**
      * A URI that can be used to retrieve a thumbnail of the contact's photo.
      * A photo can be referred to either by a URI (this field or {@link #PHOTO_URI})
@@ -80,32 +76,27 @@ public class Contacts extends ContentProvider {
      * <P>Type: TEXT</P>
      */
     static final String PHOTO_THUMBNAIL_URI = "photo_thumb_uri";
-
     /**
      * Flag that reflects the {@link Groups#GROUP_VISIBLE} state of any
      * {@link CommonDataKinds.GroupMembership} for this contact.
      */
     static final String IN_VISIBLE_GROUP = "in_visible_group";
-
     /**
      * Flag that reflects whether this contact represents the user's
      * personal profile entry.
      */
     static final String IS_USER_PROFILE = "is_user_profile";
-
     /**
      * An indicator of whether this contact has at least one phone number. "1" if there is
      * at least one phone number, "0" otherwise.
      * <P>Type: INTEGER</P>
      */
     static final String HAS_PHONE_NUMBER = "has_phone_number";
-
     /**
      * An opaque value that contains hints on how to find the contact if
      * its row id changed as a result of a sync or aggregation.
      */
     static final String LOOKUP_KEY = "lookup";
-
     /**
      * Timestamp (milliseconds since epoch) of when this contact was last updated.  This
      * includes updates to all data associated with this contact including raw contacts.  Any
@@ -124,12 +115,13 @@ public class Contacts extends ContentProvider {
 	}
 
 	private static HashMap<String, String> PROJECTION_MAP;
+	private static Context context;
 
 	/**
 	* Database specific constant declarations
 	*/
 	private SQLiteDatabase db;
-	static final String DATABASE_NAME = "Content";
+	static final String DATABASE_NAME = "FakeContactContent";
 	static final String TABLE_NAME = "fakeContact";
 	static final int DATABASE_VERSION = 1;
 	static final String CREATE_DB_TABLE = " CREATE TABLE " + TABLE_NAME + " (" + 
@@ -140,7 +132,7 @@ public class Contacts extends ContentProvider {
 			PHOTO_URI + " TEXT, " +
 			PHOTO_THUMBNAIL_URI + " TEXT, " +
 			IN_VISIBLE_GROUP + " INTEGER, " +
-			IS_USER_PROFILE + "INTEGER, " +
+			IS_USER_PROFILE + " INTEGER, " +
 			HAS_PHONE_NUMBER + " INTEGER, " +
 			LOOKUP_KEY + " TEXT, " +
 			CONTACT_LAST_UPDATED_TIMESTAMP + " INTEGER);";
@@ -157,7 +149,8 @@ public class Contacts extends ContentProvider {
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			db.execSQL(CREATE_DB_TABLE);
-			addDefaultData(db);
+			Log.v(SPrivacyApplication.getDebugTag(), "came into onCreate for Contacts!");
+			loaDefaultData(db);
 		}
 		
 		@Override
@@ -166,7 +159,7 @@ public class Contacts extends ContentProvider {
 			onCreate(db);
 		}
 		
-		private int addDefaultData(SQLiteDatabase db) {
+		private int loaDefaultData(SQLiteDatabase db) {
 			ContentValues values = new ContentValues();
 			values.put(DISPLAY_NAME,"John Doe");
 			values.put(PHOTO_ID,"");
@@ -180,8 +173,10 @@ public class Contacts extends ContentProvider {
 			values.put(CONTACT_LAST_UPDATED_TIMESTAMP,"1407544837");
 			try{
 				db.insert(TABLE_NAME, null, values);
+				Log.v(SPrivacyApplication.getDebugTag(), "came into loaddefaults for Contacts!");
 			} catch (SQLException e) {
 	            Log.e("error", "Error inserting " + values, e);
+				Log.v(SPrivacyApplication.getDebugTag(), "came into exception for Contacts!");
 	            return -1;
 			}
 			return 1;
@@ -190,7 +185,7 @@ public class Contacts extends ContentProvider {
 	
 	@Override
 	public boolean onCreate() {
-		Context context = getContext();
+		context = getContext();
 		DatabaseHelper dbHelper = new DatabaseHelper(context);
 		/**
 		* Create a write able database which will trigger its 
