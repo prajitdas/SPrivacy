@@ -150,7 +150,7 @@ public class Contacts extends ContentProvider {
 		public void onCreate(SQLiteDatabase db) {
 			db.execSQL(CREATE_DB_TABLE);
 			Log.v(SPrivacyApplication.getDebugTag(), "came into onCreate for Contacts!");
-			loaDefaultData(db);
+//			loaDefaultData(db);
 		}
 		
 		@Override
@@ -159,28 +159,30 @@ public class Contacts extends ContentProvider {
 			onCreate(db);
 		}
 		
-		private int loaDefaultData(SQLiteDatabase db) {
-			ContentValues values = new ContentValues();
-			values.put(DISPLAY_NAME,"John Doe");
-			values.put(PHOTO_ID,"");
-			values.put(PHOTO_FILE_ID,"");
-			values.put(PHOTO_URI,"");
-			values.put(PHOTO_THUMBNAIL_URI,"");
-			values.put(IN_VISIBLE_GROUP,"1");
-			values.put(IS_USER_PROFILE,"");
-			values.put(HAS_PHONE_NUMBER,"4567890123");
-			values.put(LOOKUP_KEY,"");
-			values.put(CONTACT_LAST_UPDATED_TIMESTAMP,"1407544837");
-			try{
-				db.insert(TABLE_NAME, null, values);
-				Log.v(SPrivacyApplication.getDebugTag(), "came into loaddefaults for Contacts!");
-			} catch (SQLException e) {
-	            Log.e("error", "Error inserting " + values, e);
-				Log.v(SPrivacyApplication.getDebugTag(), "came into exception for Contacts!");
-	            return -1;
-			}
-			return 1;
-		}
+//		private int loaDefaultData(SQLiteDatabase db) {
+//			ContentValues values = new ContentValues();
+//			values.put(DISPLAY_NAME,"John Doe");
+//			values.put(PHOTO_ID,"");
+//			values.put(PHOTO_FILE_ID,"");
+//			values.put(PHOTO_URI,"");
+//			values.put(PHOTO_THUMBNAIL_URI,"");
+//			values.put(IN_VISIBLE_GROUP,"1");
+//			values.put(IS_USER_PROFILE,"");
+//			values.put(HAS_PHONE_NUMBER,"4567890123");
+//			values.put(LOOKUP_KEY,"");
+//			values.put(CONTACT_LAST_UPDATED_TIMESTAMP,"1407544837");
+//			try{
+//				db.insert(TABLE_NAME, null, values);
+//				Log.v(SPrivacyApplication.getDebugTag(), "came into loaddefaults for Contacts!");
+//			} catch (SQLException e) {
+//	            Log.e("error", "Error inserting " + values, e);
+//				Log.v(SPrivacyApplication.getDebugTag(), "came into exception for Contacts!");
+//				db.close();
+//	            return -1;
+//			}
+//			db.close();
+//			return 1;
+//		}
 	}
 	
 	@Override
@@ -192,9 +194,10 @@ public class Contacts extends ContentProvider {
 		* creation if it doesn't already exist.
 		*/
 		db = dbHelper.getWritableDatabase();
+		loaDefaultData(db);
 		return (db == null)? false:true;
 	}
-
+	
 	@Override
 	public String getType(Uri uri) {
 		switch (uriMatcher.match(uri)){
@@ -274,5 +277,28 @@ public class Contacts extends ContentProvider {
 		}
 		getContext().getContentResolver().notifyChange(uri, null);
 		return count;
+	}
+
+	private int loaDefaultData(SQLiteDatabase db) {
+		ContentValues values = new ContentValues();
+		values.put(DISPLAY_NAME,"John Doe");
+		values.put(PHOTO_ID,"");
+		values.put(PHOTO_FILE_ID,"");
+		values.put(PHOTO_URI,"");
+		values.put(PHOTO_THUMBNAIL_URI,"");
+		values.put(IN_VISIBLE_GROUP,"1");
+		values.put(IS_USER_PROFILE,"");
+		values.put(HAS_PHONE_NUMBER,"4567890123");
+		values.put(LOOKUP_KEY,"");
+		values.put(CONTACT_LAST_UPDATED_TIMESTAMP,"1407544837");
+		try{
+			db.insert(TABLE_NAME, null, values);
+			Log.v(SPrivacyApplication.getDebugTag(), "came into loaddefaults for Contacts!");
+		} catch (SQLException e) {
+	        Log.e("error", "Error inserting " + values, e);
+			Log.v(SPrivacyApplication.getDebugTag(), "came into exception for Contacts!");
+	        return -1;
+		}
+		return 1;
 	}
 }
