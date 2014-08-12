@@ -15,15 +15,22 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.util.Log;
 
 public class Contacts extends ContentProvider {
+	/**
+	 * fields for my content provider
+	 */
 	static final String PROVIDER_NAME = SPrivacyApplication.getConstFakeAuthorityPrefix()
 			+SPrivacyApplication.getConstFake()
 			+SPrivacyApplication.getConstContacts();
 	static final String URL = "content://" + PROVIDER_NAME;
 	static final Uri CONTENT_URI = Uri.parse(URL);
 
+	/**
+	 *  fields for the database
+	 */
 	static final String _ID = "_id";
     /**
      * The display name for the contact.
@@ -106,9 +113,14 @@ public class Contacts extends ContentProvider {
     static final String CONTACT_LAST_UPDATED_TIMESTAMP =
             "contact_last_updated_timestamp";
     
-    static final int ID = 0;
+	/**
+	 * integer values used in content URI
+	 */
     static final int CONTACTS = 1;
+    static final int CONTACTS_ID = 2;
     
+    DatabaseHelper dbHelper;
+
 	static final UriMatcher uriMatcher;
 	static{
 		uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -188,7 +200,7 @@ public class Contacts extends ContentProvider {
 	@Override
 	public boolean onCreate() {
 		context = getContext();
-		DatabaseHelper dbHelper = new DatabaseHelper(context);
+		dbHelper = new DatabaseHelper(context);
 		/**
 		* Create a write able database which will trigger its 
 		* creation if it doesn't already exist.
@@ -200,7 +212,7 @@ public class Contacts extends ContentProvider {
 	@Override
 	public String getType(Uri uri) {
 		switch (uriMatcher.match(uri)){
-			case ID:
+			case CONTACTS_ID:
 				return "vnd.android.cursor.dir/contact";
 			case CONTACTS:
 				return "vnd.android.cursor.dir/contact";
@@ -217,10 +229,10 @@ public class Contacts extends ContentProvider {
 		queryBuilder.setTables(TABLE_NAME);
 
 		switch (uriMatcher.match(uri)) {
-			// maps all database column names
-			case ID:
-				queryBuilder.setProjectionMap(PROJECTION_MAP);
+			case CONTACTS_ID:
+				queryBuilder.appendWhere(DISPLAY_NAME + "=" + uri.getLastPathSegment());
 				break;
+			// maps all database column names
 			case CONTACTS:
 				queryBuilder.setProjectionMap(PROJECTION_MAP);
 				break;
@@ -256,9 +268,10 @@ public class Contacts extends ContentProvider {
 	public int delete(Uri uri, String selection, String[] selectionArgs) {
 		int count = 0;
 		switch (uriMatcher.match(uri)){
-			case ID:
-				// delete all the records of the table
-				count = db.delete(TABLE_NAME, selection, selectionArgs);
+			case CONTACTS_ID:
+				String id = uri.getLastPathSegment();	//gets the id
+				count = db.delete(TABLE_NAME, DISPLAY_NAME +  " = " + id + 
+						(!TextUtils.isEmpty(selection) ? " AND (" + selection + ')' : ""), selectionArgs);
 				break;
 			case CONTACTS:
 				// delete all the records of the table
@@ -277,8 +290,9 @@ public class Contacts extends ContentProvider {
 			String[] selectionArgs) {
 		int count = 0;
 		switch (uriMatcher.match(uri)){
-			case ID:
-				count = db.update(TABLE_NAME, values, selection, selectionArgs);
+			case CONTACTS_ID:
+				count = db.update(TABLE_NAME, values, DISPLAY_NAME + " = " + uri.getLastPathSegment() + 
+						(!TextUtils.isEmpty(selection) ? " AND (" + selection + ')' : ""), selectionArgs);
 				break;
 			case CONTACTS:
 				count = db.update(TABLE_NAME, values, selection, selectionArgs);
