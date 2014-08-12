@@ -112,6 +112,14 @@ public class Contacts extends ContentProvider {
      */
     static final String CONTACT_LAST_UPDATED_TIMESTAMP =
             "contact_last_updated_timestamp";
+    /**
+     * Sort key that takes into account locale-based traditions for sorting
+     * names in address books.  The default
+     * sort key is {@link #DISPLAY_NAME_PRIMARY}.  For Chinese names
+     * the sort key is the name's Pinyin spelling, and for Japanese names
+     * it is the Hiragana version of the phonetic name.
+     */
+    public static final String SORT_KEY_PRIMARY = "sort_key";
     
 	/**
 	 * integer values used in content URI
@@ -125,8 +133,7 @@ public class Contacts extends ContentProvider {
 	static{
 		uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts(), CONTACTS);
-		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts(), CONTACTS_ID);
-//		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts(), CONTACT);
+		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts()+"/#", CONTACTS_ID);
 	}
 
 	private static HashMap<String, String> PROJECTION_MAP;
@@ -142,6 +149,7 @@ public class Contacts extends ContentProvider {
 	static final String CREATE_DB_TABLE = " CREATE TABLE " + TABLE_NAME + " (" + 
 			_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
 			DISPLAY_NAME + " TEXT NOT NULL, " +
+			SORT_KEY_PRIMARY + " TEXT NOT NULL, " +
 			PHOTO_ID + " INTEGER, " +
 			PHOTO_FILE_ID + " INTEGER, " +
 			PHOTO_URI + " TEXT, " +
@@ -177,6 +185,7 @@ public class Contacts extends ContentProvider {
 		private int loaDefaultData(SQLiteDatabase db) {
 			ContentValues values = new ContentValues();
 			values.put(DISPLAY_NAME,"John Doe");
+			values.put(SORT_KEY_PRIMARY,"John Doe");
 			values.put(PHOTO_ID,"");
 			values.put(PHOTO_FILE_ID,"");
 			values.put(PHOTO_URI,"");
@@ -231,7 +240,7 @@ public class Contacts extends ContentProvider {
 
 		switch (uriMatcher.match(uri)) {
 			case CONTACTS_ID:
-				queryBuilder.appendWhere(DISPLAY_NAME + "=" + uri.getLastPathSegment());
+				queryBuilder.appendWhere(_ID + "=" + uri.getLastPathSegment());
 				break;
 			// maps all database column names
 			case CONTACTS:
@@ -244,8 +253,9 @@ public class Contacts extends ContentProvider {
 			// No sorting-> sort on names by default
 			sortOrder = _ID;
 		}
-		Cursor cursor = queryBuilder.query(db, projection, selection, 
-				selectionArgs, null, null, sortOrder);
+//		Cursor cursor = queryBuilder.query(db, projection, selection, 
+//				selectionArgs, null, null, sortOrder);
+		Cursor cursor = queryBuilder.query(db, projection, null, null, null, null, null);
 		/** 
 		* register to watch a content URI for changes
 		*/
@@ -271,7 +281,7 @@ public class Contacts extends ContentProvider {
 		switch (uriMatcher.match(uri)){
 			case CONTACTS_ID:
 				String id = uri.getLastPathSegment();	//gets the id
-				count = db.delete(TABLE_NAME, DISPLAY_NAME +  " = " + id + 
+				count = db.delete(TABLE_NAME, _ID +  " = " + id + 
 						(!TextUtils.isEmpty(selection) ? " AND (" + selection + ')' : ""), selectionArgs);
 				break;
 			case CONTACTS:
@@ -292,7 +302,7 @@ public class Contacts extends ContentProvider {
 		int count = 0;
 		switch (uriMatcher.match(uri)){
 			case CONTACTS_ID:
-				count = db.update(TABLE_NAME, values, DISPLAY_NAME + " = " + uri.getLastPathSegment() + 
+				count = db.update(TABLE_NAME, values, _ID + " = " + uri.getLastPathSegment() + 
 						(!TextUtils.isEmpty(selection) ? " AND (" + selection + ')' : ""), selectionArgs);
 				break;
 			case CONTACTS:

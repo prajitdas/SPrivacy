@@ -22,8 +22,6 @@ public class SPrivacyApplication extends Application {
 
 	private static final String CONST_CONTACTS = "contacts";
 
-	private static final String CONST_LOOKUP = "lookup";
-
 	private static final String CONST_FAKE = "fake";
 
 	private static final String CONST_FAKE_AUTHORITY_PREFIX = "com.prajitdas.sprivacy.fakecontentprovider.Content.";
@@ -137,9 +135,5 @@ public class SPrivacyApplication extends Application {
 
 	public static String getConstScheme() {
 		return CONST_SCHEME;
-	}
-
-	public static String getConstLookup() {
-		return CONST_LOOKUP;
 	}
 }

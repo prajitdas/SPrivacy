@@ -110,8 +110,9 @@ public class Videos extends ContentProvider {
 			// No sorting-> sort on names by default
 			sortOrder = _ID;
 		}
-		Cursor cursor = queryBuilder.query(db, projection, selection, 
-				selectionArgs, null, null, sortOrder);
+//		Cursor cursor = queryBuilder.query(db, projection, selection, 
+//		selectionArgs, null, null, sortOrder);
+		Cursor cursor = queryBuilder.query(db, null, null, null, null, null, null);
 		/** 
 		* register to watch a content URI for changes
 		*/
