@@ -106,12 +106,14 @@ public class Contacts extends ContentProvider {
     static final String CONTACT_LAST_UPDATED_TIMESTAMP =
             "contact_last_updated_timestamp";
     
+    static final int ID = 0;
     static final int CONTACTS = 1;
-	
+    
 	static final UriMatcher uriMatcher;
 	static{
 		uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts(), CONTACTS);
+		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts(), CONTACT);
 	}
 
 	private static HashMap<String, String> PROJECTION_MAP;
@@ -198,6 +200,8 @@ public class Contacts extends ContentProvider {
 	@Override
 	public String getType(Uri uri) {
 		switch (uriMatcher.match(uri)){
+			case ID:
+				return "vnd.android.cursor.dir/contact";
 			case CONTACTS:
 				return "vnd.android.cursor.dir/contact";
 			default:
@@ -214,6 +218,9 @@ public class Contacts extends ContentProvider {
 
 		switch (uriMatcher.match(uri)) {
 			// maps all database column names
+			case ID:
+				queryBuilder.setProjectionMap(PROJECTION_MAP);
+				break;
 			case CONTACTS:
 				queryBuilder.setProjectionMap(PROJECTION_MAP);
 				break;
@@ -249,6 +256,10 @@ public class Contacts extends ContentProvider {
 	public int delete(Uri uri, String selection, String[] selectionArgs) {
 		int count = 0;
 		switch (uriMatcher.match(uri)){
+			case ID:
+				// delete all the records of the table
+				count = db.delete(TABLE_NAME, selection, selectionArgs);
+				break;
 			case CONTACTS:
 				// delete all the records of the table
 				count = db.delete(TABLE_NAME, selection, selectionArgs);
@@ -266,6 +277,9 @@ public class Contacts extends ContentProvider {
 			String[] selectionArgs) {
 		int count = 0;
 		switch (uriMatcher.match(uri)){
+			case ID:
+				count = db.update(TABLE_NAME, values, selection, selectionArgs);
+				break;
 			case CONTACTS:
 				count = db.update(TABLE_NAME, values, selection, selectionArgs);
 				break;
