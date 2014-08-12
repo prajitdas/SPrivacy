@@ -125,6 +125,7 @@ public class Contacts extends ContentProvider {
 	static{
 		uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts(), CONTACTS);
+		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts(), CONTACTS_ID);
 //		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts(), CONTACT);
 	}
 
@@ -187,7 +188,7 @@ public class Contacts extends ContentProvider {
 			values.put(CONTACT_LAST_UPDATED_TIMESTAMP,"1407544837");
 			try{
 				db.insert(TABLE_NAME, null, values);
-				Log.v(SPrivacyApplication.getDebugTag(), "came into loaddefaults for Contacts!");
+				Log.v(SPrivacyApplication.getDebugTag(), "came into loadDefaultData for Contacts!");
 			} catch (SQLException e) {
 	            Log.e("error", "Error inserting " + values, e);
 				Log.v(SPrivacyApplication.getDebugTag(), "came into exception for Contacts!");
