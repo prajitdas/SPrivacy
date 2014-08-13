@@ -15,6 +15,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.provider.ContactsContract.CommonDataKinds.StructuredPostal;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -31,7 +32,7 @@ public class Contacts extends ContentProvider {
 	/**
 	 *  fields for the database
 	 */
-	static final String _ID = "_id";
+	static final String CONTACTS_TABLE_ID = "_id";
     /**
      * The display name for the contact.
      * <P>Type: TEXT</P>
@@ -85,7 +86,8 @@ public class Contacts extends ContentProvider {
     static final String PHOTO_THUMBNAIL_URI = "photo_thumb_uri";
     /**
      * Flag that reflects the {@link Groups#GROUP_VISIBLE} state of any
-     * {@link CommonDataKinds.GroupMembership} for this contact.
+     * {@link CommonDataKinds.Gr			// maps all database column names
+oupMembership} for this contact.
      */
     static final String IN_VISIBLE_GROUP = "in_visible_group";
     /**
@@ -121,11 +123,12 @@ public class Contacts extends ContentProvider {
      */
     public static final String SORT_KEY_PRIMARY = "sort_key";
     
-	/**
+    /**
 	 * integer values used in content URI
 	 */
     static final int CONTACTS = 1;
     static final int CONTACTS_ID = 2;
+    static final int CONTACTS_ID_DATA = 3;
     
     DatabaseHelper dbHelper;
 
@@ -134,6 +137,7 @@ public class Contacts extends ContentProvider {
 		uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts(), CONTACTS);
 		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts()+"/#", CONTACTS_ID);
+		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts()+"/#/data", CONTACTS_ID_DATA);
 	}
 
 	private static HashMap<String, String> PROJECTION_MAP;
@@ -147,7 +151,7 @@ public class Contacts extends ContentProvider {
 	static final String TABLE_NAME = "fakeContact";
 	static final int DATABASE_VERSION = 1;
 	static final String CREATE_DB_TABLE = " CREATE TABLE " + TABLE_NAME + " (" + 
-			_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
+			CONTACTS_TABLE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
 			DISPLAY_NAME + " TEXT NOT NULL, " +
 			SORT_KEY_PRIMARY + " TEXT NOT NULL, " +
 			PHOTO_ID + " INTEGER, " +
@@ -158,7 +162,10 @@ public class Contacts extends ContentProvider {
 			IS_USER_PROFILE + " INTEGER, " +
 			HAS_PHONE_NUMBER + " INTEGER, " +
 			LOOKUP_KEY + " TEXT, " +
-			CONTACT_LAST_UPDATED_TIMESTAMP + " INTEGER);";
+			CONTACT_LAST_UPDATED_TIMESTAMP + " INTEGER, "+
+			ContactAddressQuery.FORMATTED_ADDRESS + " TEXT, "+
+			ContactAddressQuery.ADDRESS_TYPE + " TEXT, "+
+			ContactAddressQuery.ADDRESS_LABEL + " TEXT);";
 
 	/**
 	* Helper class that actually creates and manages 
@@ -195,6 +202,10 @@ public class Contacts extends ContentProvider {
 			values.put(HAS_PHONE_NUMBER,"4567890123");
 			values.put(LOOKUP_KEY,"johndoe");
 			values.put(CONTACT_LAST_UPDATED_TIMESTAMP,"1407544837");
+			values.put(ContactAddressQuery.FORMATTED_ADDRESS,"1 Mordor Lane, Mordor, Middlearth");
+			values.put(ContactAddressQuery.ADDRESS_TYPE,"Home");
+			values.put(ContactAddressQuery.ADDRESS_LABEL,"Home");
+
 			try{
 				db.insert(TABLE_NAME, null, values);
 				Log.v(SPrivacyApplication.getDebugTag(), "came into loadDefaultData for Contacts!");
@@ -240,7 +251,10 @@ public class Contacts extends ContentProvider {
 
 		switch (uriMatcher.match(uri)) {
 			case CONTACTS_ID:
-				queryBuilder.appendWhere(_ID + "=" + uri.getLastPathSegment());
+				queryBuilder.appendWhere(CONTACTS_TABLE_ID + "=" + uri.getLastPathSegment());
+				break;
+			case CONTACTS_ID_DATA:
+				queryBuilder.appendWhere(CONTACTS_TABLE_ID + "=" + getUriWithID(uri).getLastPathSegment());
 				break;
 			// maps all database column names
 			case CONTACTS:
@@ -251,7 +265,7 @@ public class Contacts extends ContentProvider {
 		}
 		if (sortOrder == null || sortOrder == ""){
 			// No sorting-> sort on names by default
-			sortOrder = _ID;
+			sortOrder = CONTACTS_TABLE_ID;
 		}
 //		Cursor cursor = queryBuilder.query(db, projection, selection, 
 //				selectionArgs, null, null, sortOrder);
@@ -261,6 +275,10 @@ public class Contacts extends ContentProvider {
 		*/
 		cursor.setNotificationUri(getContext().getContentResolver(), uri);
 		return cursor;
+	}
+	
+	private Uri getUriWithID(Uri inputUri) {
+        return Uri.parse(inputUri.toString().substring(0,inputUri.toString().lastIndexOf(inputUri.getLastPathSegment())-1));
 	}
 
 	@Override
@@ -281,7 +299,7 @@ public class Contacts extends ContentProvider {
 		switch (uriMatcher.match(uri)){
 			case CONTACTS_ID:
 				String id = uri.getLastPathSegment();	//gets the id
-				count = db.delete(TABLE_NAME, _ID +  " = " + id + 
+				count = db.delete(TABLE_NAME, CONTACTS_TABLE_ID +  " = " + id + 
 						(!TextUtils.isEmpty(selection) ? " AND (" + selection + ')' : ""), selectionArgs);
 				break;
 			case CONTACTS:
@@ -302,7 +320,7 @@ public class Contacts extends ContentProvider {
 		int count = 0;
 		switch (uriMatcher.match(uri)){
 			case CONTACTS_ID:
-				count = db.update(TABLE_NAME, values, _ID + " = " + uri.getLastPathSegment() + 
+				count = db.update(TABLE_NAME, values, CONTACTS_TABLE_ID + " = " + uri.getLastPathSegment() + 
 						(!TextUtils.isEmpty(selection) ? " AND (" + selection + ')' : ""), selectionArgs);
 				break;
 			case CONTACTS:
@@ -314,4 +332,23 @@ public class Contacts extends ContentProvider {
 		getContext().getContentResolver().notifyChange(uri, null);
 		return count;
 	}
+//	
+//    /**
+//     * This interface defines constants used by contact retrieval queries.
+//     */
+//    private interface ContactDetailQuery {
+//    	final static String CONTACT_ID = Contacts.CONTACTS_TABLE_ID;
+//    	final static String DISPLAY_NAME = Contacts.DISPLAY_NAME;
+//    }
+
+    /**
+     * This interface defines constants used by address retrieval queries.
+     * The ADDRESS_ID is not required as it is the same as the normal _ID
+     */
+    private interface ContactAddressQuery {    	
+//    	final static String ADDRESS_ID = StructuredPostal._ID;
+    	final static String FORMATTED_ADDRESS = StructuredPostal.FORMATTED_ADDRESS;
+    	final static String ADDRESS_TYPE = StructuredPostal.TYPE;
+    	final static String ADDRESS_LABEL = StructuredPostal.LABEL;
+    }
 }
