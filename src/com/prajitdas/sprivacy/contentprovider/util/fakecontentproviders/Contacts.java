@@ -129,6 +129,9 @@ oupMembership} for this contact.
     static final int CONTACTS = 1;
     static final int CONTACTS_ID = 2;
     static final int CONTACTS_ID_DATA = 3;
+    static final int DATA = 4;
+    static final int GROUPS = 5;
+    static final int RAW = 6;
     
     DatabaseHelper dbHelper;
 
@@ -138,6 +141,9 @@ oupMembership} for this contact.
 		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts(), CONTACTS);
 		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts()+"/#", CONTACTS_ID);
 		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts()+"/#/data", CONTACTS_ID_DATA);
+		uriMatcher.addURI(PROVIDER_NAME, "data", DATA);
+		uriMatcher.addURI(PROVIDER_NAME, "groups", GROUPS);
+		uriMatcher.addURI(PROVIDER_NAME, "raw_contacts", RAW);
 	}
 
 	private static HashMap<String, String> PROJECTION_MAP;
@@ -165,7 +171,21 @@ oupMembership} for this contact.
 			CONTACT_LAST_UPDATED_TIMESTAMP + " INTEGER, "+
 			ContactAddressQuery.FORMATTED_ADDRESS + " TEXT, "+
 			ContactAddressQuery.ADDRESS_TYPE + " TEXT, "+
-			ContactAddressQuery.ADDRESS_LABEL + " TEXT);";
+			ContactAddressQuery.ADDRESS_LABEL + " TEXT, " +
+			"mimetype TEXT, " +
+			"data_version INTEGER, " +
+			"is_primary INTEGER, " +
+			"is_super_primary INTEGER, " +
+			"raw_contact_id INTEGER, " +
+			"contact_id INTEGER, " +
+			"data4 TEXT, " +
+			"data5 TEXT, " +
+			"data6 TEXT, " +
+			"data7 TEXT, " +
+			"data8 TEXT, " +
+			"data9 TEXT, " +
+			"data10 TEXT, " +
+			"data14 TEXT);";
 
 	/**
 	* Helper class that actually creates and manages 
@@ -205,6 +225,20 @@ oupMembership} for this contact.
 			values.put(ContactAddressQuery.FORMATTED_ADDRESS,"1 Mordor Lane, Mordor, Middlearth");
 			values.put(ContactAddressQuery.ADDRESS_TYPE,"Home");
 			values.put(ContactAddressQuery.ADDRESS_LABEL,"Home");
+			values.put("mimetype","vnd.android.cursor.item/contact");
+			values.put("data_version","1");
+			values.put("is_primary","0");
+			values.put("is_super_primary","0");
+			values.put("raw_contact_id","1");
+			values.put("contact_id","1");
+			values.put("data4","N/A");
+			values.put("data5","N/A");
+			values.put("data6","N/A");
+			values.put("data7","N/A");
+			values.put("data8","N/A");
+			values.put("data9","N/A");
+			values.put("data10","N/A");
+			values.put("data14","N/A");
 
 			try{
 				db.insert(TABLE_NAME, null, values);
@@ -234,9 +268,15 @@ oupMembership} for this contact.
 	public String getType(Uri uri) {
 		switch (uriMatcher.match(uri)){
 			case CONTACTS_ID:
-				return "vnd.android.cursor.dir/contact";
+				return "vnd.android.cursor.item/contact";
 			case CONTACTS:
 				return "vnd.android.cursor.dir/contact";
+			case DATA:
+				return "vnd.android.cursor.item/contact";
+			case GROUPS:
+				return "vnd.android.cursor.dir/contact";
+			case RAW:
+				return "vnd.android.cursor.item/contact";
 			default:
 				throw new IllegalArgumentException("Unsupported URI: " + uri);
 		}
@@ -248,6 +288,8 @@ oupMembership} for this contact.
 		SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
 		// the TABLE_NAME to query on
 		queryBuilder.setTables(TABLE_NAME);
+		
+		boolean returnNullData = false;
 
 		switch (uriMatcher.match(uri)) {
 			case CONTACTS_ID:
@@ -260,6 +302,18 @@ oupMembership} for this contact.
 			case CONTACTS:
 				queryBuilder.setProjectionMap(PROJECTION_MAP);
 				break;
+			case DATA:
+				queryBuilder.setProjectionMap(PROJECTION_MAP);
+				returnNullData = true;
+				break;
+			case GROUPS:
+				queryBuilder.setProjectionMap(PROJECTION_MAP);
+				returnNullData = true;
+				break;
+			case RAW:
+				queryBuilder.setProjectionMap(PROJECTION_MAP);
+				returnNullData = true;
+				break;
 			default:
 				throw new IllegalArgumentException("Unknown URI " + uri);
 		}
@@ -269,11 +323,14 @@ oupMembership} for this contact.
 		}
 //		Cursor cursor = queryBuilder.query(db, projection, selection, 
 //				selectionArgs, null, null, sortOrder);
-		Cursor cursor = queryBuilder.query(db, projection, null, null, null, null, null);
-		/** 
-		* register to watch a content URI for changes
-		*/
-		cursor.setNotificationUri(getContext().getContentResolver(), uri);
+		Cursor cursor = null;
+		if(!returnNullData) {
+			cursor = queryBuilder.query(db, projection, null, null, null, null, null);
+			/** 
+			* register to watch a content URI for changes
+			*/
+			cursor.setNotificationUri(getContext().getContentResolver(), uri);
+		}
 		return cursor;
 	}
 	
