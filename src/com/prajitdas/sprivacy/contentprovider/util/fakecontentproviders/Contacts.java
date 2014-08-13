@@ -225,20 +225,20 @@ oupMembership} for this contact.
 			values.put(ContactAddressQuery.FORMATTED_ADDRESS,"1 Mordor Lane, Mordor, Middlearth");
 			values.put(ContactAddressQuery.ADDRESS_TYPE,"Home");
 			values.put(ContactAddressQuery.ADDRESS_LABEL,"Home");
-			values.put("mimetype","vnd.android.cursor.item/contact");
+			values.put("mimetype","vnd.android.cursor.item/name");
 			values.put("data_version","1");
 			values.put("is_primary","0");
 			values.put("is_super_primary","0");
 			values.put("raw_contact_id","1");
 			values.put("contact_id","1");
-			values.put("data4","N/A");
-			values.put("data5","N/A");
-			values.put("data6","N/A");
-			values.put("data7","N/A");
-			values.put("data8","N/A");
-			values.put("data9","N/A");
-			values.put("data10","N/A");
-			values.put("data14","N/A");
+			values.put("data4","");
+			values.put("data5","");
+			values.put("data6","");
+			values.put("data7","");
+			values.put("data8","");
+			values.put("data9","");
+			values.put("data10","");
+			values.put("data14","");
 
 			try{
 				db.insert(TABLE_NAME, null, values);
