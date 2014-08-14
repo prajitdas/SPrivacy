@@ -56,7 +56,7 @@ public class SContentProvider extends ContentProvider {
 	static final int VIDEOS = 3;
 	static final int AUDIOS = 4;
 	static final int CONTACTS = 5;
-	static final int CONTACTS_ID = 6;
+//	static final int CONTACTS_ID = 6;
 	
 	static final UriMatcher uriMatcher;
 	static{
@@ -66,7 +66,7 @@ public class SContentProvider extends ContentProvider {
 		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstVideos(), VIDEOS);
 		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstAudios(), AUDIOS);
 		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts(), CONTACTS);
-		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts()+"/#", CONTACTS_ID);
+//		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts()+"/#", CONTACTS_ID);
 	}
 	
 	/**
@@ -248,10 +248,10 @@ public class SContentProvider extends ContentProvider {
 	private Cursor dataControl(int provider, Uri uri, String[] projection, String selection, 
 			String[] selectionArgs, String sortOrder, 
 			Uri realURI, Uri fakeURI, Uri anonimyzedURI) {
-		Log.v(SPrivacyApplication.getDebugTag(), 
-				"Real URI: "+realURI.toString()+
-				"\nFake URI: "+fakeURI.toString()+
-				"\nAnonymized URI: "+anonimyzedURI.toString());
+		Log.v(SPrivacyApplication.getDebugTag(), "Came into data control! with projection as follows"); 
+		if(projection!=null)
+			for(String p:projection)
+				Log.v(SPrivacyApplication.getDebugTag(), "data"+p); 
 		Cursor c = null;
 		if(accessControl.isPolicy()) {
 			c = getContext().getContentResolver()
@@ -273,6 +273,7 @@ public class SContentProvider extends ContentProvider {
 //					theLookupKey = c.getString(LOOKUP_KEY);
 //				} while(c.moveToNext());
 //			}
+			Log.v(SPrivacyApplication.getDebugTag(), "Real URI: "+realURI.toString());
 		}
 		else {
 			if(accessControl.getLevel()==1) {
@@ -286,6 +287,7 @@ public class SContentProvider extends ContentProvider {
 								selectionArgs, 
 								sortOrder);
 //				Media.setUri(getFakeUri(provider));
+				Log.v(SPrivacyApplication.getDebugTag(), "Fake URI: "+fakeURI.toString());
 			}
 			else {
 				c = getContext().getContentResolver()
@@ -295,6 +297,7 @@ public class SContentProvider extends ContentProvider {
 								selectionArgs, 
 								sortOrder);
 //				Media.setUri(getAnonymousUri(provider));
+				Log.v(SPrivacyApplication.getDebugTag(), "Anonymized URI: "+anonimyzedURI.toString());
 			}
 		}
 		return c;
@@ -318,8 +321,8 @@ public class SContentProvider extends ContentProvider {
 				return "vnd.android.cursor.dir/audio";
 			case CONTACTS:
 				return "vnd.android.cursor.dir/contact";
-			case CONTACTS_ID:
-				return "vnd.android.cursor.dir/contact";
+//			case CONTACTS_ID:
+//				return "vnd.android.cursor.dir/contact";
 			default:
 				throw new IllegalArgumentException("Unsupported URI: " + uri);
 		}
@@ -346,6 +349,7 @@ public class SContentProvider extends ContentProvider {
 	public Cursor query(Uri uri, String[] projection, String selection, 
 			String[] selectionArgs, String sortOrder) {
 	
+		Log.v(SPrivacyApplication.getDebugTag(), "Came into Query!");
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 		qb.setTables(TABLE_NAME);
 		if (sortOrder == null || sortOrder == ""){
@@ -371,6 +375,7 @@ public class SContentProvider extends ContentProvider {
 				c = setAudioData(uri, projection, selection, selectionArgs, sortOrder);
 				break;
 			case CONTACTS:
+				Log.v(SPrivacyApplication.getDebugTag(), "Came into contacts switch!");
 				qb.setProjectionMap(PROJECTION_MAP);
 				c = setContactData(uri, projection, selection, selectionArgs, sortOrder);
 				break;
@@ -386,7 +391,7 @@ public class SContentProvider extends ContentProvider {
 	
 	private Cursor setAudioData(Uri uri, String[] projection, String selection, 
 			String[] selectionArgs, String sortOrder) {
-		//TODO Have to figure out how to return dummy data based on access levels.
+		//TODO Have to figure out how to control based on app name and context
 		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
 				SPrivacyApplication.getConstAudios(), 
 				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
@@ -397,18 +402,19 @@ public class SContentProvider extends ContentProvider {
 	
 	private Cursor setContactData(Uri uri, String[] projection, String selection, 
 			String[] selectionArgs, String sortOrder) {
-		//TODO Have to figure out how to return dummy data based on access levels.
+		//TODO Have to figure out how to control based on app name and context
 		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
 				SPrivacyApplication.getConstContacts(), 
 				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
 				null), getContext());
+		Log.v(SPrivacyApplication.getDebugTag(), "Came into contacts switch!");
 		return dataControl(CONTACTS, uri, projection, selection, selectionArgs, sortOrder, 
 				RealURIsForQuery.contactUri, FakeURIsForQuery.contactUri, AnonimyzedURIsForQuery.contactUri);
 	}
 	
 //	private Cursor setContactSingleData(Uri uri, String[] projection,
 //			String selection, String[] selectionArgs, String sortOrder) {
-//		//TODO Have to figure out how to return dummy data based on access levels.
+//		//TODO Have to figure out how to control based on app name and context
 //		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
 //				SPrivacyApplication.getConstContacts(), 
 //				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
@@ -419,7 +425,7 @@ public class SContentProvider extends ContentProvider {
 
 	private Cursor setFileData(Uri uri, String[] projection, String selection, 
 			String[] selectionArgs, String sortOrder) {
-		//TODO Have to figure out how to return dummy data based on access levels.
+		//TODO Have to figure out how to control based on app name and context
 		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
 				SPrivacyApplication.getConstFiles(), 
 				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
@@ -430,7 +436,7 @@ public class SContentProvider extends ContentProvider {
 
 	private Cursor setImageData(Uri uri, String[] projection, String selection, 
 			String[] selectionArgs, String sortOrder) {
-		//TODO Have to figure out how to return dummy data based on access levels.
+		//TODO Have to figure out how to control based on app name and context
 		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
 				SPrivacyApplication.getConstImages(), 
 				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
@@ -441,7 +447,7 @@ public class SContentProvider extends ContentProvider {
 	
     private Cursor setVideoData(Uri uri, String[] projection, String selection, 
 			String[] selectionArgs, String sortOrder) {
-		//TODO Have to figure out how to return dummy data based on access levels.
+    	//TODO Have to figure out how to control based on app name and context
 		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
 				SPrivacyApplication.getConstVideos(), 
 				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 

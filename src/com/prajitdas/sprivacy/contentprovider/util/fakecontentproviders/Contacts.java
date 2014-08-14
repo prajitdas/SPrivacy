@@ -15,6 +15,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.StructuredPostal;
 import android.text.TextUtils;
 import android.util.Log;
@@ -172,20 +173,20 @@ oupMembership} for this contact.
 			ContactAddressQuery.FORMATTED_ADDRESS + " TEXT, "+
 			ContactAddressQuery.ADDRESS_TYPE + " TEXT, "+
 			ContactAddressQuery.ADDRESS_LABEL + " TEXT, " +
-			"mimetype TEXT, " +
-			"data_version INTEGER, " +
-			"is_primary INTEGER, " +
-			"is_super_primary INTEGER, " +
-			"raw_contact_id INTEGER, " +
-			"contact_id INTEGER, " +
-			"data4 TEXT, " +
-			"data5 TEXT, " +
-			"data6 TEXT, " +
-			"data7 TEXT, " +
-			"data8 TEXT, " +
-			"data9 TEXT, " +
-			"data10 TEXT, " +
-			"data14 TEXT);";
+			ContactsContract.Data.MIMETYPE + " TEXT, " +
+			ContactsContract.Data.DATA_VERSION + " INTEGER, " +
+			ContactsContract.Data.IS_PRIMARY + " INTEGER, " +
+			ContactsContract.Data.IS_SUPER_PRIMARY + " INTEGER, " +
+			ContactsContract.Data.RAW_CONTACT_ID + " INTEGER, " +
+			ContactsContract.Data.CONTACT_ID + " INTEGER, " +
+			ContactsContract.Data.DATA4 + " TEXT, " +
+			ContactsContract.Data.DATA5 + " TEXT, " +
+			ContactsContract.Data.DATA6 + " TEXT, " +
+			ContactsContract.Data.DATA7 + " TEXT, " +
+			ContactsContract.Data.DATA8 + " TEXT, " +
+			ContactsContract.Data.DATA9 + " TEXT, " +
+			ContactsContract.Data.DATA10 + " TEXT, " +
+			ContactsContract.Data.DATA14 + " TEXT);";
 
 	/**
 	* Helper class that actually creates and manages 
@@ -225,21 +226,20 @@ oupMembership} for this contact.
 			values.put(ContactAddressQuery.FORMATTED_ADDRESS,"1 Mordor Lane, Mordor, Middlearth");
 			values.put(ContactAddressQuery.ADDRESS_TYPE,"Home");
 			values.put(ContactAddressQuery.ADDRESS_LABEL,"Home");
-			values.put("mimetype","vnd.android.cursor.item/name");
-			values.put("data_version","1");
-			values.put("is_primary","0");
-			values.put("is_super_primary","0");
-			values.put("raw_contact_id","1");
-			values.put("contact_id","1");
-			values.put("data4","");
-			values.put("data5","");
-			values.put("data6","");
-			values.put("data7","");
-			values.put("data8","");
-			values.put("data9","");
-			values.put("data10","");
-			values.put("data14","");
-
+			values.put(ContactsContract.Data.MIMETYPE,"");
+			values.put(ContactsContract.Data.DATA_VERSION,"1");
+			values.put(ContactsContract.Data.IS_PRIMARY,"0");
+			values.put(ContactsContract.Data.IS_SUPER_PRIMARY,"0");
+			values.put(ContactsContract.Data.RAW_CONTACT_ID,"1");
+			values.put(ContactsContract.Data.CONTACT_ID,"1");
+			values.put(ContactsContract.Data.DATA4,"");
+			values.put(ContactsContract.Data.DATA5,"");
+			values.put(ContactsContract.Data.DATA6,"");
+			values.put(ContactsContract.Data.DATA7,"");
+			values.put(ContactsContract.Data.DATA8,"");
+			values.put(ContactsContract.Data.DATA9,"");
+			values.put(ContactsContract.Data.DATA10,"");
+			values.put(ContactsContract.Data.DATA14,"");
 			try{
 				db.insert(TABLE_NAME, null, values);
 				Log.v(SPrivacyApplication.getDebugTag(), "came into loadDefaultData for Contacts!");
