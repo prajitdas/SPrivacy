@@ -226,7 +226,7 @@ oupMembership} for this contact.
 			values.put(ContactAddressQuery.FORMATTED_ADDRESS,"1 Mordor Lane, Mordor, Middlearth");
 			values.put(ContactAddressQuery.ADDRESS_TYPE,"Home");
 			values.put(ContactAddressQuery.ADDRESS_LABEL,"Home");
-			values.put(ContactsContract.Data.MIMETYPE,"");
+			values.put(ContactsContract.Data.MIMETYPE,"vnd.android.cursor.dir/contact");
 			values.put(ContactsContract.Data.DATA_VERSION,"1");
 			values.put(ContactsContract.Data.IS_PRIMARY,"0");
 			values.put(ContactsContract.Data.IS_SUPER_PRIMARY,"0");
