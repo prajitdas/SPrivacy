@@ -1,9 +1,8 @@
 package com.prajitdas.sprivacy.contentprovider.util.fakecontentproviders;
 
 import java.util.HashMap;
-
 import com.prajitdas.sprivacy.SPrivacyApplication;
-
+import android.annotation.TargetApi;
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -15,11 +14,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.StructuredPostal;
 import android.text.TextUtils;
 import android.util.Log;
 
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class Contacts extends ContentProvider {
 	/**
 	 * fields for my content provider
