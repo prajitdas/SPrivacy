@@ -211,40 +211,79 @@ oupMembership} for this contact.
 		}
 		
 		private int loaDefaultData(SQLiteDatabase db) {
-			ContentValues values = new ContentValues();
-			values.put(DISPLAY_NAME,"John Doe");
-			values.put(SORT_KEY_PRIMARY,"John Doe");
-			values.put(PHOTO_ID,"");
-			values.put(PHOTO_FILE_ID,"");
-			values.put(PHOTO_URI,"");
-			values.put(PHOTO_THUMBNAIL_URI,"");
-			values.put(IN_VISIBLE_GROUP,"1");
-			values.put(IS_USER_PROFILE,"");
-			values.put(HAS_PHONE_NUMBER,"4567890123");
-			values.put(LOOKUP_KEY,"johndoe");
-			values.put(CONTACT_LAST_UPDATED_TIMESTAMP,"1407544837");
-			values.put(ContactAddressQuery.FORMATTED_ADDRESS,"1 Mordor Lane, Mordor, Middlearth");
-			values.put(ContactAddressQuery.ADDRESS_TYPE,"Home");
-			values.put(ContactAddressQuery.ADDRESS_LABEL,"Home");
-			values.put(ContactsContract.Data.MIMETYPE,"vnd.android.cursor.dir/contact");
-			values.put(ContactsContract.Data.DATA_VERSION,"1");
-			values.put(ContactsContract.Data.IS_PRIMARY,"0");
-			values.put(ContactsContract.Data.IS_SUPER_PRIMARY,"0");
-			values.put(ContactsContract.Data.RAW_CONTACT_ID,"1");
-			values.put(ContactsContract.Data.CONTACT_ID,"1");
-			values.put(ContactsContract.Data.DATA4,"");
-			values.put(ContactsContract.Data.DATA5,"");
-			values.put(ContactsContract.Data.DATA6,"");
-			values.put(ContactsContract.Data.DATA7,"");
-			values.put(ContactsContract.Data.DATA8,"");
-			values.put(ContactsContract.Data.DATA9,"");
-			values.put(ContactsContract.Data.DATA10,"");
-			values.put(ContactsContract.Data.DATA14,"");
+			//Data Set 1
+			ContentValues values1 = new ContentValues();
+			values1.put(DISPLAY_NAME,"John Doe");
+			values1.put(SORT_KEY_PRIMARY,"John Doe");
+			values1.put(PHOTO_ID,"");
+			values1.put(PHOTO_FILE_ID,"");
+			values1.put(PHOTO_URI,"");
+			values1.put(PHOTO_THUMBNAIL_URI,"");
+			values1.put(IN_VISIBLE_GROUP,"1");
+			values1.put(IS_USER_PROFILE,"");
+			values1.put(HAS_PHONE_NUMBER,"4567890123");
+			values1.put(LOOKUP_KEY,"johndoe");
+			values1.put(CONTACT_LAST_UPDATED_TIMESTAMP,"1407544837");
+			values1.put(ContactAddressQuery.FORMATTED_ADDRESS,"1 Mordor Lane, Mordor, Middlearth");
+			values1.put(ContactAddressQuery.ADDRESS_TYPE,"Home");
+			values1.put(ContactAddressQuery.ADDRESS_LABEL,"Home");
+			values1.put(ContactsContract.Data.MIMETYPE,"vnd.android.cursor.item/postal-address_v2");
+			values1.put(ContactsContract.Data.DATA_VERSION,"1");
+			values1.put(ContactsContract.Data.IS_PRIMARY,"0");
+			values1.put(ContactsContract.Data.IS_SUPER_PRIMARY,"0");
+			values1.put(ContactsContract.Data.RAW_CONTACT_ID,"1");
+			values1.put(ContactsContract.Data.CONTACT_ID,"1");
+			values1.put(ContactsContract.Data.DATA4,"");
+			values1.put(ContactsContract.Data.DATA5,"");
+			values1.put(ContactsContract.Data.DATA6,"");
+			values1.put(ContactsContract.Data.DATA7,"");
+			values1.put(ContactsContract.Data.DATA8,"");
+			values1.put(ContactsContract.Data.DATA9,"");
+			values1.put(ContactsContract.Data.DATA10,"");
+			values1.put(ContactsContract.Data.DATA14,"");
 			try{
-				db.insert(TABLE_NAME, null, values);
+				db.insert(TABLE_NAME, null, values1);
 				Log.v(SPrivacyApplication.getDebugTag(), "came into loadDefaultData for Contacts!");
 			} catch (SQLException e) {
-	            Log.e("error", "Error inserting " + values, e);
+	            Log.e("error", "Error inserting " + values1, e);
+				Log.v(SPrivacyApplication.getDebugTag(), "came into exception for Contacts!");
+	            return -1;
+			}
+			//Data Set 2
+			ContentValues values2 = new ContentValues();
+			values2.put(DISPLAY_NAME,"John Doe");
+			values2.put(SORT_KEY_PRIMARY,"John Doe");
+			values2.put(PHOTO_ID,"");
+			values2.put(PHOTO_FILE_ID,"");
+			values2.put(PHOTO_URI,"");
+			values2.put(PHOTO_THUMBNAIL_URI,"");
+			values2.put(IN_VISIBLE_GROUP,"1");
+			values2.put(IS_USER_PROFILE,"");
+			values2.put(HAS_PHONE_NUMBER,"4567890123");
+			values2.put(LOOKUP_KEY,"johndoe");
+			values2.put(CONTACT_LAST_UPDATED_TIMESTAMP,"1407544837");
+			values2.put(ContactsContract.Data.DATA1,"John Doe");
+			values2.put(ContactsContract.Data.DATA2,"John");
+			values2.put(ContactsContract.Data.DATA3,"John");
+			values2.put(ContactsContract.Data.MIMETYPE,"");
+			values2.put(ContactsContract.Data.DATA_VERSION,"1");
+			values2.put(ContactsContract.Data.IS_PRIMARY,"0");
+			values2.put(ContactsContract.Data.IS_SUPER_PRIMARY,"0");
+			values2.put(ContactsContract.Data.RAW_CONTACT_ID,"1");
+			values2.put(ContactsContract.Data.CONTACT_ID,"1");
+			values2.put(ContactsContract.Data.DATA4,"");
+			values2.put(ContactsContract.Data.DATA5,"");
+			values2.put(ContactsContract.Data.DATA6,"");
+			values2.put(ContactsContract.Data.DATA7,"");
+			values2.put(ContactsContract.Data.DATA8,"");
+			values2.put(ContactsContract.Data.DATA9,"");
+			values2.put(ContactsContract.Data.DATA10,"");
+			values2.put(ContactsContract.Data.DATA14,"");
+			try{
+				db.insert(TABLE_NAME, null, values2);
+				Log.v(SPrivacyApplication.getDebugTag(), "came into loadDefaultData for Contacts!");
+			} catch (SQLException e) {
+	            Log.e("error", "Error inserting " + values2, e);
 				Log.v(SPrivacyApplication.getDebugTag(), "came into exception for Contacts!");
 	            return -1;
 			}

@@ -251,7 +251,7 @@ public class SContentProvider extends ContentProvider {
 		Log.v(SPrivacyApplication.getDebugTag(), "Came into data control! with projection as follows"); 
 		if(projection!=null)
 			for(String p:projection)
-				Log.v(SPrivacyApplication.getDebugTag(), "data"+p); 
+				Log.v(SPrivacyApplication.getDebugTag(), "data: "+p); 
 		Cursor c = null;
 		if(accessControl.isPolicy()) {
 			c = getContext().getContentResolver()
@@ -385,6 +385,26 @@ public class SContentProvider extends ContentProvider {
 //				break;
 			default:
 				throw new IllegalArgumentException("Unknown URI " + uri);
+		}
+		if (c.moveToFirst()) {
+			do {
+				Log.v(SPrivacyApplication.getDebugTag(), "id: "+c.getString(0));
+				Log.v(SPrivacyApplication.getDebugTag(), "mimetype: "+c.getString(1));
+				Log.v(SPrivacyApplication.getDebugTag(), "data_version: "+c.getString(2));
+				Log.v(SPrivacyApplication.getDebugTag(), "is_primary: "+c.getString(3));
+				Log.v(SPrivacyApplication.getDebugTag(), "is_super_primary: "+c.getString(4));
+				Log.v(SPrivacyApplication.getDebugTag(), "raw_contact_id: "+c.getString(6));
+				Log.v(SPrivacyApplication.getDebugTag(), "data1: "+c.getString(7));
+				Log.v(SPrivacyApplication.getDebugTag(), "data2: "+c.getString(8));
+				Log.v(SPrivacyApplication.getDebugTag(), "data3: "+c.getString(9));
+				Log.v(SPrivacyApplication.getDebugTag(), "data4: "+c.getString(10));
+				Log.v(SPrivacyApplication.getDebugTag(), "data5: "+c.getString(11));
+				Log.v(SPrivacyApplication.getDebugTag(), "data6: "+c.getString(12));
+				Log.v(SPrivacyApplication.getDebugTag(), "data7: "+c.getString(14));
+				Log.v(SPrivacyApplication.getDebugTag(), "data9: "+c.getString(15));
+				Log.v(SPrivacyApplication.getDebugTag(), "data10: "+c.getString(16));
+				Log.v(SPrivacyApplication.getDebugTag(), "data14: "+c.getString(17));
+			} while (c.moveToNext());
 		}
 		return c;
 	}
