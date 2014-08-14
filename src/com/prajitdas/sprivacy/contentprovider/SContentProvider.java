@@ -251,7 +251,9 @@ public class SContentProvider extends ContentProvider {
 		Log.v(SPrivacyApplication.getDebugTag(), "Came into data control! with projection as follows"); 
 		if(projection!=null)
 			for(String p:projection)
-				Log.v(SPrivacyApplication.getDebugTag(), "data: "+p); 
+				Log.v(SPrivacyApplication.getDebugTag(), "data: "+p);
+		Log.v(SPrivacyApplication.getDebugTag(), "sort order "+ sortOrder);
+		sortOrder = "display_name";
 		Cursor c = null;
 		if(accessControl.isPolicy()) {
 			c = getContext().getContentResolver()
