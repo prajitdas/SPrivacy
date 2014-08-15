@@ -1,10 +1,9 @@
 package com.prajitdas.sprivacy.contentprovider.util.fakecontentproviders;
 
 import java.util.HashMap;
-import com.prajitdas.sprivacy.SPrivacyApplication;
+
 import android.annotation.TargetApi;
 import android.content.ContentProvider;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
@@ -17,8 +16,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.StructuredPostal;
-import android.text.TextUtils;
 import android.util.Log;
+
+import com.prajitdas.sprivacy.SPrivacyApplication;
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class Contacts extends ContentProvider {
@@ -167,44 +167,129 @@ public class Contacts extends ContentProvider {
 				Log.v(SPrivacyApplication.getDebugTag(), "came into exception for Contacts!");
 	            return -1;
 			}
-//			//Data Set 2
-//			ContentValues values2 = new ContentValues();
-//			values2.put(DISPLAY_NAME,"John Doe");
-//			values2.put(SORT_KEY_PRIMARY,"John Doe");
-//			values2.put(PHOTO_ID,"");
-//			values2.put(PHOTO_FILE_ID,"");
-//			values2.put(PHOTO_URI,"");
-//			values2.put(PHOTO_THUMBNAIL_URI,"");
-//			values2.put(IN_VISIBLE_GROUP,"1");
-//			values2.put(IS_USER_PROFILE,"");
-//			values2.put(HAS_PHONE_NUMBER,"4567890123");
-//			values2.put(LOOKUP_KEY,"johndoe");
-//			values2.put(CONTACT_LAST_UPDATED_TIMESTAMP,"1407544837");
-//			values2.put(ContactsContract.Data.DATA1,"John Doe");
-//			values2.put(ContactsContract.Data.DATA2,"John");
-//			values2.put(ContactsContract.Data.DATA3,"John");
-//			values2.put(ContactsContract.Data.MIMETYPE,"");
-//			values2.put(ContactsContract.Data.DATA_VERSION,"1");
-//			values2.put(ContactsContract.Data.IS_PRIMARY,"0");
-//			values2.put(ContactsContract.Data.IS_SUPER_PRIMARY,"0");
-//			values2.put(ContactsContract.Data.RAW_CONTACT_ID,"1");
-//			values2.put(ContactsContract.Data.CONTACT_ID,"1");
-//			values2.put(ContactsContract.Data.DATA4,"");
-//			values2.put(ContactsContract.Data.DATA5,"");
-//			values2.put(ContactsContract.Data.DATA6,"");
-//			values2.put(ContactsContract.Data.DATA7,"");
-//			values2.put(ContactsContract.Data.DATA8,"");
-//			values2.put(ContactsContract.Data.DATA9,"");
-//			values2.put(ContactsContract.Data.DATA10,"");
-//			values2.put(ContactsContract.Data.DATA14,"");
-//			try{
-//				db.insert(TABLE_NAME, null, values2);
-//				Log.v(SPrivacyApplication.getDebugTag(), "came into loadDefaultData for Contacts!");
-//			} catch (SQLException e) {
-//	            Log.e("error", "Error inserting " + values2, e);
-//				Log.v(SPrivacyApplication.getDebugTag(), "came into exception for Contacts!");
-//	            return -1;
-//			}
+			//Data Set 2
+			ContentValues values2 = new ContentValues();
+			values2.put(ContactsContract.Data.DISPLAY_NAME,"Jane Doe");
+			values2.put(ContactsContract.Data.SORT_KEY_PRIMARY,"Jane Doe");
+			values2.put(ContactsContract.Data.PHOTO_ID,"");
+			values2.put(ContactsContract.Data.PHOTO_FILE_ID,"");
+			values2.put(ContactsContract.Data.PHOTO_URI,"");
+			values2.put(ContactsContract.Data.PHOTO_THUMBNAIL_URI,"");
+			values2.put(ContactsContract.Data.IN_VISIBLE_GROUP,"1");
+			values2.put(ContactsContract.Data.IS_USER_PROFILE,"");
+			values2.put(ContactsContract.Data.HAS_PHONE_NUMBER,"4567890123");
+			values2.put(ContactsContract.Data.LOOKUP_KEY,"janedoe");
+			values2.put(ContactsContract.Data.CONTACT_LAST_UPDATED_TIMESTAMP, System.currentTimeMillis());
+			values2.put(ContactAddressQuery.FORMATTED_ADDRESS,"1 Mordor Lane, Mordor, Middlearth");
+			values2.put(ContactAddressQuery.ADDRESS_TYPE,"Home");
+			values2.put(ContactAddressQuery.ADDRESS_LABEL,"Home");
+			values2.put(ContactsContract.Data.MIMETYPE,"vnd.android.cursor.item/name");
+			values2.put(ContactsContract.Data.DATA_VERSION,"1");
+			values2.put(ContactsContract.Data.IS_PRIMARY,"0");
+			values2.put(ContactsContract.Data.IS_SUPER_PRIMARY,"0");
+			values2.put(ContactsContract.Data.RAW_CONTACT_ID,"1");
+			values2.put(ContactsContract.Data.CONTACT_ID,"1");
+			values2.put(ContactsContract.Data.DATA4,"");
+			values2.put(ContactsContract.Data.DATA5,"");
+			values2.put(ContactsContract.Data.DATA6,"");
+			values2.put(ContactsContract.Data.DATA7,"");
+			values2.put(ContactsContract.Data.DATA8,"");
+			values2.put(ContactsContract.Data.DATA9,"");
+			values2.put(ContactsContract.Data.DATA10,"");
+			values2.put(ContactsContract.Data.DATA14,"");
+			values2.put(ContactsContract.Data.STARRED,"0");
+			values2.put(ContactsContract.Data.CUSTOM_RINGTONE,"");
+			values2.put(ContactsContract.Data.SEND_TO_VOICEMAIL,"0");
+			try{
+				db.insert(TABLE_NAME, null, values2);
+				Log.v(SPrivacyApplication.getDebugTag(), "came into loadDefaultData for Contacts!");
+			} catch (SQLException e) {
+	            Log.e("error", "Error inserting " + values2, e);
+				Log.v(SPrivacyApplication.getDebugTag(), "came into exception for Contacts!");
+	            return -1;
+			}
+			//Data Set 3
+			ContentValues values3 = new ContentValues();
+			values3.put(ContactsContract.Data.DISPLAY_NAME,"Johnny Doe");
+			values3.put(ContactsContract.Data.SORT_KEY_PRIMARY,"Johnny Doe");
+			values3.put(ContactsContract.Data.PHOTO_ID,"");
+			values3.put(ContactsContract.Data.PHOTO_FILE_ID,"");
+			values3.put(ContactsContract.Data.PHOTO_URI,"");
+			values3.put(ContactsContract.Data.PHOTO_THUMBNAIL_URI,"");
+			values3.put(ContactsContract.Data.IN_VISIBLE_GROUP,"1");
+			values3.put(ContactsContract.Data.IS_USER_PROFILE,"");
+			values3.put(ContactsContract.Data.HAS_PHONE_NUMBER,"4567890123");
+			values3.put(ContactsContract.Data.LOOKUP_KEY,"johnnydoe");
+			values3.put(ContactsContract.Data.CONTACT_LAST_UPDATED_TIMESTAMP, System.currentTimeMillis());
+			values3.put(ContactAddressQuery.FORMATTED_ADDRESS,"1 Mordor Lane, Mordor, Middlearth");
+			values3.put(ContactAddressQuery.ADDRESS_TYPE,"Home");
+			values3.put(ContactAddressQuery.ADDRESS_LABEL,"Home");
+			values3.put(ContactsContract.Data.MIMETYPE,"vnd.android.cursor.item/name");
+			values3.put(ContactsContract.Data.DATA_VERSION,"1");
+			values3.put(ContactsContract.Data.IS_PRIMARY,"0");
+			values3.put(ContactsContract.Data.IS_SUPER_PRIMARY,"0");
+			values3.put(ContactsContract.Data.RAW_CONTACT_ID,"1");
+			values3.put(ContactsContract.Data.CONTACT_ID,"1");
+			values3.put(ContactsContract.Data.DATA4,"");
+			values3.put(ContactsContract.Data.DATA5,"");
+			values3.put(ContactsContract.Data.DATA6,"");
+			values3.put(ContactsContract.Data.DATA7,"");
+			values3.put(ContactsContract.Data.DATA8,"");
+			values3.put(ContactsContract.Data.DATA9,"");
+			values3.put(ContactsContract.Data.DATA10,"");
+			values3.put(ContactsContract.Data.DATA14,"");
+			values3.put(ContactsContract.Data.STARRED,"0");
+			values3.put(ContactsContract.Data.CUSTOM_RINGTONE,"");
+			values3.put(ContactsContract.Data.SEND_TO_VOICEMAIL,"0");
+			try{
+				db.insert(TABLE_NAME, null, values3);
+				Log.v(SPrivacyApplication.getDebugTag(), "came into loadDefaultData for Contacts!");
+			} catch (SQLException e) {
+	            Log.e("error", "Error inserting " + values3, e);
+				Log.v(SPrivacyApplication.getDebugTag(), "came into exception for Contacts!");
+	            return -1;
+			}
+			//Data Set 4
+			ContentValues values4 = new ContentValues();
+			values4.put(ContactsContract.Data.DISPLAY_NAME,"Joanna Doe");
+			values4.put(ContactsContract.Data.SORT_KEY_PRIMARY,"Joanna Doe");
+			values4.put(ContactsContract.Data.PHOTO_ID,"");
+			values4.put(ContactsContract.Data.PHOTO_FILE_ID,"");
+			values4.put(ContactsContract.Data.PHOTO_URI,"");
+			values4.put(ContactsContract.Data.PHOTO_THUMBNAIL_URI,"");
+			values4.put(ContactsContract.Data.IN_VISIBLE_GROUP,"1");
+			values4.put(ContactsContract.Data.IS_USER_PROFILE,"");
+			values4.put(ContactsContract.Data.HAS_PHONE_NUMBER,"4567890123");
+			values4.put(ContactsContract.Data.LOOKUP_KEY,"joannadoe");
+			values4.put(ContactsContract.Data.CONTACT_LAST_UPDATED_TIMESTAMP, System.currentTimeMillis());
+			values4.put(ContactAddressQuery.FORMATTED_ADDRESS,"1 Mordor Lane, Mordor, Middlearth");
+			values4.put(ContactAddressQuery.ADDRESS_TYPE,"Home");
+			values4.put(ContactAddressQuery.ADDRESS_LABEL,"Home");
+			values4.put(ContactsContract.Data.MIMETYPE,"vnd.android.cursor.item/name");
+			values4.put(ContactsContract.Data.DATA_VERSION,"1");
+			values4.put(ContactsContract.Data.IS_PRIMARY,"0");
+			values4.put(ContactsContract.Data.IS_SUPER_PRIMARY,"0");
+			values4.put(ContactsContract.Data.RAW_CONTACT_ID,"1");
+			values4.put(ContactsContract.Data.CONTACT_ID,"1");
+			values4.put(ContactsContract.Data.DATA4,"");
+			values4.put(ContactsContract.Data.DATA5,"");
+			values4.put(ContactsContract.Data.DATA6,"");
+			values4.put(ContactsContract.Data.DATA7,"");
+			values4.put(ContactsContract.Data.DATA8,"");
+			values4.put(ContactsContract.Data.DATA9,"");
+			values4.put(ContactsContract.Data.DATA10,"");
+			values4.put(ContactsContract.Data.DATA14,"");
+			values4.put(ContactsContract.Data.STARRED,"0");
+			values4.put(ContactsContract.Data.CUSTOM_RINGTONE,"");
+			values4.put(ContactsContract.Data.SEND_TO_VOICEMAIL,"0");
+			try{
+				db.insert(TABLE_NAME, null, values4);
+				Log.v(SPrivacyApplication.getDebugTag(), "came into loadDefaultData for Contacts!");
+			} catch (SQLException e) {
+	            Log.e("error", "Error inserting " + values4, e);
+				Log.v(SPrivacyApplication.getDebugTag(), "came into exception for Contacts!");
+	            return -1;
+			}
 			return 1;
 		}
 	}
@@ -297,54 +382,66 @@ public class Contacts extends ContentProvider {
 
 	@Override
 	public Uri insert(Uri uri, ContentValues values) {
-		long row = db.insert(TABLE_NAME, "", values);
-		// If record is added successfully
-		if(row > 0) {
-			Uri newUri = ContentUris.withAppendedId(CONTENT_URI, row);
-			getContext().getContentResolver().notifyChange(newUri, null);
-			return newUri;
-		}
-		throw new SQLException("Fail to add a new record into " + uri);
+//		long row = db.insert(TABLE_NAME, "", values);
+//		// If record is added successfully
+//		if(row > 0) {
+//			Uri newUri = ContentUris.withAppendedId(CONTENT_URI, row);
+//			getContext().getContentResolver().notifyChange(newUri, null);
+//			return newUri;
+//		}
+//		throw new SQLException("Fail to add a new record into " + uri);
+		/**
+		 * Do nothing and return the same uri
+		 */
+		return uri;
 	}
 
 	@Override
 	public int delete(Uri uri, String selection, String[] selectionArgs) {
-		int count = 0;
-		switch (uriMatcher.match(uri)){
-			case CONTACTS_ID:
-				String id = uri.getLastPathSegment();	//gets the id
-				count = db.delete(TABLE_NAME, CONTACTS_TABLE_ID +  " = " + id + 
-						(!TextUtils.isEmpty(selection) ? " AND (" + selection + ')' : ""), selectionArgs);
-				break;
-			case CONTACTS:
-				// delete all the records of the table
-				count = db.delete(TABLE_NAME, selection, selectionArgs);
-				break;
-			default: 
-				throw new IllegalArgumentException("Unsupported URI " + uri);
-		}
-
-		getContext().getContentResolver().notifyChange(uri, null);
-		return count;
+//		int count = 0;
+//		switch (uriMatcher.match(uri)){
+//			case CONTACTS_ID:
+//				String id = uri.getLastPathSegment();	//gets the id
+//				count = db.delete(TABLE_NAME, CONTACTS_TABLE_ID +  " = " + id + 
+//						(!TextUtils.isEmpty(selection) ? " AND (" + selection + ')' : ""), selectionArgs);
+//				break;
+//			case CONTACTS:
+//				// delete all the records of the table
+//				count = db.delete(TABLE_NAME, selection, selectionArgs);
+//				break;
+//			default: 
+//				throw new IllegalArgumentException("Unsupported URI " + uri);
+//		}
+//
+//		getContext().getContentResolver().notifyChange(uri, null);
+//		return count;
+		/**
+		 * Do nothing and pretend to have changed one row
+		 */
+		return 1;
 	}
 
 	@Override
 	public int update(Uri uri, ContentValues values, String selection,
 			String[] selectionArgs) {
-		int count = 0;
-		switch (uriMatcher.match(uri)){
-			case CONTACTS_ID:
-				count = db.update(TABLE_NAME, values, CONTACTS_TABLE_ID + " = " + uri.getLastPathSegment() + 
-						(!TextUtils.isEmpty(selection) ? " AND (" + selection + ')' : ""), selectionArgs);
-				break;
-			case CONTACTS:
-				count = db.update(TABLE_NAME, values, selection, selectionArgs);
-				break;
-			default: 
-				throw new IllegalArgumentException("Unsupported URI " + uri );
-		}
-		getContext().getContentResolver().notifyChange(uri, null);
-		return count;
+//		int count = 0;
+//		switch (uriMatcher.match(uri)){
+//			case CONTACTS_ID:
+//				count = db.update(TABLE_NAME, values, CONTACTS_TABLE_ID + " = " + uri.getLastPathSegment() + 
+//						(!TextUtils.isEmpty(selection) ? " AND (" + selection + ')' : ""), selectionArgs);
+//				break;
+//			case CONTACTS:
+//				count = db.update(TABLE_NAME, values, selection, selectionArgs);
+//				break;
+//			default: 
+//				throw new IllegalArgumentException("Unsupported URI " + uri );
+//		}
+//		getContext().getContentResolver().notifyChange(uri, null);
+//		return count;
+		/**
+		 * Do nothing and pretend to have changed one row
+		 */
+		return 1;
 	}
 //	
 //    /**
