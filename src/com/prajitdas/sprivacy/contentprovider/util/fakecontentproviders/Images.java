@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.HashMap;
 
+import android.annotation.TargetApi;
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -18,7 +19,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
-import android.os.Environment;
+import android.os.Build;
 import android.provider.MediaStore.Images.ImageColumns;
 import android.util.Log;
 
@@ -98,10 +99,11 @@ public class Images extends ContentProvider {
 			return 1;
 		}
 	    
-	    private void loaDefaultData(SQLiteDatabase databaseRef, Bitmap finalBitmap) {
-		    String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
+	    @TargetApi(Build.VERSION_CODES.KITKAT)
+		private void loaDefaultData(SQLiteDatabase databaseRef, Bitmap finalBitmap) {
+//		    String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).toString();
 		    final SQLiteDatabase db = databaseRef;
-		    File myDir = new File(root + "/saved_images");
+		    File myDir = context.getExternalFilesDir("images");//new File(root + "/saved_images");
 		    myDir.mkdirs();
 		    String fname = "image.png";
 		    File file = new File(myDir, fname);
@@ -127,8 +129,10 @@ public class Images extends ContentProvider {
 		                    Log.i("ExternalStorage", "-> uri=" + uri);
 		                    Log.i("ExternalStorage", "-> getAuthority=" + uri.getAuthority());
 		                    Log.i("ExternalStorage", "-> getLastPathSegment=" + uri.getLastPathSegment());
+		                    Log.i("ExternalStorage", "-> imageUri=" + uri);
 		                    imageUri = uri;
-		    		    	addDefaultData(db, imageUri.getLastPathSegment().toString());
+//		    		    	addDefaultData(db, imageUri.getLastPathSegment().toString());
+		    		    	addDefaultData(db, imageUri.toString());
 		                }
 		    });
 		}
