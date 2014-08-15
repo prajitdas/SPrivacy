@@ -103,7 +103,7 @@ public class Images extends ContentProvider {
 		    final SQLiteDatabase db = databaseRef;
 		    File myDir = new File(root + "/saved_images");
 		    myDir.mkdirs();
-		    String fname = "image";
+		    String fname = "image.png";
 		    File file = new File(myDir, fname);
 		    if (file.exists())
 		        file.delete();
