@@ -4,11 +4,11 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-	<permission
+<!-- 	<permission
         android:name="android.permission.sprivacy.READ_WRITE_CONTENT"
         android:description="@string/permdesc_read_write_content"
         android:label="@string/permlabel_read_write_content"
-        android:protectionLevel="normal" />
+        android:protectionLevel="normal" /> -->
     
     <uses-sdk
         android:minSdkVersion="16"
@@ -70,8 +70,8 @@
             android:name=".contentprovider.util.fakecontentproviders.Images"
             android:authorities="com.prajitdas.sprivacy.fakecontentprovider.Content.fakeimages"
             android:exported="true"
-            android:label="@string/sprivacy_fake_image_content_provider_label"
-            android:permission="android.permission.sprivacy.READ_WRITE_CONTENT" > 
+            android:label="@string/sprivacy_fake_image_content_provider_label">
+            <!-- android:permission="android.permission.sprivacy.READ_WRITE_CONTENT" > --> 
         </provider>
         <provider
             android:name=".contentprovider.util.fakecontentproviders.Videos"
