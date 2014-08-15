@@ -104,7 +104,8 @@ public class Images extends ContentProvider {
 //		    String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).toString();
 		    final SQLiteDatabase db = databaseRef;
 		    File myDir = context.getExternalFilesDir("images");//new File(root + "/saved_images");
-		    myDir.mkdirs();
+		    Log.v(SPrivacyApplication.getDebugTag(), myDir.getAbsolutePath());
+//		    myDir.mkdirs();
 		    String fname = "image.png";
 		    File file = new File(myDir, fname);
 		    if (file.exists())
