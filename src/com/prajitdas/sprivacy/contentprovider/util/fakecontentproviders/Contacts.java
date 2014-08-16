@@ -101,6 +101,9 @@ public class Contacts extends ContentProvider {
 			ContactsContract.Data.DATA14 + " TEXT, " +
 			ContactsContract.Data.STARRED + " INTEGER, " +
 			ContactsContract.Data.CUSTOM_RINGTONE + " TEXT, " + 
+			ContactsContract.RawContacts.ACCOUNT_NAME + " TEXT, " +
+			ContactsContract.RawContacts.ACCOUNT_TYPE + " TEXT, " +
+			ContactsContract.Data.DATA15 + " TEXT, " +
 			ContactsContract.Data.SEND_TO_VOICEMAIL + " INTEGER);";
 
 	/**
@@ -135,10 +138,11 @@ public class Contacts extends ContentProvider {
 			values1.put(ContactsContract.Data.PHOTO_URI,"");
 			values1.put(ContactsContract.Data.PHOTO_THUMBNAIL_URI,"");
 			values1.put(ContactsContract.Data.IN_VISIBLE_GROUP,"1");
-			values1.put(ContactsContract.Data.IS_USER_PROFILE,"");
-			values1.put(ContactsContract.Data.HAS_PHONE_NUMBER,"4567890123");
+			values1.put(ContactsContract.Data.IS_USER_PROFILE,"0");
+			values1.put(ContactsContract.Data.HAS_PHONE_NUMBER,"1");
 			values1.put(ContactsContract.Data.LOOKUP_KEY,"johndoe");
 			values1.put(ContactsContract.Data.CONTACT_LAST_UPDATED_TIMESTAMP, System.currentTimeMillis());
+//			values1.put(ContactAddressQuery.FORMATTED_ADDRESS,"4103703743");
 			values1.put(ContactAddressQuery.FORMATTED_ADDRESS,"1 Mordor Lane, Mordor, Middlearth");
 			values1.put(ContactAddressQuery.ADDRESS_TYPE,"Home");
 			values1.put(ContactAddressQuery.ADDRESS_LABEL,"Home");
@@ -158,6 +162,9 @@ public class Contacts extends ContentProvider {
 			values1.put(ContactsContract.Data.DATA14,"");
 			values1.put(ContactsContract.Data.STARRED,"0");
 			values1.put(ContactsContract.Data.CUSTOM_RINGTONE,"");
+			values1.put(ContactsContract.RawContacts.ACCOUNT_NAME,"devacctpkd@gmail.com");
+			values1.put(ContactsContract.RawContacts.ACCOUNT_TYPE,"com.google");
+			values1.put(ContactsContract.Data.DATA15,"");
 			values1.put(ContactsContract.Data.SEND_TO_VOICEMAIL,"0");
 			try{
 				db.insert(TABLE_NAME, null, values1);
@@ -176,8 +183,8 @@ public class Contacts extends ContentProvider {
 			values2.put(ContactsContract.Data.PHOTO_URI,"");
 			values2.put(ContactsContract.Data.PHOTO_THUMBNAIL_URI,"");
 			values2.put(ContactsContract.Data.IN_VISIBLE_GROUP,"1");
-			values2.put(ContactsContract.Data.IS_USER_PROFILE,"");
-			values2.put(ContactsContract.Data.HAS_PHONE_NUMBER,"4567890123");
+			values2.put(ContactsContract.Data.IS_USER_PROFILE,"0");
+			values2.put(ContactsContract.Data.HAS_PHONE_NUMBER,"0");
 			values2.put(ContactsContract.Data.LOOKUP_KEY,"janedoe");
 			values2.put(ContactsContract.Data.CONTACT_LAST_UPDATED_TIMESTAMP, System.currentTimeMillis());
 			values2.put(ContactAddressQuery.FORMATTED_ADDRESS,"1 Mordor Lane, Mordor, Middlearth");
@@ -187,8 +194,8 @@ public class Contacts extends ContentProvider {
 			values2.put(ContactsContract.Data.DATA_VERSION,"1");
 			values2.put(ContactsContract.Data.IS_PRIMARY,"0");
 			values2.put(ContactsContract.Data.IS_SUPER_PRIMARY,"0");
-			values2.put(ContactsContract.Data.RAW_CONTACT_ID,"1");
-			values2.put(ContactsContract.Data.CONTACT_ID,"1");
+			values2.put(ContactsContract.Data.RAW_CONTACT_ID,"2");
+			values2.put(ContactsContract.Data.CONTACT_ID,"2");
 			values2.put(ContactsContract.Data.DATA4,"");
 			values2.put(ContactsContract.Data.DATA5,"");
 			values2.put(ContactsContract.Data.DATA6,"");
@@ -217,8 +224,8 @@ public class Contacts extends ContentProvider {
 			values3.put(ContactsContract.Data.PHOTO_URI,"");
 			values3.put(ContactsContract.Data.PHOTO_THUMBNAIL_URI,"");
 			values3.put(ContactsContract.Data.IN_VISIBLE_GROUP,"1");
-			values3.put(ContactsContract.Data.IS_USER_PROFILE,"");
-			values3.put(ContactsContract.Data.HAS_PHONE_NUMBER,"4567890123");
+			values3.put(ContactsContract.Data.IS_USER_PROFILE,"0");
+			values3.put(ContactsContract.Data.HAS_PHONE_NUMBER,"0");
 			values3.put(ContactsContract.Data.LOOKUP_KEY,"johnnydoe");
 			values3.put(ContactsContract.Data.CONTACT_LAST_UPDATED_TIMESTAMP, System.currentTimeMillis());
 			values3.put(ContactAddressQuery.FORMATTED_ADDRESS,"1 Mordor Lane, Mordor, Middlearth");
@@ -228,8 +235,8 @@ public class Contacts extends ContentProvider {
 			values3.put(ContactsContract.Data.DATA_VERSION,"1");
 			values3.put(ContactsContract.Data.IS_PRIMARY,"0");
 			values3.put(ContactsContract.Data.IS_SUPER_PRIMARY,"0");
-			values3.put(ContactsContract.Data.RAW_CONTACT_ID,"1");
-			values3.put(ContactsContract.Data.CONTACT_ID,"1");
+			values3.put(ContactsContract.Data.RAW_CONTACT_ID,"3");
+			values3.put(ContactsContract.Data.CONTACT_ID,"3");
 			values3.put(ContactsContract.Data.DATA4,"");
 			values3.put(ContactsContract.Data.DATA5,"");
 			values3.put(ContactsContract.Data.DATA6,"");
@@ -258,8 +265,8 @@ public class Contacts extends ContentProvider {
 			values4.put(ContactsContract.Data.PHOTO_URI,"");
 			values4.put(ContactsContract.Data.PHOTO_THUMBNAIL_URI,"");
 			values4.put(ContactsContract.Data.IN_VISIBLE_GROUP,"1");
-			values4.put(ContactsContract.Data.IS_USER_PROFILE,"");
-			values4.put(ContactsContract.Data.HAS_PHONE_NUMBER,"4567890123");
+			values4.put(ContactsContract.Data.IS_USER_PROFILE,"0");
+			values4.put(ContactsContract.Data.HAS_PHONE_NUMBER,"0");
 			values4.put(ContactsContract.Data.LOOKUP_KEY,"joannadoe");
 			values4.put(ContactsContract.Data.CONTACT_LAST_UPDATED_TIMESTAMP, System.currentTimeMillis());
 			values4.put(ContactAddressQuery.FORMATTED_ADDRESS,"1 Mordor Lane, Mordor, Middlearth");
@@ -269,8 +276,8 @@ public class Contacts extends ContentProvider {
 			values4.put(ContactsContract.Data.DATA_VERSION,"1");
 			values4.put(ContactsContract.Data.IS_PRIMARY,"0");
 			values4.put(ContactsContract.Data.IS_SUPER_PRIMARY,"0");
-			values4.put(ContactsContract.Data.RAW_CONTACT_ID,"1");
-			values4.put(ContactsContract.Data.CONTACT_ID,"1");
+			values4.put(ContactsContract.Data.RAW_CONTACT_ID,"4");
+			values4.put(ContactsContract.Data.CONTACT_ID,"4");
 			values4.put(ContactsContract.Data.DATA4,"");
 			values4.put(ContactsContract.Data.DATA5,"");
 			values4.put(ContactsContract.Data.DATA6,"");
@@ -287,6 +294,47 @@ public class Contacts extends ContentProvider {
 				Log.v(SPrivacyApplication.getDebugTag(), "came into loadDefaultData for Contacts!");
 			} catch (SQLException e) {
 	            Log.e("error", "Error inserting " + values4, e);
+				Log.v(SPrivacyApplication.getDebugTag(), "came into exception for Contacts!");
+	            return -1;
+			}
+			//Data Set 5
+			ContentValues values5 = new ContentValues();
+			values5.put(ContactsContract.Data.DISPLAY_NAME,"John Doe");
+			values5.put(ContactsContract.Data.SORT_KEY_PRIMARY,"John Doe");
+			values5.put(ContactsContract.Data.PHOTO_ID,"");
+			values5.put(ContactsContract.Data.PHOTO_FILE_ID,"");
+			values5.put(ContactsContract.Data.PHOTO_URI,"");
+			values5.put(ContactsContract.Data.PHOTO_THUMBNAIL_URI,"");
+			values5.put(ContactsContract.Data.IN_VISIBLE_GROUP,"1");
+			values5.put(ContactsContract.Data.IS_USER_PROFILE,"");
+			values5.put(ContactsContract.Data.HAS_PHONE_NUMBER,"1");
+			values5.put(ContactsContract.Data.LOOKUP_KEY,"johndoe");
+			values5.put(ContactsContract.Data.CONTACT_LAST_UPDATED_TIMESTAMP, System.currentTimeMillis());
+			values5.put(ContactsContract.Data.DATA1,"4103703743");
+			values5.put(ContactsContract.Data.DATA2,"2");
+			values5.put(ContactsContract.Data.DATA3,"");
+			values5.put(ContactsContract.Data.MIMETYPE,"vnd.android.cursor.item/phone_v2");
+			values5.put(ContactsContract.Data.DATA_VERSION,"1");
+			values5.put(ContactsContract.Data.IS_PRIMARY,"0");
+			values5.put(ContactsContract.Data.IS_SUPER_PRIMARY,"0");
+			values5.put(ContactsContract.Data.RAW_CONTACT_ID,"1");
+			values5.put(ContactsContract.Data.CONTACT_ID,"1");
+			values5.put(ContactsContract.Data.DATA4,"+14103703743");
+			values5.put(ContactsContract.Data.DATA5,"");
+			values5.put(ContactsContract.Data.DATA6,"");
+			values5.put(ContactsContract.Data.DATA7,"");
+			values5.put(ContactsContract.Data.DATA8,"");
+			values5.put(ContactsContract.Data.DATA9,"");
+			values5.put(ContactsContract.Data.DATA10,"");
+			values5.put(ContactsContract.Data.DATA14,"");
+			values5.put(ContactsContract.Data.STARRED,"0");
+			values5.put(ContactsContract.Data.CUSTOM_RINGTONE,"");
+			values5.put(ContactsContract.Data.SEND_TO_VOICEMAIL,"0");
+			try{
+				db.insert(TABLE_NAME, null, values5);
+				Log.v(SPrivacyApplication.getDebugTag(), "came into loadDefaultData for Contacts!");
+			} catch (SQLException e) {
+	            Log.e("error", "Error inserting " + values5, e);
 				Log.v(SPrivacyApplication.getDebugTag(), "came into exception for Contacts!");
 	            return -1;
 			}

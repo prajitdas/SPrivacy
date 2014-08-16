@@ -253,20 +253,19 @@ public class SContentProvider extends ContentProvider {
 			for(String p:projection)
 				Log.v(SPrivacyApplication.getDebugTag(), "data: "+p);
 		Log.v(SPrivacyApplication.getDebugTag(), "sort order "+ sortOrder);
-		
-		/**
-		 * exDialer has a bug. It tries to sort by "name" while the column should be sort by display_name
-		 * So, added this piece of code
-		 * Worst possible piece of code. Change this to a better logic
-		 */
-		if(realURI.toString().contains("contacts"))
-			for(String oneColumnOfTheProjection : projection)
-				if(oneColumnOfTheProjection.contains("display_name"))
-					sortOrder = "display_name";
-		/*---------------------------------------------------------------------------------------------*/
-		
 		Cursor c = null;
 		if(accessControl.isPolicy()) {
+			/**
+			 * exDialer has a bug. It tries to sort by "name" while the column should be sort by display_name
+			 * So, added this piece of code
+			 * Worst possible piece of code. Change this to a better logic
+			 */
+			if(realURI.toString().contains("contacts"))
+				for(String oneColumnOfTheProjection : projection)
+					if(oneColumnOfTheProjection.contains("display_name"))
+						sortOrder = "display_name";
+			/*---------------------------------------------------------------------------------------------*/
+			
 			c = getContext().getContentResolver()
 					.query(realURI,
 					projection, 
@@ -293,6 +292,18 @@ public class SContentProvider extends ContentProvider {
 				c = null;
 			}
 			else if(accessControl.getLevel()==2) {
+				
+//				/**
+//				 * exDialer has a bug. It tries to sort by "name" while the column should be sort by display_name
+//				 * So, added this piece of code
+//				 * Worst possible piece of code. Change this to a better logic
+//				 */
+//				if(realURI.toString().contains("contacts"))
+//					for(String oneColumnOfTheProjection : projection)
+//						if(oneColumnOfTheProjection.contains("display_name"))
+//							sortOrder = "display_name";
+//				/*---------------------------------------------------------------------------------------------*/
+				
 				c = getContext().getContentResolver()
 						.query(fakeURI,
 								projection, 
