@@ -129,6 +129,16 @@ public class Contacts extends ContentProvider {
 		}
 		
 		private int loaDefaultData(SQLiteDatabase db) {
+			int returnValue = -1;
+			returnValue = loadDataSet1(db);
+			returnValue = loadDataSet2(db);
+			returnValue = loadDataSet3(db);
+			returnValue = loadDataSet4(db);
+			returnValue = loadDataSet5(db);
+			return returnValue;
+		}
+
+		private int loadDataSet1(SQLiteDatabase db) {
 			//Data Set 1
 			ContentValues values1 = new ContentValues();
 			values1.put(ContactsContract.Data.DISPLAY_NAME,"John Doe");
@@ -174,6 +184,9 @@ public class Contacts extends ContentProvider {
 				Log.v(SPrivacyApplication.getDebugTag(), "came into exception for Contacts!");
 	            return -1;
 			}
+			return 1;
+		}
+		private int loadDataSet2(SQLiteDatabase db) {
 			//Data Set 2
 			ContentValues values2 = new ContentValues();
 			values2.put(ContactsContract.Data.DISPLAY_NAME,"Jane Doe");
@@ -215,6 +228,9 @@ public class Contacts extends ContentProvider {
 				Log.v(SPrivacyApplication.getDebugTag(), "came into exception for Contacts!");
 	            return -1;
 			}
+			return 1;
+		}
+		private int loadDataSet3(SQLiteDatabase db) {
 			//Data Set 3
 			ContentValues values3 = new ContentValues();
 			values3.put(ContactsContract.Data.DISPLAY_NAME,"Johnny Doe");
@@ -256,6 +272,9 @@ public class Contacts extends ContentProvider {
 				Log.v(SPrivacyApplication.getDebugTag(), "came into exception for Contacts!");
 	            return -1;
 			}
+			return 1;
+		}
+		private int loadDataSet4(SQLiteDatabase db) {
 			//Data Set 4
 			ContentValues values4 = new ContentValues();
 			values4.put(ContactsContract.Data.DISPLAY_NAME,"Joanna Doe");
@@ -297,6 +316,9 @@ public class Contacts extends ContentProvider {
 				Log.v(SPrivacyApplication.getDebugTag(), "came into exception for Contacts!");
 	            return -1;
 			}
+			return 1;
+		}
+		private int loadDataSet5(SQLiteDatabase db) {
 			//Data Set 5
 			ContentValues values5 = new ContentValues();
 			values5.put(ContactsContract.Data.DISPLAY_NAME,"John Doe");
