@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import android.annotation.TargetApi;
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
@@ -191,19 +192,15 @@ public class Images extends ContentProvider {
 
 	@Override
 	public Uri insert(Uri uri, ContentValues values) {
-//		long row = db.insert(TABLE_NAME, "", values);
-//		// If record is added successfully
-//		if(row > 0) {
-//			Uri newUri = ContentUris.withAppendedId(CONTENT_URI, row);
-//			getContext().getContentResolver().notifyChange(newUri, null);
-//			Log.v(SPrivacyApplication.getDebugTag(), "URI is: "+newUri.toString());
-//			return newUri;
-//		}
-//		throw new SQLException("Fail to add a new record into " + uri);
-		/**
-		 * Do nothing and return the same uri
-		 */
-		return uri;
+		long row = db.insert(TABLE_NAME, "", values);
+		// If record is added successfully
+		if(row > 0) {
+			Uri newUri = ContentUris.withAppendedId(CONTENT_URI, row);
+			getContext().getContentResolver().notifyChange(newUri, null);
+			Log.v(SPrivacyApplication.getDebugTag(), "URI is: "+newUri.toString());
+			return newUri;
+		}
+		throw new SQLException("Fail to add a new record into " + uri);
 	}
 
 	@Override

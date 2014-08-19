@@ -29,27 +29,27 @@ public class SContentProvider extends ContentProvider {
 	 * Forming the authority of the SPrivacy provider
 	 */
 	static final String PROVIDER_NAME = SPrivacyApplication.getConstSprivacyAuthority();
-	static final String URL = SPrivacyApplication.getConstScheme() + PROVIDER_NAME;
+	static final String PROVIDER_BASE_URL = SPrivacyApplication.getConstScheme() + PROVIDER_NAME;
 
 	/**
 	 * Forming the URIs for the contents that we will provide
 	 */
-	static final Uri IMAGES_CONTENT_URI = Uri.parse(URL+
+	static final Uri IMAGES_CONTENT_URI = Uri.parse(PROVIDER_BASE_URL+
 			SPrivacyApplication.getConstSlash()+
 			SPrivacyApplication.getConstImages());
-	static final Uri FILES_CONTENT_URI = Uri.parse(URL+
+	static final Uri FILES_CONTENT_URI = Uri.parse(PROVIDER_BASE_URL+
 			SPrivacyApplication.getConstSlash()+
 			SPrivacyApplication.getConstFiles());
-	static final Uri VIDEOS_CONTENT_URI = Uri.parse(URL+
+	static final Uri VIDEOS_CONTENT_URI = Uri.parse(PROVIDER_BASE_URL+
 			SPrivacyApplication.getConstSlash()+
 			SPrivacyApplication.getConstVideos());
-	static final Uri AUDIOS_CONTENT_URI = Uri.parse(URL+
+	static final Uri AUDIOS_CONTENT_URI = Uri.parse(PROVIDER_BASE_URL+
 			SPrivacyApplication.getConstSlash()+
 			SPrivacyApplication.getConstAudios());
-	static final Uri CONTACTS_CONTENT_URI = Uri.parse(URL+
+	static final Uri CONTACTS_CONTENT_URI = Uri.parse(PROVIDER_BASE_URL+
 			SPrivacyApplication.getConstSlash()+
 			SPrivacyApplication.getConstContacts());
-	static final Uri CONTACTS_LOOKUP_ID_URI = Uri.parse(URL+
+	static final Uri CONTACTS_LOOKUP_ID_URI = Uri.parse(PROVIDER_BASE_URL+
 			SPrivacyApplication.getConstSlash()+
 			SPrivacyApplication.getConstContacts()+
 			SPrivacyApplication.getConstSlash()+
@@ -59,7 +59,7 @@ public class SContentProvider extends ContentProvider {
 //			"*"+
 //			SPrivacyApplication.getConstSlash()+
 //			"#");
-	static final Uri CONTACTS_DATA_URI = Uri.parse(URL+
+	static final Uri CONTACTS_DATA_URI = Uri.parse(PROVIDER_BASE_URL+
 			SPrivacyApplication.getConstSlash()+
 			SPrivacyApplication.getConstContacts()+
 			SPrivacyApplication.getConstSlash()+
@@ -71,16 +71,16 @@ public class SContentProvider extends ContentProvider {
 //			"data"+
 //			SPrivacyApplication.getConstSlash()+
 //			"#");
-	static final Uri CONTACTS_STATUS_UPDATES_URI = Uri.parse(URL+
+	static final Uri CONTACTS_STATUS_UPDATES_URI = Uri.parse(PROVIDER_BASE_URL+
 			SPrivacyApplication.getConstSlash()+
 			SPrivacyApplication.getConstContacts()+
 			SPrivacyApplication.getConstSlash()+
 			"status_updates");
-	static final Uri CONTACTS_RAW_CONTACTS_URI = Uri.parse(URL+
+	static final Uri CONTACTS_RAW_CONTACTS_URI = Uri.parse(PROVIDER_BASE_URL+
 			SPrivacyApplication.getConstSlash()+
 			SPrivacyApplication.getConstContacts()+
 			"raw_contacts");
-	static final Uri CONTACTS_GROUPS_URI = Uri.parse(URL+
+	static final Uri CONTACTS_GROUPS_URI = Uri.parse(PROVIDER_BASE_URL+
 			SPrivacyApplication.getConstSlash()+
 			SPrivacyApplication.getConstContacts()+
 			"groups");
@@ -216,32 +216,64 @@ public class SContentProvider extends ContentProvider {
 		 * Has to be concatenated with the lookup key and if possible the contact id
 		 * The form is: content://com.android.contacts/contacts/lookup/<lookup_key>/<optional_contact_id>
 		 */
-		Uri contactLookupIDUri = Contacts.CONTENT_LOOKUP_URI;
+		Uri contactLookupIDUri = Uri.parse(SPrivacyApplication.getConstScheme()
+				+SPrivacyApplication.getConstFakeAuthorityPrefix()
+				+SPrivacyApplication.getConstFake()
+				+SPrivacyApplication.getConstContacts()
+				+SPrivacyApplication.getConstSlash()
+				+SPrivacyApplication.getConstContacts()
+				+SPrivacyApplication.getConstSlash()
+				+"lookup");
 		/**
 		 * Has to be concatenated with "data"
 		 * The form is: content://com.android.contacts/data
 		 */
-		Uri contactData = Uri.withAppendedPath(Contacts.CONTENT_URI,Contacts.Data.CONTENT_DIRECTORY);
+		Uri contactData = Uri.parse(SPrivacyApplication.getConstScheme()
+				+SPrivacyApplication.getConstFakeAuthorityPrefix()
+				+SPrivacyApplication.getConstFake()
+				+SPrivacyApplication.getConstContacts()
+				+SPrivacyApplication.getConstSlash()
+				+"data");
 		/**
 		 * Has to be concatenated with "data" and a contact_id
 		 * The form is: content://com.android.contacts/data/<contact_id>
 		 */
-		Uri contactDataId = Uri.withAppendedPath(Contacts.CONTENT_URI,Contacts.Data.CONTENT_DIRECTORY);
+		Uri contactDataId = Uri.parse(SPrivacyApplication.getConstScheme()
+				+SPrivacyApplication.getConstFakeAuthorityPrefix()
+				+SPrivacyApplication.getConstFake()
+				+SPrivacyApplication.getConstContacts()
+				+SPrivacyApplication.getConstSlash()
+				+"data");
 		/**
 		 * Has to be concatenated with "status_updates"
 		 * The form is: content://com.android.contacts/status_updates 
 		 */
-		Uri contactStatusUpdates = Contacts.CONTENT_URI;
+		Uri contactStatusUpdates = Uri.parse(SPrivacyApplication.getConstScheme()
+				+SPrivacyApplication.getConstFakeAuthorityPrefix()
+				+SPrivacyApplication.getConstFake()
+				+SPrivacyApplication.getConstContacts()
+				+SPrivacyApplication.getConstSlash()
+				+"status_updates");
 		/**
 		 * Has to be concatenated with "raw_contacts"
 		 * The form is: content://com.android.contacts/raw_contacts
 		 */
-		Uri contactRawContacts = Contacts.CONTENT_URI;
+		Uri contactRawContacts = Uri.parse(SPrivacyApplication.getConstScheme()
+				+SPrivacyApplication.getConstFakeAuthorityPrefix()
+				+SPrivacyApplication.getConstFake()
+				+SPrivacyApplication.getConstContacts()
+				+SPrivacyApplication.getConstSlash()
+				+"raw_contacts");
 		/**
 		 * Has to be concatenated with "groups"
 		 * The form is: content://com.android.contacts/groups
 		 */
-		Uri contactGroups = Contacts.CONTENT_URI;
+		Uri contactGroups = Uri.parse(SPrivacyApplication.getConstScheme()
+				+SPrivacyApplication.getConstFakeAuthorityPrefix()
+				+SPrivacyApplication.getConstFake()
+				+SPrivacyApplication.getConstContacts()
+				+SPrivacyApplication.getConstSlash()
+				+"groups");
     }
 
 	/**
@@ -284,32 +316,65 @@ public class SContentProvider extends ContentProvider {
 		 * Has to be concatenated with the lookup key and if possible the contact id
 		 * The form is: content://com.android.contacts/contacts/lookup/<lookup_key>/<optional_contact_id>
 		 */
-		Uri contactLookupIDUri = Contacts.CONTENT_LOOKUP_URI;
+		Uri contactLookupIDUri = Uri.parse(SPrivacyApplication.getConstScheme()
+				+SPrivacyApplication.getConstAnonymizedAuthorityPrefix()
+				+SPrivacyApplication.getConstAnnonymous()
+				+SPrivacyApplication.getConstContacts()
+				+SPrivacyApplication.getConstSlash()
+				+SPrivacyApplication.getConstContacts()
+				+SPrivacyApplication.getConstSlash()
+				+"lookup");
 		/**
 		 * Has to be concatenated with "data"
 		 * The form is: content://com.android.contacts/data
 		 */
-		Uri contactData = Uri.withAppendedPath(Contacts.CONTENT_URI,Contacts.Data.CONTENT_DIRECTORY);
+		Uri contactData = Uri.parse(SPrivacyApplication.getConstScheme()
+				+SPrivacyApplication.getConstAnonymizedAuthorityPrefix()
+				+SPrivacyApplication.getConstAnnonymous()
+				+SPrivacyApplication.getConstContacts()
+				+SPrivacyApplication.getConstSlash()
+				+"data");
 		/**
 		 * Has to be concatenated with "data" and a contact_id
 		 * The form is: content://com.android.contacts/data/<contact_id>
 		 */
-		Uri contactDataId = Uri.withAppendedPath(Contacts.CONTENT_URI,Contacts.Data.CONTENT_DIRECTORY);
+		Uri contactDataId = Uri.parse(SPrivacyApplication.getConstScheme()
+				+SPrivacyApplication.getConstAnonymizedAuthorityPrefix()
+				+SPrivacyApplication.getConstAnnonymous()
+				+SPrivacyApplication.getConstContacts()
+				+SPrivacyApplication.getConstSlash()
+				+"data");
 		/**
 		 * Has to be concatenated with "status_updates"
 		 * The form is: content://com.android.contacts/status_updates 
 		 */
-		Uri contactStatusUpdates = Contacts.CONTENT_URI;
+		Uri contactStatusUpdates = Uri.parse(SPrivacyApplication.getConstScheme()
+				+SPrivacyApplication.getConstAnonymizedAuthorityPrefix()
+				+SPrivacyApplication.getConstAnnonymous()
+				+SPrivacyApplication.getConstContacts()
+				+SPrivacyApplication.getConstSlash()
+				+"status_updates");
 		/**
 		 * Has to be concatenated with "raw_contacts"
 		 * The form is: content://com.android.contacts/raw_contacts
 		 */
-		Uri contactRawContacts = Contacts.CONTENT_URI;
+		Uri contactRawContacts = Uri.parse(SPrivacyApplication.getConstScheme()
+				+SPrivacyApplication.getConstAnonymizedAuthorityPrefix()
+				+SPrivacyApplication.getConstAnnonymous()
+				+SPrivacyApplication.getConstContacts()
+				+SPrivacyApplication.getConstSlash()
+				+"raw_contacts");
 		/**
 		 * Has to be concatenated with "groups"
 		 * The form is: content://com.android.contacts/groups
 		 */
-		Uri contactGroups = Contacts.CONTENT_URI;    }
+		Uri contactGroups = Uri.parse(SPrivacyApplication.getConstScheme()
+				+SPrivacyApplication.getConstAnonymizedAuthorityPrefix()
+				+SPrivacyApplication.getConstAnnonymous()
+				+SPrivacyApplication.getConstContacts()
+				+SPrivacyApplication.getConstSlash()
+				+"groups");
+	}
 
 	private static HashMap<String, String> PROJECTION_MAP;
 	private AccessControl accessControl;
