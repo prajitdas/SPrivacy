@@ -478,7 +478,6 @@ public class SContentProvider extends ContentProvider {
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection, 
 			String[] selectionArgs, String sortOrder) {
-	
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 		qb.setTables(TABLE_NAME);
 		if (sortOrder == null || sortOrder == ""){
@@ -573,6 +572,7 @@ public class SContentProvider extends ContentProvider {
 			String selection, String[] selectionArgs, String sortOrder) {
 		//TODO Have to figure out how to control based on app name and context
 		Log.v(SPrivacyApplication.getDebugTag(), "URI: "+uri.toString());
+		modifyUri(uri);
 		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
 				SPrivacyApplication.getConstContacts(), 
 				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
@@ -685,6 +685,80 @@ public class SContentProvider extends ContentProvider {
 				RealURIsForQuery.videoUri, FakeURIsForQuery.videoUri, AnonimyzedURIsForQuery.videoUri);
 	}
 	
+	private void modifyUri(Uri uri) {
+		String tempUriString = null;
+		switch (uriMatcher.match(uri)) {
+			case SPrivacyQuery.IMAGES:
+				break;
+			case SPrivacyQuery.FILES:
+				break;
+			case SPrivacyQuery.VIDEOS:
+				break;
+			case SPrivacyQuery.AUDIOS:
+				break;
+			case SPrivacyQuery.CONTACTS:
+				break;
+			case SPrivacyQuery.CONTACTS_LOOKUP_ID:
+				tempUriString = extractRequiredUriPartForLookupId(uri);
+				Uri.withAppendedPath(RealURIsForQuery.contactLookupIDUri, tempUriString);
+				Uri.withAppendedPath(FakeURIsForQuery.contactLookupIDUri, tempUriString);
+				Uri.withAppendedPath(AnonimyzedURIsForQuery.contactLookupIDUri, tempUriString);
+				break;
+			case SPrivacyQuery.CONTACTS_DATA:
+				break;
+			case SPrivacyQuery.CONTACTS_DATA_ID:
+				tempUriString = extractRequiredUriPartForDataId(uri);
+				Uri.withAppendedPath(RealURIsForQuery.contactDataId, tempUriString);
+				Uri.withAppendedPath(FakeURIsForQuery.contactDataId, tempUriString);
+				Uri.withAppendedPath(AnonimyzedURIsForQuery.contactDataId, tempUriString);
+				break;
+			case SPrivacyQuery.CONTACTS_STATUS_UPDATES:
+				break;
+			case SPrivacyQuery.CONTACTS_RAW_CONTACTS:
+				break;
+			case SPrivacyQuery.CONTACTS_GROUPS:
+				break;
+			default:
+				throw new IllegalArgumentException("Unknown URI " + uri);
+		}
+	}
+
+	private String extractRequiredUriPartForLookupId(Uri input) {
+		int countOfParts = input.getPathSegments().size();
+		int lookupStringLocation = -1;
+		int loopCounter = 0;
+		for(String part : input.getPathSegments()) {
+			if(part.equals("lookup"))
+				lookupStringLocation = loopCounter;
+			loopCounter++;
+		}
+		String extractedPath = null;
+		if((countOfParts-lookupStringLocation-1) == 2)
+			extractedPath = "/"+input.getPathSegments().get(lookupStringLocation+1)+"/"+input.getPathSegments().get(lookupStringLocation+2);
+		else if((countOfParts-lookupStringLocation-1) == 1)
+			extractedPath = "/"+input.getPathSegments().get(lookupStringLocation+1);
+		else
+			extractedPath = "";
+		return extractedPath;
+	}
+
+	private String extractRequiredUriPartForDataId(Uri input) {
+		int countOfParts = input.getPathSegments().size();
+		int dataStringLocation = -1;
+		int loopCounter = 0;
+		for(String part : input.getPathSegments()) {
+			if(part.equals("data"))
+				dataStringLocation = loopCounter;
+			loopCounter++;
+		}
+		String extractedPath = null;
+		if((countOfParts-dataStringLocation-1) == 1)
+			extractedPath = "/"+input.getPathSegments().get(dataStringLocation+1);
+		else
+			extractedPath = "";
+		return extractedPath;
+	}
+
 	@Override
 	public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
 		return 0;
