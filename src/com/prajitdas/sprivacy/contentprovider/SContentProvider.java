@@ -99,17 +99,14 @@ public class SContentProvider extends ContentProvider {
 
 		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts(), SPrivacyQuery.CONTACTS);
 		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts()
-				+SPrivacyApplication.getConstSlash()+"*"+SPrivacyApplication.getConstSlash()+"#", SPrivacyQuery.CONTACTS_LOOKUP_ID);
-		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts()
-				+SPrivacyApplication.getConstSlash()+"data", SPrivacyQuery.CONTACTS_DATA);
-		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts()
-				+SPrivacyApplication.getConstSlash()+"data"+SPrivacyApplication.getConstSlash()+"#", SPrivacyQuery.CONTACTS_DATA_ID);
-		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts()
-				+SPrivacyApplication.getConstSlash()+"status_updates", SPrivacyQuery.CONTACTS_STATUS_UPDATES);
-		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts()
-				+"raw_contacts", SPrivacyQuery.CONTACTS_RAW_CONTACTS);
-		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts()
-				+"groups", SPrivacyQuery.CONTACTS_GROUPS);
+				+SPrivacyApplication.getConstSlash()+"lookup"
+				+SPrivacyApplication.getConstSlash()+"*"
+				+SPrivacyApplication.getConstSlash()+"#", SPrivacyQuery.CONTACTS_LOOKUP_ID);
+		uriMatcher.addURI(PROVIDER_NAME, "data", SPrivacyQuery.CONTACTS_DATA);
+		uriMatcher.addURI(PROVIDER_NAME, "data"+SPrivacyApplication.getConstSlash()+"#", SPrivacyQuery.CONTACTS_DATA_ID);
+		uriMatcher.addURI(PROVIDER_NAME, "status_updates", SPrivacyQuery.CONTACTS_STATUS_UPDATES);
+		uriMatcher.addURI(PROVIDER_NAME, "raw_contacts", SPrivacyQuery.CONTACTS_RAW_CONTACTS);
+		uriMatcher.addURI(PROVIDER_NAME, "groups", SPrivacyQuery.CONTACTS_GROUPS);
 	}
 	
 	/**
@@ -156,27 +153,27 @@ public class SContentProvider extends ContentProvider {
 		 * Has to be concatenated with "data"
 		 * The form is: content://com.android.contacts/data
 		 */
-		Uri contactData = Uri.withAppendedPath(Contacts.CONTENT_URI,Contacts.Data.CONTENT_DIRECTORY);
+		Uri contactData = Uri.parse("content://com.android.contacts/data");
 		/**
 		 * Has to be concatenated with "data" and a contact_id
 		 * The form is: content://com.android.contacts/data/<contact_id>
 		 */
-		Uri contactDataId = Uri.withAppendedPath(Contacts.CONTENT_URI,Contacts.Data.CONTENT_DIRECTORY);
+		Uri contactDataId = Uri.parse("content://com.android.contacts/data");
 		/**
 		 * Has to be concatenated with "status_updates"
 		 * The form is: content://com.android.contacts/status_updates 
 		 */
-		Uri contactStatusUpdates = Contacts.CONTENT_URI;
+		Uri contactStatusUpdates = Uri.parse("content://com.android.contacts/status_updates");
 		/**
 		 * Has to be concatenated with "raw_contacts"
 		 * The form is: content://com.android.contacts/raw_contacts
 		 */
-		Uri contactRawContacts = Contacts.CONTENT_URI;
+		Uri contactRawContacts = Uri.parse("content://com.android.contacts/raw_contacts");
 		/**
 		 * Has to be concatenated with "groups"
 		 * The form is: content://com.android.contacts/groups
 		 */
-		Uri contactGroups = Contacts.CONTENT_URI;
+		Uri contactGroups = Uri.parse("content://com.android.contacts/groups");
 	}
 
 	/**
@@ -340,22 +337,29 @@ public class SContentProvider extends ContentProvider {
 	private Cursor dataControl(int provider, Uri uri, String[] projection, String selection, 
 			String[] selectionArgs, String sortOrder, 
 			Uri realURI, Uri fakeURI, Uri anonimyzedURI) {
-		Log.v(SPrivacyApplication.getDebugTag(), "Came into data control! with projection as follows"); 
-		if(projection!=null)
-			for(String p:projection)
-				Log.v(SPrivacyApplication.getDebugTag(), "data: "+p);
-		Log.v(SPrivacyApplication.getDebugTag(), "sort order "+ sortOrder);
+//		Log.v(SPrivacyApplication.getDebugTag(), "Came into data control! with projection as follows"); 
+//		if(projection!=null)
+//			for(String p:projection)
+//				Log.v(SPrivacyApplication.getDebugTag(), "data: "+p);
+//		Log.v(SPrivacyApplication.getDebugTag(), "sort order "+ sortOrder);
 		Cursor c = null;
 		if(accessControl.isPolicy()) {
+			/*------------------------------Logic for exDialer's discrepancies!!!--------------------------*/
 			/**
-			 * exDialer has a bug. It tries to sort by "name" while the column should be sort by display_name
+			 * exDialer has BUGS!!!!!!!!!!!
+			 * It tries to sort by "name" while the column should be sort by display_name
+			 * It also tries to sort by name when the column does not exist!!!!
 			 * So, added this piece of code
-			 * Worst possible piece of code. Change this to a better logic
 			 */
+			boolean foundDisplayName = false;
 			if(realURI.toString().contains("contacts"))
 				for(String oneColumnOfTheProjection : projection)
 					if(oneColumnOfTheProjection.contains("display_name"))
-						sortOrder = "display_name";
+						foundDisplayName = true;
+			if(sortOrder.equals("name") && foundDisplayName)
+				sortOrder = "display_name";
+			else
+				sortOrder = null;
 			/*---------------------------------------------------------------------------------------------*/
 			
 			c = getContext().getContentResolver()
@@ -475,7 +479,6 @@ public class SContentProvider extends ContentProvider {
 	public Cursor query(Uri uri, String[] projection, String selection, 
 			String[] selectionArgs, String sortOrder) {
 	
-		Log.v(SPrivacyApplication.getDebugTag(), "Came into Query!");
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 		qb.setTables(TABLE_NAME);
 		if (sortOrder == null || sortOrder == ""){
@@ -501,37 +504,30 @@ public class SContentProvider extends ContentProvider {
 				c = setAudioData(uri, projection, selection, selectionArgs, sortOrder);
 				break;
 			case SPrivacyQuery.CONTACTS:
-				Log.v(SPrivacyApplication.getDebugTag(), "Came into contacts switch!");
 				qb.setProjectionMap(PROJECTION_MAP);
 				c = setContactData(uri, projection, selection, selectionArgs, sortOrder);
 				break;
 			case SPrivacyQuery.CONTACTS_LOOKUP_ID:
-				Log.v(SPrivacyApplication.getDebugTag(), "Came into contacts switch!");
 				qb.setProjectionMap(PROJECTION_MAP);
 				c = setContactLookupIdData(uri, projection, selection, selectionArgs, sortOrder);
 				break;
 			case SPrivacyQuery.CONTACTS_DATA:
-				Log.v(SPrivacyApplication.getDebugTag(), "Came into contacts switch!");
 				qb.setProjectionMap(PROJECTION_MAP);
 				c = setContactDataData(uri, projection, selection, selectionArgs, sortOrder);
 				break;
 			case SPrivacyQuery.CONTACTS_DATA_ID:
-				Log.v(SPrivacyApplication.getDebugTag(), "Came into contacts switch!");
 				qb.setProjectionMap(PROJECTION_MAP);
 				c = setContactDataIdData(uri, projection, selection, selectionArgs, sortOrder);
 				break;
 			case SPrivacyQuery.CONTACTS_STATUS_UPDATES:
-				Log.v(SPrivacyApplication.getDebugTag(), "Came into contacts switch!");
 				qb.setProjectionMap(PROJECTION_MAP);
 				c = setContactStatusUpdatesData(uri, projection, selection, selectionArgs, sortOrder);
 				break;
 			case SPrivacyQuery.CONTACTS_RAW_CONTACTS:
-				Log.v(SPrivacyApplication.getDebugTag(), "Came into contacts switch!");
 				qb.setProjectionMap(PROJECTION_MAP);
 				c = setContactRawContactsData(uri, projection, selection, selectionArgs, sortOrder);
 				break;
 			case SPrivacyQuery.CONTACTS_GROUPS:
-				Log.v(SPrivacyApplication.getDebugTag(), "Came into contacts switch!");
 				qb.setProjectionMap(PROJECTION_MAP);
 				c = setContactGroupsData(uri, projection, selection, selectionArgs, sortOrder);
 				break;
@@ -564,11 +560,11 @@ public class SContentProvider extends ContentProvider {
 	private Cursor setContactData(Uri uri, String[] projection, String selection, 
 			String[] selectionArgs, String sortOrder) {
 		//TODO Have to figure out how to control based on app name and context
+		Log.v(SPrivacyApplication.getDebugTag(), "URI: "+uri.toString());
 		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
 				SPrivacyApplication.getConstContacts(), 
 				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
 				null), getContext());
-		Log.v(SPrivacyApplication.getDebugTag(), "Came into contacts switch!");
 		return dataControl(SPrivacyQuery.CONTACTS, uri, projection, selection, selectionArgs, sortOrder, 
 				RealURIsForQuery.contactUri, FakeURIsForQuery.contactUri, AnonimyzedURIsForQuery.contactUri);
 	}
@@ -576,11 +572,11 @@ public class SContentProvider extends ContentProvider {
 	private Cursor setContactLookupIdData(Uri uri, String[] projection,
 			String selection, String[] selectionArgs, String sortOrder) {
 		//TODO Have to figure out how to control based on app name and context
+		Log.v(SPrivacyApplication.getDebugTag(), "URI: "+uri.toString());
 		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
 				SPrivacyApplication.getConstContacts(), 
 				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
 				null), getContext());
-		Log.v(SPrivacyApplication.getDebugTag(), "Came into contacts switch!");
 		return dataControl(SPrivacyQuery.CONTACTS_LOOKUP_ID, uri, projection, selection, selectionArgs, sortOrder, 
 				RealURIsForQuery.contactLookupIDUri, FakeURIsForQuery.contactLookupIDUri, AnonimyzedURIsForQuery.contactLookupIDUri);
 	}
@@ -588,11 +584,11 @@ public class SContentProvider extends ContentProvider {
 	private Cursor setContactDataData(Uri uri, String[] projection,
 			String selection, String[] selectionArgs, String sortOrder) {
 		//TODO Have to figure out how to control based on app name and context
+		Log.v(SPrivacyApplication.getDebugTag(), "URI: "+uri.toString());
 		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
 				SPrivacyApplication.getConstContacts(), 
 				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
 				null), getContext());
-		Log.v(SPrivacyApplication.getDebugTag(), "Came into contacts switch!");
 		return dataControl(SPrivacyQuery.CONTACTS_DATA, uri, projection, selection, selectionArgs, sortOrder, 
 				RealURIsForQuery.contactData, FakeURIsForQuery.contactData, AnonimyzedURIsForQuery.contactData);
 	}
@@ -600,11 +596,11 @@ public class SContentProvider extends ContentProvider {
 	private Cursor setContactDataIdData(Uri uri, String[] projection,
 			String selection, String[] selectionArgs, String sortOrder) {
 		//TODO Have to figure out how to control based on app name and context
+		Log.v(SPrivacyApplication.getDebugTag(), "URI: "+uri.toString());
 		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
 				SPrivacyApplication.getConstContacts(), 
 				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
 				null), getContext());
-		Log.v(SPrivacyApplication.getDebugTag(), "Came into contacts switch!");
 		return dataControl(SPrivacyQuery.CONTACTS_DATA_ID, uri, projection, selection, selectionArgs, sortOrder, 
 				RealURIsForQuery.contactDataId, FakeURIsForQuery.contactDataId, AnonimyzedURIsForQuery.contactDataId);
 	}
@@ -612,11 +608,11 @@ public class SContentProvider extends ContentProvider {
 	private Cursor setContactStatusUpdatesData(Uri uri, String[] projection,
 			String selection, String[] selectionArgs, String sortOrder) {
 		//TODO Have to figure out how to control based on app name and context
+		Log.v(SPrivacyApplication.getDebugTag(), "URI: "+uri.toString());
 		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
 				SPrivacyApplication.getConstContacts(), 
 				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
 				null), getContext());
-		Log.v(SPrivacyApplication.getDebugTag(), "Came into contacts switch!");
 		return dataControl(SPrivacyQuery.CONTACTS_STATUS_UPDATES, uri, projection, selection, selectionArgs, sortOrder, 
 				RealURIsForQuery.contactStatusUpdates, FakeURIsForQuery.contactStatusUpdates, AnonimyzedURIsForQuery.contactStatusUpdates);
 	}
@@ -624,11 +620,11 @@ public class SContentProvider extends ContentProvider {
 	private Cursor setContactRawContactsData(Uri uri, String[] projection,
 			String selection, String[] selectionArgs, String sortOrder) {
 		//TODO Have to figure out how to control based on app name and context
+		Log.v(SPrivacyApplication.getDebugTag(), "URI: "+uri.toString());
 		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
 				SPrivacyApplication.getConstContacts(), 
 				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
 				null), getContext());
-		Log.v(SPrivacyApplication.getDebugTag(), "Came into contacts switch!");
 		return dataControl(SPrivacyQuery.CONTACTS_RAW_CONTACTS, uri, projection, selection, selectionArgs, sortOrder, 
 				RealURIsForQuery.contactRawContacts, FakeURIsForQuery.contactRawContacts, AnonimyzedURIsForQuery.contactRawContacts);
 	}
@@ -636,11 +632,11 @@ public class SContentProvider extends ContentProvider {
 	private Cursor setContactGroupsData(Uri uri, String[] projection,
 			String selection, String[] selectionArgs, String sortOrder) {
 		//TODO Have to figure out how to control based on app name and context
+		Log.v(SPrivacyApplication.getDebugTag(), "URI: "+uri.toString());
 		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
 				SPrivacyApplication.getConstContacts(), 
 				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
 				null), getContext());
-		Log.v(SPrivacyApplication.getDebugTag(), "Came into contacts switch!");
 		return dataControl(SPrivacyQuery.CONTACTS_GROUPS, uri, projection, selection, selectionArgs, sortOrder, 
 				RealURIsForQuery.contactGroups, FakeURIsForQuery.contactGroups, AnonimyzedURIsForQuery.contactGroups);
 	}
