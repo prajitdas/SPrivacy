@@ -55,7 +55,7 @@ public class CallLogs extends ContentProvider {
 	 */
 	static final String CALL_LOGS_TABLE_NAME = "fakeCallLogs";
 	static final String CREATE_DB_TABLE_CALL_LOGS = " CREATE TABLE " + CALL_LOGS_TABLE_NAME + " (" + 
-			CallLog.Calls._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+			CallLog.Calls._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
 			CallLog.Calls.TYPE + " INTEGER, " +
 			CallLog.Calls.NEW + " INTEGER, " +
 			CallLog.Calls.IS_READ + " INTEGER, " +
@@ -74,7 +74,7 @@ public class CallLogs extends ContentProvider {
 	
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-			db.execSQL(CALL_LOGS_TABLE_NAME);
+			db.execSQL(CREATE_DB_TABLE_CALL_LOGS);
 			loaDefaultData(db);
 		}
 		
@@ -115,7 +115,7 @@ public class CallLogs extends ContentProvider {
 		private int loadDataSet2(SQLiteDatabase db) {
 			//Data Set 2
 			ContentValues values = new ContentValues();
-			values.put(CallLog.Calls.TYPE,"0");
+			values.put(CallLog.Calls.TYPE,"2");
 			values.put(CallLog.Calls.NEW,"0");
 			values.put(CallLog.Calls.IS_READ,"0");
 			values.put(CallLog.Calls.DATE,"1408486152");
@@ -153,7 +153,7 @@ public class CallLogs extends ContentProvider {
 		private int loadDataSet4(SQLiteDatabase db) {
 			//Data Set 4
 			ContentValues values = new ContentValues();
-			values.put(CallLog.Calls.TYPE,"1");
+			values.put(CallLog.Calls.TYPE,"3");
 			values.put(CallLog.Calls.NEW,"0");
 			values.put(CallLog.Calls.IS_READ,"0");
 			values.put(CallLog.Calls.DATE,"1408386065");
@@ -173,7 +173,6 @@ public class CallLogs extends ContentProvider {
 	
 	@Override
 	public boolean onCreate() {
-		Log.v(SPrivacyApplication.getDebugTag(), CONTENT_URI.toString());
 		context = getContext();
 		dbHelper = new DatabaseHelper(context);
 		/**
