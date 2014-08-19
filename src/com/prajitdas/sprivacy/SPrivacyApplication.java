@@ -22,6 +22,8 @@ public class SPrivacyApplication extends Application {
 
 	private static final String CONST_CONTACTS = "contacts";
 
+	private static final String CONST_CALL_LOGS = "call_logs";
+
 	private static final String CONST_FAKE = "fake";
 
 	private static final String CONST_FAKE_AUTHORITY_PREFIX = "com.prajitdas.sprivacy.fakecontentprovider.Content.";
@@ -135,5 +137,9 @@ public class SPrivacyApplication extends Application {
 
 	public static String getConstScheme() {
 		return CONST_SCHEME;
+	}
+
+	public static String getConstCallLogs() {
+		return CONST_CALL_LOGS;
 	}
 }

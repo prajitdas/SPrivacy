@@ -60,6 +60,13 @@
         </provider>
         <!-- Fake content providers -->
         <provider
+            android:name=".contentprovider.util.fakecontentproviders.CallLogs"
+            android:authorities="com.prajitdas.sprivacy.fakecontentprovider.Content.fakecall_logs"
+            android:exported="true"
+            android:label="@string/sprivacy_fake_contact_content_provider_label" >
+            <!-- android:permission="android.permission.sprivacy.READ_WRITE_CONTENT" > -->
+        </provider>
+        <provider
             android:name=".contentprovider.util.fakecontentproviders.Contacts"
             android:authorities="com.prajitdas.sprivacy.fakecontentprovider.Content.fakecontacts"
             android:exported="true"
