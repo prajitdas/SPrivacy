@@ -173,6 +173,7 @@ public class CallLogs extends ContentProvider {
 	
 	@Override
 	public boolean onCreate() {
+		Log.v(SPrivacyApplication.getDebugTag(), CONTENT_URI.toString());
 		context = getContext();
 		dbHelper = new DatabaseHelper(context);
 		/**

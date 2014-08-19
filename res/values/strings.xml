@@ -12,6 +12,7 @@
     <string name="sprivacy_fake_image_content_provider_label">SPrivacy Fake Image Content Provider</string>
     <string name="sprivacy_fake_video_content_provider_label">SPrivacy Fake Video Content Provider</string>
     <string name="sprivacy_fake_audio_content_provider_label">SPrivacy Fake Audio Content Provider</string>
+    <string name="sprivacy_fake_calllogs_content_provider_label">SPrivacy Fake Call Logs Provider</string>
     <string name="sprivacy_fake_contact_content_provider_label">SPrivacy Fake Contact Content Provider</string>
     <string name="sprivacy_fake_file_content_provider_label">SPrivacy Fake File Content Provider</string>
     <string name="sprivacy_anonymized_image_content_provider_label">SPrivacy Anonymized Image Content Provider</string>

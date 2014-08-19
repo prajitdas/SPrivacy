@@ -12,6 +12,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.CallLog;
 import android.provider.ContactsContract.Contacts;
 import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.Files;
@@ -49,6 +50,9 @@ public class SContentProvider extends ContentProvider {
 	static final Uri CONTACTS_CONTENT_URI = Uri.parse(PROVIDER_BASE_URL+
 			SPrivacyApplication.getConstSlash()+
 			SPrivacyApplication.getConstContacts());
+	static final Uri CALL_LOGS_CONTENT_URI = Uri.parse(PROVIDER_BASE_URL+
+			SPrivacyApplication.getConstSlash()+
+			SPrivacyApplication.getConstCallLogs());
 	static final Uri CONTACTS_LOOKUP_ID_URI = Uri.parse(PROVIDER_BASE_URL+
 			SPrivacyApplication.getConstSlash()+
 			SPrivacyApplication.getConstContacts()+
@@ -97,6 +101,7 @@ public class SContentProvider extends ContentProvider {
 		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstVideos(), SPrivacyQuery.VIDEOS);
 		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstAudios(), SPrivacyQuery.AUDIOS);
 
+		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstCallLogs(), SPrivacyQuery.CALL_LOGS);
 		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts(), SPrivacyQuery.CONTACTS);
 		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts()
 				+SPrivacyApplication.getConstSlash()+"lookup"
@@ -174,6 +179,7 @@ public class SContentProvider extends ContentProvider {
 		 * The form is: content://com.android.contacts/groups
 		 */
 		Uri contactGroups = Uri.parse("content://com.android.contacts/groups");
+		Uri callLogsUri = CallLog.Calls.CONTENT_URI;
 	}
 
 	/**
@@ -274,6 +280,10 @@ public class SContentProvider extends ContentProvider {
 				+SPrivacyApplication.getConstContacts()
 				+SPrivacyApplication.getConstSlash()
 				+"groups");
+		Uri callLogsUri = Uri.parse(SPrivacyApplication.getConstScheme()
+				+SPrivacyApplication.getConstFakeAuthorityPrefix()
+				+SPrivacyApplication.getConstFake()
+				+SPrivacyApplication.getConstCallLogs());
     }
 
 	/**
@@ -374,6 +384,10 @@ public class SContentProvider extends ContentProvider {
 				+SPrivacyApplication.getConstContacts()
 				+SPrivacyApplication.getConstSlash()
 				+"groups");
+		Uri callLogsUri = Uri.parse(SPrivacyApplication.getConstScheme()
+				+SPrivacyApplication.getConstAnonymizedAuthorityPrefix()
+				+SPrivacyApplication.getConstAnnonymous()
+				+SPrivacyApplication.getConstCallLogs());
 	}
 
 	private static HashMap<String, String> PROJECTION_MAP;
@@ -518,6 +532,8 @@ public class SContentProvider extends ContentProvider {
 				return "vnd.android.cursor.item/contact";
 			case SPrivacyQuery.CONTACTS_GROUPS:
 				return "vnd.android.cursor.item/contact";
+			case SPrivacyQuery.CALL_LOGS:
+				return "vnd.android.cursor.dir/calls";
 			default:
 				throw new IllegalArgumentException("Unsupported URI: " + uri);
 		}
@@ -595,6 +611,10 @@ public class SContentProvider extends ContentProvider {
 				qb.setProjectionMap(PROJECTION_MAP);
 				c = setContactGroupsData(uri, projection, selection, selectionArgs, sortOrder);
 				break;
+			case SPrivacyQuery.CALL_LOGS:
+				qb.setProjectionMap(PROJECTION_MAP);
+				c = setCallLogsData(uri, projection, selection, selectionArgs, sortOrder);
+				break;
 			default:
 				throw new IllegalArgumentException("Unknown URI " + uri);
 		}
@@ -621,6 +641,18 @@ public class SContentProvider extends ContentProvider {
 		return c;
 	}
 	
+	private Cursor setCallLogsData(Uri uri, String[] projection, String selection, 
+			String[] selectionArgs, String sortOrder) {
+		//TODO Have to figure out how to control based on app name and context
+		Log.v(SPrivacyApplication.getDebugTag(), "URI: "+uri.toString());
+		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
+				SPrivacyApplication.getConstContacts(), 
+				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
+				null), getContext());
+		return dataControl(SPrivacyQuery.CALL_LOGS, uri, projection, selection, selectionArgs, sortOrder, 
+				RealURIsForQuery.callLogsUri, FakeURIsForQuery.callLogsUri, AnonimyzedURIsForQuery.callLogsUri);
+	}
+
 	private Cursor setContactData(Uri uri, String[] projection, String selection, 
 			String[] selectionArgs, String sortOrder) {
 		//TODO Have to figure out how to control based on app name and context
@@ -841,5 +873,6 @@ public class SContentProvider extends ContentProvider {
 		static final int CONTACTS_STATUS_UPDATES = 9;
 		static final int CONTACTS_RAW_CONTACTS = 10;
 		static final int CONTACTS_GROUPS = 11;
+		static final int CALL_LOGS = 12;
 	}
 }

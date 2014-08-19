@@ -61,9 +61,9 @@
         <!-- Fake content providers -->
         <provider
             android:name=".contentprovider.util.fakecontentproviders.CallLogs"
-            android:authorities="com.prajitdas.sprivacy.fakecontentprovider.Content.fakecall_logs"
+            android:authorities="com.prajitdas.sprivacy.fakecontentprovider.Content.fakecalllogs"
             android:exported="true"
-            android:label="@string/sprivacy_fake_contact_content_provider_label" >
+            android:label="@string/sprivacy_fake_calllogs_content_provider_label" >
             <!-- android:permission="android.permission.sprivacy.READ_WRITE_CONTENT" > -->
         </provider>
         <provider
@@ -103,6 +103,13 @@
         </provider>
         
         <!-- Anonymized content providers -->
+        <provider
+            android:name=".contentprovider.util.anonymizedcontentproviders.CallLogs"
+            android:authorities="com.prajitdas.sprivacy.anonymizedcontentprovider.Content.anonymizedcalllogs"
+            android:exported="true"
+            android:label="@string/sprivacy_fake_calllogs_content_provider_label" >
+            <!-- android:permission="android.permission.sprivacy.READ_WRITE_CONTENT" > -->
+        </provider>
         <provider
             android:name=".contentprovider.util.anonymizedcontentproviders.Contacts"
             android:authorities="com.prajitdas.sprivacy.anonymizedcontentprovider.Content.anonymizedcontacts"

@@ -22,7 +22,7 @@ public class SPrivacyApplication extends Application {
 
 	private static final String CONST_CONTACTS = "contacts";
 
-	private static final String CONST_CALL_LOGS = "call_logs";
+	private static final String CONST_CALL_LOGS = "calllogs";
 
 	private static final String CONST_FAKE = "fake";
 
