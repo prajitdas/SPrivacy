@@ -173,6 +173,7 @@ public class Contacts extends ContentProvider {
 		private int loadDataSet1(SQLiteDatabase db) {
 			//Data Set 1
 			ContentValues values = new ContentValues();
+//			values.put(ContactsContract.Contacts.LOOKUP_KEY,"148i7d4474d90b0231cf.148i52aee9f68970fc96");
 			values.put(ContactsContract.Contacts.LOOKUP_KEY,"johndoe");
 			values.put(ContactsContract.Contacts.DISPLAY_NAME,"John Doe");
 			values.put(ContactsContract.Contacts.PHOTO_ID,"");
@@ -249,6 +250,7 @@ public class Contacts extends ContentProvider {
 		private int loadDataSet2(SQLiteDatabase db) {
 			//Data Set 2
 			ContentValues values = new ContentValues();
+//			values.put(ContactsContract.Contacts.LOOKUP_KEY,"148i7d4474d90b0231cf.148i52aee9f68970fc78");
 			values.put(ContactsContract.Contacts.LOOKUP_KEY,"janedoe");
 			values.put(ContactsContract.Contacts.DISPLAY_NAME,"Jane Doe");
 			values.put(ContactsContract.Contacts.PHOTO_ID,"");
@@ -325,6 +327,7 @@ public class Contacts extends ContentProvider {
 		private int loadDataSet3(SQLiteDatabase db) {
 			//Data Set 3
 			ContentValues values = new ContentValues();
+//			values.put(ContactsContract.Contacts.LOOKUP_KEY,"148i7d4474d90b0231cf.148i52aee9f68970fc12");
 			values.put(ContactsContract.Contacts.LOOKUP_KEY,"johnnydoe");
 			values.put(ContactsContract.Contacts.DISPLAY_NAME,"Johnny Doe");
 			values.put(ContactsContract.Contacts.PHOTO_ID,"");
@@ -401,6 +404,7 @@ public class Contacts extends ContentProvider {
 		private int loadDataSet4(SQLiteDatabase db) {
 			//Data Set 4
 			ContentValues values = new ContentValues();
+//			values.put(ContactsContract.Contacts.LOOKUP_KEY,"148i7d4474d90b0231cf.148i52aee9f68970fc45");
 			values.put(ContactsContract.Contacts.LOOKUP_KEY,"joannadoe");
 			values.put(ContactsContract.Contacts.DISPLAY_NAME,"Joanna Doe");
 			values.put(ContactsContract.Contacts.PHOTO_ID,"");
