@@ -25,48 +25,91 @@ import com.prajitdas.sprivacy.policymanager.util.AccessControl;
 import com.prajitdas.sprivacy.policymanager.util.PolicyQuery;
 
 public class SContentProvider extends ContentProvider {
+	/**
+	 * Forming the authority of the SPrivacy provider
+	 */
 	static final String PROVIDER_NAME = SPrivacyApplication.getConstSprivacyAuthority();
-	static final String URL = "content://" + PROVIDER_NAME;
+	static final String URL = SPrivacyApplication.getConstScheme() + PROVIDER_NAME;
 
-	static final Uri IMAGES_CONTENT_URI = Uri.parse(URL 
-			+ SPrivacyApplication.getConstSlash() + SPrivacyApplication.getConstImages());
+	/**
+	 * Forming the URIs for the contents that we will provide
+	 */
+	static final Uri IMAGES_CONTENT_URI = Uri.parse(URL+
+			SPrivacyApplication.getConstSlash()+
+			SPrivacyApplication.getConstImages());
+	static final Uri FILES_CONTENT_URI = Uri.parse(URL+
+			SPrivacyApplication.getConstSlash()+
+			SPrivacyApplication.getConstFiles());
+	static final Uri VIDEOS_CONTENT_URI = Uri.parse(URL+
+			SPrivacyApplication.getConstSlash()+
+			SPrivacyApplication.getConstVideos());
+	static final Uri AUDIOS_CONTENT_URI = Uri.parse(URL+
+			SPrivacyApplication.getConstSlash()+
+			SPrivacyApplication.getConstAudios());
+	static final Uri CONTACTS_CONTENT_URI = Uri.parse(URL+
+			SPrivacyApplication.getConstSlash()+
+			SPrivacyApplication.getConstContacts());
+	static final Uri CONTACTS_LOOKUP_ID_URI = Uri.parse(URL+
+			SPrivacyApplication.getConstSlash()+
+			SPrivacyApplication.getConstContacts()+
+			SPrivacyApplication.getConstSlash()+
+			"lookup");
+//			"lookup"+
+//			SPrivacyApplication.getConstSlash()+
+//			"*"+
+//			SPrivacyApplication.getConstSlash()+
+//			"#");
+	static final Uri CONTACTS_DATA_URI = Uri.parse(URL+
+			SPrivacyApplication.getConstSlash()+
+			SPrivacyApplication.getConstContacts()+
+			SPrivacyApplication.getConstSlash()+
+			"data");
+//	static final Uri CONTACTS_DATA_ID_URI = Uri.parse(URL+
+//			SPrivacyApplication.getConstSlash()+
+//			SPrivacyApplication.getConstContacts()+
+//			SPrivacyApplication.getConstSlash()+
+//			"data"+
+//			SPrivacyApplication.getConstSlash()+
+//			"#");
+	static final Uri CONTACTS_STATUS_UPDATES_URI = Uri.parse(URL+
+			SPrivacyApplication.getConstSlash()+
+			SPrivacyApplication.getConstContacts()+
+			SPrivacyApplication.getConstSlash()+
+			"status_updates");
+	static final Uri CONTACTS_RAW_CONTACTS_URI = Uri.parse(URL+
+			SPrivacyApplication.getConstSlash()+
+			SPrivacyApplication.getConstContacts()+
+			"raw_contacts");
+	static final Uri CONTACTS_GROUPS_URI = Uri.parse(URL+
+			SPrivacyApplication.getConstSlash()+
+			SPrivacyApplication.getConstContacts()+
+			"groups");
+
 	
-	static final Uri FILES_CONTENT_URI = Uri.parse(URL 
-			+ SPrivacyApplication.getConstSlash() + SPrivacyApplication.getConstFiles());
-	static final Uri VIDEOS_CONTENT_URI = Uri.parse(URL 
-			+ SPrivacyApplication.getConstSlash() + SPrivacyApplication.getConstVideos());
-	
-	static final Uri AUDIOS_CONTENT_URI = Uri.parse(URL 
-			+ SPrivacyApplication.getConstSlash() + SPrivacyApplication.getConstAudios());
-	static final Uri CONTACTS_CONTENT_URI = Uri.parse(URL 
-			+ SPrivacyApplication.getConstSlash() + SPrivacyApplication.getConstContacts());
-	
-//    // columns queried by the contacts app
-//	final static int ID = 0;
-//    final static int LOOKUP_KEY = 1;
-//    final static int DISPLAY_NAME = 2;
-//    final static int PHOTO_THUMBNAIL_DATA = 3;
-//    final static int SORT_KEY = 4;
-    
     static final String _ID = "_id";
 	static final String NAME = "name";
 
-	static final int IMAGES = 1;
-	static final int FILES = 2;
-	static final int VIDEOS = 3;
-	static final int AUDIOS = 4;
-	static final int CONTACTS = 5;
-//	static final int CONTACTS_ID = 6;
-	
 	static final UriMatcher uriMatcher;
 	static{
 		uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstImages(), IMAGES);
-		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstFiles(), FILES);
-		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstVideos(), VIDEOS);
-		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstAudios(), AUDIOS);
-		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts(), CONTACTS);
-//		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts()+"/#", CONTACTS_ID);
+		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstImages(), SPrivacyQuery.IMAGES);
+		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstFiles(), SPrivacyQuery.FILES);
+		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstVideos(), SPrivacyQuery.VIDEOS);
+		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstAudios(), SPrivacyQuery.AUDIOS);
+
+		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts(), SPrivacyQuery.CONTACTS);
+		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts()
+				+SPrivacyApplication.getConstSlash()+"*"+SPrivacyApplication.getConstSlash()+"#", SPrivacyQuery.CONTACTS_LOOKUP_ID);
+		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts()
+				+SPrivacyApplication.getConstSlash()+"data", SPrivacyQuery.CONTACTS_DATA);
+		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts()
+				+SPrivacyApplication.getConstSlash()+"data"+SPrivacyApplication.getConstSlash()+"#", SPrivacyQuery.CONTACTS_DATA_ID);
+		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts()
+				+SPrivacyApplication.getConstSlash()+"status_updates", SPrivacyQuery.CONTACTS_STATUS_UPDATES);
+		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts()
+				+"raw_contacts", SPrivacyQuery.CONTACTS_RAW_CONTACTS);
+		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstContacts()
+				+"groups", SPrivacyQuery.CONTACTS_GROUPS);
 	}
 	
 	/**
@@ -102,8 +145,39 @@ public class SContentProvider extends ContentProvider {
 		Uri audioUri = Audio.Media.EXTERNAL_CONTENT_URI;
 		//Gets the contacts on the device
 		Uri contactUri = Contacts.CONTENT_URI;
-//		Uri contactDataUri = Contacts.CONTENT_LOOKUP_URI;
-    }
+		/**
+		 * The following URIs are to be verified for real and fake contents
+		 * ----------------------------------------------------------------------------------------------
+		 * Has to be concatenated with the lookup key and if possible the contact id
+		 * The form is: content://com.android.contacts/contacts/lookup/<lookup_key>/<optional_contact_id>
+		 */
+		Uri contactLookupIDUri = Contacts.CONTENT_LOOKUP_URI;
+		/**
+		 * Has to be concatenated with "data"
+		 * The form is: content://com.android.contacts/data
+		 */
+		Uri contactData = Uri.withAppendedPath(Contacts.CONTENT_URI,Contacts.Data.CONTENT_DIRECTORY);
+		/**
+		 * Has to be concatenated with "data" and a contact_id
+		 * The form is: content://com.android.contacts/data/<contact_id>
+		 */
+		Uri contactDataId = Uri.withAppendedPath(Contacts.CONTENT_URI,Contacts.Data.CONTENT_DIRECTORY);
+		/**
+		 * Has to be concatenated with "status_updates"
+		 * The form is: content://com.android.contacts/status_updates 
+		 */
+		Uri contactStatusUpdates = Contacts.CONTENT_URI;
+		/**
+		 * Has to be concatenated with "raw_contacts"
+		 * The form is: content://com.android.contacts/raw_contacts
+		 */
+		Uri contactRawContacts = Contacts.CONTENT_URI;
+		/**
+		 * Has to be concatenated with "groups"
+		 * The form is: content://com.android.contacts/groups
+		 */
+		Uri contactGroups = Contacts.CONTENT_URI;
+	}
 
 	/**
      * This interface defines constants for the Cursor and CursorLoader
@@ -139,6 +213,38 @@ public class SContentProvider extends ContentProvider {
 				+SPrivacyApplication.getConstContacts()
 				+SPrivacyApplication.getConstSlash()
 				+SPrivacyApplication.getConstContacts());
+		/**
+		 * The following URIs are to be verified for real and fake contents
+		 * ----------------------------------------------------------------------------------------------
+		 * Has to be concatenated with the lookup key and if possible the contact id
+		 * The form is: content://com.android.contacts/contacts/lookup/<lookup_key>/<optional_contact_id>
+		 */
+		Uri contactLookupIDUri = Contacts.CONTENT_LOOKUP_URI;
+		/**
+		 * Has to be concatenated with "data"
+		 * The form is: content://com.android.contacts/data
+		 */
+		Uri contactData = Uri.withAppendedPath(Contacts.CONTENT_URI,Contacts.Data.CONTENT_DIRECTORY);
+		/**
+		 * Has to be concatenated with "data" and a contact_id
+		 * The form is: content://com.android.contacts/data/<contact_id>
+		 */
+		Uri contactDataId = Uri.withAppendedPath(Contacts.CONTENT_URI,Contacts.Data.CONTENT_DIRECTORY);
+		/**
+		 * Has to be concatenated with "status_updates"
+		 * The form is: content://com.android.contacts/status_updates 
+		 */
+		Uri contactStatusUpdates = Contacts.CONTENT_URI;
+		/**
+		 * Has to be concatenated with "raw_contacts"
+		 * The form is: content://com.android.contacts/raw_contacts
+		 */
+		Uri contactRawContacts = Contacts.CONTENT_URI;
+		/**
+		 * Has to be concatenated with "groups"
+		 * The form is: content://com.android.contacts/groups
+		 */
+		Uri contactGroups = Contacts.CONTENT_URI;
     }
 
 	/**
@@ -175,7 +281,38 @@ public class SContentProvider extends ContentProvider {
 				+SPrivacyApplication.getConstContacts()
 				+SPrivacyApplication.getConstSlash()
 				+SPrivacyApplication.getConstContacts());
-    }
+		/**
+		 * The following URIs are to be verified for real and fake contents
+		 * ----------------------------------------------------------------------------------------------
+		 * Has to be concatenated with the lookup key and if possible the contact id
+		 * The form is: content://com.android.contacts/contacts/lookup/<lookup_key>/<optional_contact_id>
+		 */
+		Uri contactLookupIDUri = Contacts.CONTENT_LOOKUP_URI;
+		/**
+		 * Has to be concatenated with "data"
+		 * The form is: content://com.android.contacts/data
+		 */
+		Uri contactData = Uri.withAppendedPath(Contacts.CONTENT_URI,Contacts.Data.CONTENT_DIRECTORY);
+		/**
+		 * Has to be concatenated with "data" and a contact_id
+		 * The form is: content://com.android.contacts/data/<contact_id>
+		 */
+		Uri contactDataId = Uri.withAppendedPath(Contacts.CONTENT_URI,Contacts.Data.CONTENT_DIRECTORY);
+		/**
+		 * Has to be concatenated with "status_updates"
+		 * The form is: content://com.android.contacts/status_updates 
+		 */
+		Uri contactStatusUpdates = Contacts.CONTENT_URI;
+		/**
+		 * Has to be concatenated with "raw_contacts"
+		 * The form is: content://com.android.contacts/raw_contacts
+		 */
+		Uri contactRawContacts = Contacts.CONTENT_URI;
+		/**
+		 * Has to be concatenated with "groups"
+		 * The form is: content://com.android.contacts/groups
+		 */
+		Uri contactGroups = Contacts.CONTENT_URI;    }
 
 	private static HashMap<String, String> PROJECTION_MAP;
 	private AccessControl accessControl;
@@ -199,51 +336,6 @@ public class SContentProvider extends ContentProvider {
 	public Bundle call(String method, String arg, Bundle extras) {
 		return extras;
 	}
-
-//	private Uri getRealUri(int choice) {
-//		switch(choice) {
-//			case 1:
-//				return Uri.parse("content://media/external/images/media");
-//			case 2:
-//				return Uri.parse("content://media/external/files/media");
-//			case 3:
-//				return Uri.parse("content://media/external/videos/media");
-//			case 4:
-//				return Uri.parse("content://media/external/audios/media");
-//			default:
-//				return Uri.parse("content://contacts");
-//		}
-//	}
-//
-//	private Uri getFakeUri(int choice) {
-//		switch(choice) {
-//			case 1:
-//				return Uri.parse("content://media/external/images/media");
-//			case 2:
-//				return Uri.parse("content://media/external/files/media");
-//			case 3:
-//				return Uri.parse("content://media/external/videos/media");
-//			case 4:
-//				return Uri.parse("content://media/external/audios/media");
-//			default:
-//				return Uri.parse("content://contacts");
-//		}
-//	}
-//
-//	private Uri getAnonymousUri(int choice) {
-//		switch(choice) {
-//			case 1:
-//				return Uri.parse("content://media/external/images/media");
-//			case 2:
-//				return Uri.parse("content://media/external/files/media");
-//			case 3:
-//				return Uri.parse("content://media/external/videos/media");
-//			case 4:
-//				return Uri.parse("content://media/external/audios/media");
-//			default:
-//				return Uri.parse("content://contacts");
-//		}
-//	}
 
 	private Cursor dataControl(int provider, Uri uri, String[] projection, String selection, 
 			String[] selectionArgs, String sortOrder, 
@@ -335,18 +427,28 @@ public class SContentProvider extends ContentProvider {
 	@Override
 	public String getType(Uri uri) {
 		switch (uriMatcher.match(uri)){
-			case IMAGES:
+			case SPrivacyQuery.IMAGES:
 				return "vnd.android.cursor.dir/image";
-			case FILES:
+			case SPrivacyQuery.FILES:
 				return "vnd.android.cursor.dir/file";
-			case VIDEOS:
+			case SPrivacyQuery.VIDEOS:
 				return "vnd.android.cursor.dir/video";
-			case AUDIOS:
+			case SPrivacyQuery.AUDIOS:
 				return "vnd.android.cursor.dir/audio";
-			case CONTACTS:
+			case SPrivacyQuery.CONTACTS:
 				return "vnd.android.cursor.dir/contact";
-//			case CONTACTS_ID:
-//				return "vnd.android.cursor.dir/contact";
+			case SPrivacyQuery.CONTACTS_LOOKUP_ID:
+				return "vnd.android.cursor.item/contact";
+			case SPrivacyQuery.CONTACTS_DATA:
+				return "vnd.android.cursor.item/contact";
+			case SPrivacyQuery.CONTACTS_DATA_ID:
+				return "vnd.android.cursor.item/contact";
+			case SPrivacyQuery.CONTACTS_STATUS_UPDATES:
+				return "vnd.android.cursor.item/contact";
+			case SPrivacyQuery.CONTACTS_RAW_CONTACTS:
+				return "vnd.android.cursor.item/contact";
+			case SPrivacyQuery.CONTACTS_GROUPS:
+				return "vnd.android.cursor.item/contact";
 			default:
 				throw new IllegalArgumentException("Unsupported URI: " + uri);
 		}
@@ -382,31 +484,57 @@ public class SContentProvider extends ContentProvider {
 
 		Cursor c;
 		switch (uriMatcher.match(uri)) {
-			case IMAGES:
+			case SPrivacyQuery.IMAGES:
 				qb.setProjectionMap(PROJECTION_MAP);
 				c = setImageData(uri, projection, selection, selectionArgs, sortOrder);
 				break;
-			case FILES:
+			case SPrivacyQuery.FILES:
 				qb.setProjectionMap(PROJECTION_MAP);
 				c = setFileData(uri, projection, selection, selectionArgs, sortOrder);
 				break;
-			case VIDEOS:
+			case SPrivacyQuery.VIDEOS:
 				qb.setProjectionMap(PROJECTION_MAP);
 				c = setVideoData(uri, projection, selection, selectionArgs, sortOrder);
 				break;
-			case AUDIOS:
+			case SPrivacyQuery.AUDIOS:
 				qb.setProjectionMap(PROJECTION_MAP);
 				c = setAudioData(uri, projection, selection, selectionArgs, sortOrder);
 				break;
-			case CONTACTS:
+			case SPrivacyQuery.CONTACTS:
 				Log.v(SPrivacyApplication.getDebugTag(), "Came into contacts switch!");
 				qb.setProjectionMap(PROJECTION_MAP);
 				c = setContactData(uri, projection, selection, selectionArgs, sortOrder);
 				break;
-//			case CONTACTS_ID:
-//				qb.setProjectionMap(PROJECTION_MAP);
-//				c = setContactSingleData(uri, projection, selection, selectionArgs, sortOrder);
-//				break;
+			case SPrivacyQuery.CONTACTS_LOOKUP_ID:
+				Log.v(SPrivacyApplication.getDebugTag(), "Came into contacts switch!");
+				qb.setProjectionMap(PROJECTION_MAP);
+				c = setContactLookupIdData(uri, projection, selection, selectionArgs, sortOrder);
+				break;
+			case SPrivacyQuery.CONTACTS_DATA:
+				Log.v(SPrivacyApplication.getDebugTag(), "Came into contacts switch!");
+				qb.setProjectionMap(PROJECTION_MAP);
+				c = setContactDataData(uri, projection, selection, selectionArgs, sortOrder);
+				break;
+			case SPrivacyQuery.CONTACTS_DATA_ID:
+				Log.v(SPrivacyApplication.getDebugTag(), "Came into contacts switch!");
+				qb.setProjectionMap(PROJECTION_MAP);
+				c = setContactDataIdData(uri, projection, selection, selectionArgs, sortOrder);
+				break;
+			case SPrivacyQuery.CONTACTS_STATUS_UPDATES:
+				Log.v(SPrivacyApplication.getDebugTag(), "Came into contacts switch!");
+				qb.setProjectionMap(PROJECTION_MAP);
+				c = setContactStatusUpdatesData(uri, projection, selection, selectionArgs, sortOrder);
+				break;
+			case SPrivacyQuery.CONTACTS_RAW_CONTACTS:
+				Log.v(SPrivacyApplication.getDebugTag(), "Came into contacts switch!");
+				qb.setProjectionMap(PROJECTION_MAP);
+				c = setContactRawContactsData(uri, projection, selection, selectionArgs, sortOrder);
+				break;
+			case SPrivacyQuery.CONTACTS_GROUPS:
+				Log.v(SPrivacyApplication.getDebugTag(), "Came into contacts switch!");
+				qb.setProjectionMap(PROJECTION_MAP);
+				c = setContactGroupsData(uri, projection, selection, selectionArgs, sortOrder);
+				break;
 			default:
 				throw new IllegalArgumentException("Unknown URI " + uri);
 		}
@@ -433,17 +561,6 @@ public class SContentProvider extends ContentProvider {
 		return c;
 	}
 	
-	private Cursor setAudioData(Uri uri, String[] projection, String selection, 
-			String[] selectionArgs, String sortOrder) {
-		//TODO Have to figure out how to control based on app name and context
-		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
-				SPrivacyApplication.getConstAudios(), 
-				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
-				null), getContext());
-		return dataControl(AUDIOS, uri, projection, selection, selectionArgs, sortOrder, 
-				RealURIsForQuery.audioUri, FakeURIsForQuery.audioUri, AnonimyzedURIsForQuery.audioUri);
-	}
-	
 	private Cursor setContactData(Uri uri, String[] projection, String selection, 
 			String[] selectionArgs, String sortOrder) {
 		//TODO Have to figure out how to control based on app name and context
@@ -452,21 +569,93 @@ public class SContentProvider extends ContentProvider {
 				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
 				null), getContext());
 		Log.v(SPrivacyApplication.getDebugTag(), "Came into contacts switch!");
-		return dataControl(CONTACTS, uri, projection, selection, selectionArgs, sortOrder, 
+		return dataControl(SPrivacyQuery.CONTACTS, uri, projection, selection, selectionArgs, sortOrder, 
 				RealURIsForQuery.contactUri, FakeURIsForQuery.contactUri, AnonimyzedURIsForQuery.contactUri);
 	}
-	
-//	private Cursor setContactSingleData(Uri uri, String[] projection,
-//			String selection, String[] selectionArgs, String sortOrder) {
-//		//TODO Have to figure out how to control based on app name and context
-//		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
-//				SPrivacyApplication.getConstContacts(), 
-//				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
-//				null), getContext());
-//		return dataControl(CONTACTS, uri, projection, selection, selectionArgs, sortOrder, 
-//				RealURIsForQuery.contactDataUri, FakeURIsForQuery.contactDataUri, AnonimyzedURIsForQuery.contactDataUri);
-//	}
 
+	private Cursor setContactLookupIdData(Uri uri, String[] projection,
+			String selection, String[] selectionArgs, String sortOrder) {
+		//TODO Have to figure out how to control based on app name and context
+		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
+				SPrivacyApplication.getConstContacts(), 
+				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
+				null), getContext());
+		Log.v(SPrivacyApplication.getDebugTag(), "Came into contacts switch!");
+		return dataControl(SPrivacyQuery.CONTACTS_LOOKUP_ID, uri, projection, selection, selectionArgs, sortOrder, 
+				RealURIsForQuery.contactLookupIDUri, FakeURIsForQuery.contactLookupIDUri, AnonimyzedURIsForQuery.contactLookupIDUri);
+	}
+
+	private Cursor setContactDataData(Uri uri, String[] projection,
+			String selection, String[] selectionArgs, String sortOrder) {
+		//TODO Have to figure out how to control based on app name and context
+		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
+				SPrivacyApplication.getConstContacts(), 
+				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
+				null), getContext());
+		Log.v(SPrivacyApplication.getDebugTag(), "Came into contacts switch!");
+		return dataControl(SPrivacyQuery.CONTACTS_DATA, uri, projection, selection, selectionArgs, sortOrder, 
+				RealURIsForQuery.contactData, FakeURIsForQuery.contactData, AnonimyzedURIsForQuery.contactData);
+	}
+
+	private Cursor setContactDataIdData(Uri uri, String[] projection,
+			String selection, String[] selectionArgs, String sortOrder) {
+		//TODO Have to figure out how to control based on app name and context
+		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
+				SPrivacyApplication.getConstContacts(), 
+				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
+				null), getContext());
+		Log.v(SPrivacyApplication.getDebugTag(), "Came into contacts switch!");
+		return dataControl(SPrivacyQuery.CONTACTS_DATA_ID, uri, projection, selection, selectionArgs, sortOrder, 
+				RealURIsForQuery.contactDataId, FakeURIsForQuery.contactDataId, AnonimyzedURIsForQuery.contactDataId);
+	}
+
+	private Cursor setContactStatusUpdatesData(Uri uri, String[] projection,
+			String selection, String[] selectionArgs, String sortOrder) {
+		//TODO Have to figure out how to control based on app name and context
+		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
+				SPrivacyApplication.getConstContacts(), 
+				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
+				null), getContext());
+		Log.v(SPrivacyApplication.getDebugTag(), "Came into contacts switch!");
+		return dataControl(SPrivacyQuery.CONTACTS_STATUS_UPDATES, uri, projection, selection, selectionArgs, sortOrder, 
+				RealURIsForQuery.contactStatusUpdates, FakeURIsForQuery.contactStatusUpdates, AnonimyzedURIsForQuery.contactStatusUpdates);
+	}
+
+	private Cursor setContactRawContactsData(Uri uri, String[] projection,
+			String selection, String[] selectionArgs, String sortOrder) {
+		//TODO Have to figure out how to control based on app name and context
+		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
+				SPrivacyApplication.getConstContacts(), 
+				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
+				null), getContext());
+		Log.v(SPrivacyApplication.getDebugTag(), "Came into contacts switch!");
+		return dataControl(SPrivacyQuery.CONTACTS_RAW_CONTACTS, uri, projection, selection, selectionArgs, sortOrder, 
+				RealURIsForQuery.contactRawContacts, FakeURIsForQuery.contactRawContacts, AnonimyzedURIsForQuery.contactRawContacts);
+	}
+
+	private Cursor setContactGroupsData(Uri uri, String[] projection,
+			String selection, String[] selectionArgs, String sortOrder) {
+		//TODO Have to figure out how to control based on app name and context
+		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
+				SPrivacyApplication.getConstContacts(), 
+				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
+				null), getContext());
+		Log.v(SPrivacyApplication.getDebugTag(), "Came into contacts switch!");
+		return dataControl(SPrivacyQuery.CONTACTS_GROUPS, uri, projection, selection, selectionArgs, sortOrder, 
+				RealURIsForQuery.contactGroups, FakeURIsForQuery.contactGroups, AnonimyzedURIsForQuery.contactGroups);
+	}
+
+	private Cursor setAudioData(Uri uri, String[] projection, String selection, 
+			String[] selectionArgs, String sortOrder) {
+		//TODO Have to figure out how to control based on app name and context
+		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
+				SPrivacyApplication.getConstAudios(), 
+				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
+				null), getContext());
+		return dataControl(SPrivacyQuery.AUDIOS, uri, projection, selection, selectionArgs, sortOrder, 
+				RealURIsForQuery.audioUri, FakeURIsForQuery.audioUri, AnonimyzedURIsForQuery.audioUri);
+	}
+	
 	private Cursor setFileData(Uri uri, String[] projection, String selection, 
 			String[] selectionArgs, String sortOrder) {
 		//TODO Have to figure out how to control based on app name and context
@@ -474,7 +663,7 @@ public class SContentProvider extends ContentProvider {
 				SPrivacyApplication.getConstFiles(), 
 				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
 				null), getContext());
-		return dataControl(FILES, uri, projection, selection, selectionArgs, sortOrder, 
+		return dataControl(SPrivacyQuery.FILES, uri, projection, selection, selectionArgs, sortOrder, 
 				RealURIsForQuery.fileUri, FakeURIsForQuery.fileUri, AnonimyzedURIsForQuery.fileUri);
 	}
 
@@ -485,7 +674,7 @@ public class SContentProvider extends ContentProvider {
 				SPrivacyApplication.getConstImages(), 
 				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
 				null), getContext());
-		return dataControl(IMAGES, uri, projection, selection, selectionArgs, sortOrder, 
+		return dataControl(SPrivacyQuery.IMAGES, uri, projection, selection, selectionArgs, sortOrder, 
 				RealURIsForQuery.imageUri, FakeURIsForQuery.imageUri, AnonimyzedURIsForQuery.imageUri);
 	}
 	
@@ -496,21 +685,26 @@ public class SContentProvider extends ContentProvider {
 				SPrivacyApplication.getConstVideos(), 
 				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
 				null), getContext());
-		return dataControl(VIDEOS, uri, projection, selection, selectionArgs, sortOrder, 
+		return dataControl(SPrivacyQuery.VIDEOS, uri, projection, selection, selectionArgs, sortOrder, 
 				RealURIsForQuery.videoUri, FakeURIsForQuery.videoUri, AnonimyzedURIsForQuery.videoUri);
 	}
 	
 	@Override
 	public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
 		return 0;
-	}	
-//	public static class Media {
-//		public static void setUri(Uri uri){
-//			EXTERNAL_CONTENT_URI = uri;
-//		}
-//		public static Uri EXTERNAL_CONTENT_URI;// = Uri.parse("content://media/external/images/media");
-//		public static Bitmap getBitmap(ContentResolver cr, Uri url) throws FileNotFoundException, IOException {
-//			return Images.Media.getBitmap(cr, url);
-//		}
-//	}
+	}
+	
+	private interface SPrivacyQuery {
+		static final int IMAGES = 1;
+		static final int FILES = 2;
+		static final int VIDEOS = 3;
+		static final int AUDIOS = 4;
+		static final int CONTACTS = 5;
+		static final int CONTACTS_LOOKUP_ID = 6;
+		static final int CONTACTS_DATA = 7;
+		static final int CONTACTS_DATA_ID = 8;
+		static final int CONTACTS_STATUS_UPDATES = 9;
+		static final int CONTACTS_RAW_CONTACTS = 10;
+		static final int CONTACTS_GROUPS = 11;
+	}
 }
