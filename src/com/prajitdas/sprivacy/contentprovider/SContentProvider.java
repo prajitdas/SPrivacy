@@ -283,6 +283,8 @@ public class SContentProvider extends ContentProvider {
 		Uri callLogsUri = Uri.parse(SPrivacyApplication.getConstScheme()
 				+SPrivacyApplication.getConstFakeAuthorityPrefix()
 				+SPrivacyApplication.getConstFake()
+				+SPrivacyApplication.getConstCallLogs()
+				+SPrivacyApplication.getConstSlash()
 				+SPrivacyApplication.getConstCallLogs());
     }
 
@@ -387,6 +389,8 @@ public class SContentProvider extends ContentProvider {
 		Uri callLogsUri = Uri.parse(SPrivacyApplication.getConstScheme()
 				+SPrivacyApplication.getConstAnonymizedAuthorityPrefix()
 				+SPrivacyApplication.getConstAnnonymous()
+				+SPrivacyApplication.getConstCallLogs()
+				+SPrivacyApplication.getConstSlash()
 				+SPrivacyApplication.getConstCallLogs());
 	}
 

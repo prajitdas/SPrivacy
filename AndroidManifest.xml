@@ -15,6 +15,7 @@
         android:targetSdkVersion="21" />
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_CALL_LOG" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- Required permission not required at or below Android 4.3 API level -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
