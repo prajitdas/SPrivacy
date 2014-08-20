@@ -572,6 +572,18 @@ public class SContentProvider extends ContentProvider {
 
 	@Override
 	public boolean onCreate() {
+		Log.v(SPrivacyApplication.getDebugTag(), IMAGES_CONTENT_URI.toString());
+		Log.v(SPrivacyApplication.getDebugTag(), FILES_CONTENT_URI.toString());
+		Log.v(SPrivacyApplication.getDebugTag(), VIDEOS_CONTENT_URI.toString());
+		Log.v(SPrivacyApplication.getDebugTag(), AUDIOS_CONTENT_URI.toString());
+		Log.v(SPrivacyApplication.getDebugTag(), CONTACTS_CONTENT_URI.toString());
+		Log.v(SPrivacyApplication.getDebugTag(), CONTACTS_LOOKUP_ID_URI.toString());
+		Log.v(SPrivacyApplication.getDebugTag(), CONTACTS_DATA_URI.toString());
+		Log.v(SPrivacyApplication.getDebugTag(), CONTACTS_STATUS_UPDATES_URI.toString());
+		Log.v(SPrivacyApplication.getDebugTag(), CONTACTS_RAW_CONTACTS_URI.toString());
+		Log.v(SPrivacyApplication.getDebugTag(), CONTACTS_GROUPS_URI.toString());
+		Log.v(SPrivacyApplication.getDebugTag(), CALL_LOGS_CONTENT_URI.toString());
+		Log.v(SPrivacyApplication.getDebugTag(), ANDROID_ID_CONTENT_URI.toString());
 		Context context = getContext();
 		DatabaseHelper dbHelper = new DatabaseHelper(context);
 		/**
