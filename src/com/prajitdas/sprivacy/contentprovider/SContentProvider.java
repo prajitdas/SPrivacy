@@ -53,9 +53,6 @@ public class SContentProvider extends ContentProvider {
 	static final Uri CONTACTS_CONTENT_URI = Uri.parse(PROVIDER_BASE_URL+
 			SPrivacyApplication.getConstSlash()+
 			SPrivacyApplication.getConstContacts());
-	static final Uri CALL_LOGS_CONTENT_URI = Uri.parse(PROVIDER_BASE_URL+
-			SPrivacyApplication.getConstSlash()+
-			SPrivacyApplication.getConstCallLogs());
 	static final Uri CONTACTS_LOOKUP_ID_URI = Uri.parse(PROVIDER_BASE_URL+
 			SPrivacyApplication.getConstSlash()+
 			SPrivacyApplication.getConstContacts()+
@@ -91,6 +88,12 @@ public class SContentProvider extends ContentProvider {
 			SPrivacyApplication.getConstSlash()+
 			SPrivacyApplication.getConstContacts()+
 			"groups");
+	static final Uri CALL_LOGS_CONTENT_URI = Uri.parse(PROVIDER_BASE_URL+
+			SPrivacyApplication.getConstSlash()+
+			SPrivacyApplication.getConstCallLogs());
+	static final Uri ANDROID_ID_CONTENT_URI = Uri.parse(PROVIDER_BASE_URL+
+			SPrivacyApplication.getConstSlash()+
+			SPrivacyApplication.getConstAndroidId());
 
 	
     static final String _ID = "_id";
@@ -99,6 +102,7 @@ public class SContentProvider extends ContentProvider {
 	static final UriMatcher uriMatcher;
 	static{
 		uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstAndroidId(), SPrivacyQuery.ANDROID_ID);
 		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstImages(), SPrivacyQuery.IMAGES);
 		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstFiles(), SPrivacyQuery.FILES);
 		uriMatcher.addURI(PROVIDER_NAME, SPrivacyApplication.getConstVideos(), SPrivacyQuery.VIDEOS);
@@ -183,6 +187,7 @@ public class SContentProvider extends ContentProvider {
 		 */
 		Uri contactGroups = Uri.parse("content://com.android.contacts/groups");
 		Uri callLogsUri = CallLog.Calls.CONTENT_URI;
+		Uri androidIdUri = Uri.parse("content://com.google.android.gsf.gservices");
 	}
 
 	/**
@@ -289,6 +294,12 @@ public class SContentProvider extends ContentProvider {
 				+SPrivacyApplication.getConstCallLogs()
 				+SPrivacyApplication.getConstSlash()
 				+SPrivacyApplication.getConstCallLogs());
+		Uri androidIdUri = Uri.parse(SPrivacyApplication.getConstScheme()
+				+SPrivacyApplication.getConstFakeAuthorityPrefix()
+				+SPrivacyApplication.getConstFake()
+				+SPrivacyApplication.getConstAndroidId()
+				+SPrivacyApplication.getConstSlash()
+				+SPrivacyApplication.getConstAndroidId());
     }
 
 	/**
@@ -395,6 +406,12 @@ public class SContentProvider extends ContentProvider {
 				+SPrivacyApplication.getConstCallLogs()
 				+SPrivacyApplication.getConstSlash()
 				+SPrivacyApplication.getConstCallLogs());
+		Uri androidIdUri = Uri.parse(SPrivacyApplication.getConstScheme()
+				+SPrivacyApplication.getConstAnonymizedAuthorityPrefix()
+				+SPrivacyApplication.getConstAnnonymous()
+				+SPrivacyApplication.getConstAndroidId()
+				+SPrivacyApplication.getConstSlash()
+				+SPrivacyApplication.getConstAndroidId());
 	}
 
 	private static HashMap<String, String> PROJECTION_MAP;
@@ -541,6 +558,8 @@ public class SContentProvider extends ContentProvider {
 				return "vnd.android.cursor.item/contact";
 			case SPrivacyQuery.CALL_LOGS:
 				return "vnd.android.cursor.dir/calls";
+			case SPrivacyQuery.ANDROID_ID:
+				return "vnd.android.cursor.item/androidid";
 			default:
 				throw new IllegalArgumentException("Unsupported URI: " + uri);
 		}
@@ -622,6 +641,10 @@ public class SContentProvider extends ContentProvider {
 				qb.setProjectionMap(PROJECTION_MAP);
 				c = setCallLogsData(uri, projection, selection, selectionArgs, sortOrder);
 				break;
+			case SPrivacyQuery.ANDROID_ID:
+				qb.setProjectionMap(PROJECTION_MAP);
+				c = setAndroidIdData(uri, projection, selection, selectionArgs, sortOrder);
+				break;
 			default:
 				throw new IllegalArgumentException("Unknown URI " + uri);
 		}
@@ -648,6 +671,18 @@ public class SContentProvider extends ContentProvider {
 		return c;
 	}
 	
+	private Cursor setAndroidIdData(Uri uri, String[] projection, String selection, 
+			String[] selectionArgs, String sortOrder) {
+		//TODO Have to figure out how to control based on app name and context
+		Log.v(SPrivacyApplication.getDebugTag(), "URI: "+uri.toString());
+		accessControl = PolicyChecker.isDataAccessAllowed(new PolicyQuery(
+				SPrivacyApplication.getConstContacts(), 
+				SPrivacyApplication.getConstAppForWhichWeAreSettingPolicies(), 
+				null), getContext());
+		return dataControl(SPrivacyQuery.ANDROID_ID, uri, projection, selection, selectionArgs, sortOrder, 
+				RealURIsForQuery.androidIdUri, FakeURIsForQuery.androidIdUri, AnonimyzedURIsForQuery.androidIdUri);
+	}
+
 	private Cursor setCallLogsData(Uri uri, String[] projection, String selection, 
 			String[] selectionArgs, String sortOrder) {
 		//TODO Have to figure out how to control based on app name and context
@@ -881,5 +916,6 @@ public class SContentProvider extends ContentProvider {
 		static final int CONTACTS_RAW_CONTACTS = 10;
 		static final int CONTACTS_GROUPS = 11;
 		static final int CALL_LOGS = 12;
+		static final int ANDROID_ID = 13;
 	}
 }

@@ -12,12 +12,15 @@
     <string name="sprivacy_fake_image_content_provider_label">SPrivacy Fake Image Content Provider</string>
     <string name="sprivacy_fake_video_content_provider_label">SPrivacy Fake Video Content Provider</string>
     <string name="sprivacy_fake_audio_content_provider_label">SPrivacy Fake Audio Content Provider</string>
+    <string name="sprivacy_fake_android_id_content_provider_label">SPrivacy Fake Android ID Provider</string>
     <string name="sprivacy_fake_calllogs_content_provider_label">SPrivacy Fake Call Logs Provider</string>
     <string name="sprivacy_fake_contact_content_provider_label">SPrivacy Fake Contact Content Provider</string>
     <string name="sprivacy_fake_file_content_provider_label">SPrivacy Fake File Content Provider</string>
     <string name="sprivacy_anonymized_image_content_provider_label">SPrivacy Anonymized Image Content Provider</string>
     <string name="sprivacy_anonymized_video_content_provider_label">SPrivacy Anonymized Video Content Provider</string>
     <string name="sprivacy_anonymized_audio_content_provider_label">SPrivacy Anonymized Audio Content Provider</string>
+    <string name="sprivacy_anonymized_calllogs_content_provider_label">SPrivacy Anonymized Call Logs Content Provider</string>
+    <string name="sprivacy_anonymized_android_id_content_provider_label">SPrivacy Anonymized Android ID Content Provider</string>
     <string name="sprivacy_anonymized_contact_content_provider_label">SPrivacy Anonymized Contact Content Provider</string>
     <string name="sprivacy_anonymized_file_content_provider_label">SPrivacy Anonymized File Content Provider</string>
     <string name="showPols">Policies</string>

@@ -4,10 +4,16 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ProviderInfo;
+import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.Gravity;
 import android.view.Menu;
@@ -32,6 +38,7 @@ import com.prajitdas.sprivacy.policymanager.util.PolicyInfo;
 public class PolicyRuleChooserActivity extends Activity {
 	private Button mBtnDBOps;
 	private TableLayout mTableOfPolicies;
+//	private TextView mLargeTextView;
 	
 	private PolicyDBHelper db;
 	private SQLiteDatabase database;
@@ -103,6 +110,12 @@ public class PolicyRuleChooserActivity extends Activity {
 	private void instantiateViews() {
 		mBtnDBOps = (Button) findViewById(R.id.btnDBOps);
 		mTableOfPolicies = (TableLayout) findViewById(R.id.tableOfPolicies);
+		/**
+		 * This is for testing the Android ID content provider
+		 */
+//		mLargeTextView = (TextView) findViewById(R.id.textViewAndroidId);
+//		mLargeTextView.setText("The Android ID obtained is: "+getAndroidId());
+		/*-------------------------------------------------------------*/
 		addTableRow();
 		addDataRows();
 	}
@@ -325,6 +338,40 @@ public class PolicyRuleChooserActivity extends Activity {
 //					changeAccessLevel(index/3, index%3+1);
 				}
 			});
+		}
+	}
+	/**
+	 * This is for testing the Android ID content provider
+	 */
+	private static final Uri URI = Uri.parse("content://com.google.android.gsf.gservices");
+	private static final String ID_KEY = "android_id";
+	@SuppressWarnings("unused")
+	private String getAndroidId() {
+		String[] selectionArgs = { ID_KEY };
+		Cursor c = getContentResolver().query(URI, null, null, selectionArgs, null);
+
+		int countOfColumns = c.getColumnCount();
+		int countOfRows = c.getCount();
+		Log.v(SPrivacyApplication.getDebugTag(), "Count of columns: "+countOfColumns);
+		Log.v(SPrivacyApplication.getDebugTag(), "Count of rows: "+countOfRows);
+		for(String columnName : c.getColumnNames())
+			Log.v(SPrivacyApplication.getDebugTag(), "Column: "+columnName);
+		Log.v(SPrivacyApplication.getDebugTag(), URI.getEncodedAuthority());
+		ProviderInfo[] providerArray;
+		PackageManager pm = getPackageManager();
+		for(PackageInfo pack : pm.getInstalledPackages(PackageManager.GET_PROVIDERS)) {
+			providerArray = pack.providers;
+			if (providerArray != null)
+				for (ProviderInfo provider : providerArray)
+					if(provider.authority.equals(URI.getEncodedAuthority()))
+						Log.v(SPrivacyApplication.getDebugTag(), pm.getApplicationLabel(provider.applicationInfo).toString()+" and "+provider.name);
+		}
+		if (!c.moveToFirst() || c.getColumnCount() < 2)
+			return null;
+		try {
+			return Long.toHexString(Long.parseLong(c.getString(1)));
+		} catch (NumberFormatException e) {
+			return null;
 		}
 	}
 }

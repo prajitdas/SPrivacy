@@ -43,6 +43,8 @@ public class SPrivacyApplication extends Application {
 
 	private static final String DEBUG_TAG = "SPrivacyApplicationDebugTag";
 
+	private static final String CONST_ANDROID_ID = "androidid";
+
 	private static SPrivacyApplication singleton;
 
 	public static String getConstAccessDenied() {
@@ -144,5 +146,9 @@ public class SPrivacyApplication extends Application {
 
 	public static String getConstCallLogs() {
 		return CONST_CALL_LOGS;
+	}
+
+	public static String getConstAndroidId() {
+		return CONST_ANDROID_ID;
 	}
 }
