@@ -24,9 +24,9 @@ public class AndroidId extends ContentProvider {
 			+SPrivacyApplication.getConstFake()
 			+SPrivacyApplication.getConstAndroidId();
 	static final String URL = "content://" + PROVIDER_NAME;
-	 static final Uri CONTENT_URI = Uri.parse(URL);
+	static final Uri CONTENT_URI = Uri.parse(URL);
 
-	static final String ANDROID_ID_KEY = "key";
+	static final String ANDROID_ID_KEY = "name";
 	static final String ANDROID_ID_VAL = "value";
 
 	static final int ANDROID_ID = 1;
@@ -62,6 +62,7 @@ public class AndroidId extends ContentProvider {
 	
 		@Override
 		public void onCreate(SQLiteDatabase db) {
+			Log.v(SPrivacyApplication.getDebugTag(), CONTENT_URI.toString());
 			db.execSQL(CREATE_DB_TABLE);
 			loaDefaultData(db);
 		}
@@ -75,7 +76,7 @@ public class AndroidId extends ContentProvider {
 			//Data Set 1
 			ContentValues values = new ContentValues();
 			values.put(ANDROID_ID_KEY,"android_id");
-			values.put(ANDROID_ID_VAL,"3pkd421343214");
+			values.put(ANDROID_ID_VAL,"1234567891234567894");
 			try{
 				db.insert(TABLE_NAME, null, values);
 			} catch (SQLException e) {
@@ -135,6 +136,8 @@ public class AndroidId extends ContentProvider {
 		* register to watch a content URI for changes
 		*/
 		cursor.setNotificationUri(getContext().getContentResolver(), uri);
+		cursor.moveToFirst();
+		Log.v(SPrivacyApplication.getDebugTag(), Long.toHexString(Long.parseLong(cursor.getString(1))));
 		return cursor;
 	}
 
