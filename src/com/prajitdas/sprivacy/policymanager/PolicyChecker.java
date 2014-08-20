@@ -7,7 +7,9 @@ import com.prajitdas.sprivacy.SPrivacyApplication;
 import com.prajitdas.sprivacy.policymanager.util.AccessControl;
 import com.prajitdas.sprivacy.policymanager.util.PolicyQuery;
 import com.prajitdas.sprivacy.policymanager.util.PolicyInfo;
-
+/**
+ * @author prajit.das
+ */
 public class PolicyChecker {
 	/**
 	 * This code should be able to find what policies are there to protect what content.

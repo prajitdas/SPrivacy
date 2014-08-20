@@ -15,7 +15,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-
+/**
+ * @author prajit.das
+ */
 public class Contacts extends ContentProvider {
 	static final String PROVIDER_NAME = SPrivacyApplication.getConstAnonymizedAuthorityPrefix()
 			+SPrivacyApplication.getConstAnnonymous()

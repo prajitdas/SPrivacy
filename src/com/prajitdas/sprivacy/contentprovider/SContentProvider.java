@@ -25,6 +25,9 @@ import com.prajitdas.sprivacy.policymanager.PolicyChecker;
 import com.prajitdas.sprivacy.policymanager.util.AccessControl;
 import com.prajitdas.sprivacy.policymanager.util.PolicyQuery;
 
+/**
+ * @author prajit.das
+ */
 public class SContentProvider extends ContentProvider {
 	/**
 	 * Forming the authority of the SPrivacy provider

@@ -17,7 +17,9 @@ import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.prajitdas.sprivacy.SPrivacyApplication;
-
+/**
+ * @author prajit.das
+ */
 public class Contacts extends ContentProvider {
 	/**
 	 * fields for my content provider

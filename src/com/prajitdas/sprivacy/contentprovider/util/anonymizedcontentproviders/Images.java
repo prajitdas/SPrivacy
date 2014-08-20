@@ -15,7 +15,9 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
 import com.prajitdas.sprivacy.SPrivacyApplication;
-
+/**
+ * @author prajit.das
+ */
 public class Images extends ContentProvider {
 	static final String PROVIDER_NAME = SPrivacyApplication.getConstAnonymizedAuthorityPrefix()
 			+SPrivacyApplication.getConstAnnonymous()

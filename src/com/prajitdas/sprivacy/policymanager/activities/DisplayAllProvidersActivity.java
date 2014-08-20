@@ -16,7 +16,9 @@ import android.widget.SimpleAdapter;
 import com.prajitdas.sprivacy.R;
 import com.prajitdas.sprivacy.policymanager.PolicyDBHelper;
 import com.prajitdas.sprivacy.policymanager.util.ProvInfo;
-
+/**
+ * @author prajit.das
+ */
 public class DisplayAllProvidersActivity extends Activity {
 	private ArrayList<HashMap<String, String>> listOfResources;
 	private ListView mListView;

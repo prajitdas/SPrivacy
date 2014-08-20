@@ -1,5 +1,7 @@
 package com.prajitdas.sprivacy.policymanager.util;
-
+/**
+ * @author prajit.das
+ */
 public class ProvInfo {
 	private int id;
 	private String label;

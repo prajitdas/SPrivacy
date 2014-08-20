@@ -15,7 +15,9 @@ import android.widget.Button;
 import com.prajitdas.sprivacy.R;
 import com.prajitdas.sprivacy.SPrivacyApplication;
 import com.prajitdas.sprivacy.policymanager.PolicyDBHelper;
-
+/**
+ * @author prajit.das
+ */
 public class DBOpsActivity extends Activity {
 	private Button mBtnShowAllPolicies;
 	private Button mBtnShowAllApplications;

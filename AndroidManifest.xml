@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+@author prajit.das
+The SPrivacy application was created as part of an intern project. 
+Efforts in this project are attributed to 
+		[Prajit Kumar Das](http://www.umbc.edu/~prajit1) of Ebiquity Research Group, UMBC and 
+		[Bin Liu](http://www-scf.usc.edu/~binliu) of Samsung Research America.
+The goal of this project is to control the privacy of user data on a mobile device.
+-->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.prajitdas.sprivacy"
     android:versionCode="1"

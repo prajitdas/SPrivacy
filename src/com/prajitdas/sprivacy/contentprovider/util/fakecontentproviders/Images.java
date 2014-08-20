@@ -25,7 +25,9 @@ import android.util.Log;
 
 import com.prajitdas.sprivacy.R;
 import com.prajitdas.sprivacy.SPrivacyApplication;
-
+/**
+ * @author prajit.das
+ */
 public class Images extends ContentProvider {
 	static final String PROVIDER_NAME = SPrivacyApplication.getConstFakeAuthorityPrefix()
 			+SPrivacyApplication.getConstFake()

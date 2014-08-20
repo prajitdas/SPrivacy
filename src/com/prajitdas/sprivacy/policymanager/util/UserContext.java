@@ -1,5 +1,7 @@
 package com.prajitdas.sprivacy.policymanager.util;
-
+/**
+ * @author prajit.das
+ */
 public class UserContext {
 	private String location;
 	private String activity;

@@ -9,9 +9,9 @@ import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
 
 import com.prajitdas.sprivacy.SPrivacyApplication;
-
 /**
- * Class that loads the default policies from network or other sources into an ArrayList of PolicyRule
+ * @author prajit.das
+ * Class that loads the default policies from network(possibly) or other sources into an ArrayList of PolicyRule
  * @TODO This class needs to be modified in order to fix how the default policies are loaded.
  */
 public class DefaultDataLoader {

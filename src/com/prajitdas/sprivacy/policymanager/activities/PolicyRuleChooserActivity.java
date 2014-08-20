@@ -26,7 +26,9 @@ import com.prajitdas.sprivacy.R;
 import com.prajitdas.sprivacy.SPrivacyApplication;
 import com.prajitdas.sprivacy.policymanager.PolicyDBHelper;
 import com.prajitdas.sprivacy.policymanager.util.PolicyInfo;
-
+/**
+ * @author prajit.das
+ */
 public class PolicyRuleChooserActivity extends Activity {
 	private Button mBtnDBOps;
 	private TableLayout mTableOfPolicies;

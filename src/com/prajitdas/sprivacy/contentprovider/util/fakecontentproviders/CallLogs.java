@@ -16,7 +16,9 @@ import android.provider.CallLog;
 import android.util.Log;
 
 import com.prajitdas.sprivacy.SPrivacyApplication;
-
+/**
+ * @author prajit.das
+ */
 public class CallLogs extends ContentProvider {
 	/**
 	 * fields for my content provider

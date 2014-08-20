@@ -16,7 +16,9 @@ import com.prajitdas.sprivacy.policymanager.util.DefaultDataLoader;
 import com.prajitdas.sprivacy.policymanager.util.PolicyInfo;
 import com.prajitdas.sprivacy.policymanager.util.ProvInfo;
 import com.prajitdas.sprivacy.policymanager.util.UserContext;
-
+/**
+ * @author prajit.das
+ */
 public class PolicyDBHelper extends SQLiteOpenHelper {
 	// fields for the database tables
 	private final static String APPID = "id";

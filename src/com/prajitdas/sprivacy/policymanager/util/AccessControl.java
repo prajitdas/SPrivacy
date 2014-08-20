@@ -1,5 +1,7 @@
 package com.prajitdas.sprivacy.policymanager.util;
-
+/**
+ * @author prajit.das
+ */
 public class AccessControl {
 	private boolean policy;
 	private int level;

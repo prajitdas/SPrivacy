@@ -7,8 +7,9 @@ import android.provider.ContactsContract.Contacts;
 import android.util.Log;
 
 import com.prajitdas.sprivacy.SPrivacyApplication;
-
-public class ConstantsManager {
+/**
+ * @author prajit.das
+ */public class ConstantsManager {
 	public static Uri getLookupUri(Context context, long id, String lookupKey) {
 		Log.v(SPrivacyApplication.getDebugTag(), "Came here and no error yet!");
 		setContext(context);

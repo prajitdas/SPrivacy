@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.widget.Toast;
 
+/**
+ * @author prajit.das
+ */
 public class SPrivacyApplication extends Application {
 	private static final String CONST_ACCESS_DENIED = "Denied";
 
