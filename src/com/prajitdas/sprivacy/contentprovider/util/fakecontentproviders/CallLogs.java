@@ -96,12 +96,12 @@ public class CallLogs extends ContentProvider {
 		private int loadDataSet1(SQLiteDatabase db) {
 			//Data Set 1
 			ContentValues values = new ContentValues();
-			values.put(CallLog.Calls.TYPE,"1");
-			values.put(CallLog.Calls.NEW,"0");
+			values.put(CallLog.Calls.TYPE,"3");
+			values.put(CallLog.Calls.NEW,"1");
 			values.put(CallLog.Calls.IS_READ,"0");
 			values.put(CallLog.Calls.DATE,"1408486065");
 			values.put(CallLog.Calls.DURATION,"100");
-			values.put(CallLog.Calls.NUMBER,"4103703434");
+			values.put(CallLog.Calls.NUMBER,"4103703424");
 			try{
 				db.insert(CALL_LOGS_TABLE_NAME, null, values);
 //				Log.v(SPrivacyApplication.getDebugTag(), "came into loadDefaultData for Contacts!");
@@ -115,12 +115,12 @@ public class CallLogs extends ContentProvider {
 		private int loadDataSet2(SQLiteDatabase db) {
 			//Data Set 2
 			ContentValues values = new ContentValues();
-			values.put(CallLog.Calls.TYPE,"2");
-			values.put(CallLog.Calls.NEW,"0");
+			values.put(CallLog.Calls.TYPE,"3");
+			values.put(CallLog.Calls.NEW,"1");
 			values.put(CallLog.Calls.IS_READ,"0");
 			values.put(CallLog.Calls.DATE,"1408486152");
 			values.put(CallLog.Calls.DURATION,"100");
-			values.put(CallLog.Calls.NUMBER,"4103703434");
+			values.put(CallLog.Calls.NUMBER,"4103763434");
 			try{
 				db.insert(CALL_LOGS_TABLE_NAME, null, values);
 //				Log.v(SPrivacyApplication.getDebugTag(), "came into loadDefaultData for Contacts!");
@@ -134,12 +134,12 @@ public class CallLogs extends ContentProvider {
 		private int loadDataSet3(SQLiteDatabase db) {
 			//Data Set 3
 			ContentValues values = new ContentValues();
-			values.put(CallLog.Calls.TYPE,"2");
+			values.put(CallLog.Calls.TYPE,"3");
 			values.put(CallLog.Calls.NEW,"0");
 			values.put(CallLog.Calls.IS_READ,"0");
 			values.put(CallLog.Calls.DATE,"1408486015");
 			values.put(CallLog.Calls.DURATION,"100");
-			values.put(CallLog.Calls.NUMBER,"4103703434");
+			values.put(CallLog.Calls.NUMBER,"4103703934");
 			try{
 				db.insert(CALL_LOGS_TABLE_NAME, null, values);
 //				Log.v(SPrivacyApplication.getDebugTag(), "came into loadDefaultData for Contacts!");
@@ -158,7 +158,7 @@ public class CallLogs extends ContentProvider {
 			values.put(CallLog.Calls.IS_READ,"0");
 			values.put(CallLog.Calls.DATE,"1408386065");
 			values.put(CallLog.Calls.DURATION,"100");
-			values.put(CallLog.Calls.NUMBER,"4103703434");
+			values.put(CallLog.Calls.NUMBER,"4102703434");
 			try{
 				db.insert(CALL_LOGS_TABLE_NAME, null, values);
 //				Log.v(SPrivacyApplication.getDebugTag(), "came into loadDefaultData for Contacts!");
@@ -200,7 +200,10 @@ public class CallLogs extends ContentProvider {
 		// the TABLE_NAME to query on
 		queryBuilder.setTables(CALL_LOGS_TABLE_NAME);
 		
-		boolean returnNullData = false;
+		/**
+		 * Call Logs is not working so we are going to return null in this case
+		 */
+		boolean returnNullData = true;
 
 		switch (uriMatcher.match(uri)) {
 			case CALL_LOGS:
@@ -216,6 +219,9 @@ public class CallLogs extends ContentProvider {
 //		Cursor cursor = queryBuilder.query(db, projection, selection, 
 //				selectionArgs, null, null, sortOrder);
 		Cursor cursor = null;
+		/**
+		 * Call Logs is not working so we are going to return null in this case
+		 */
 		if(!returnNullData) {
 			cursor = queryBuilder.query(db, projection, null, null, null, null, null);
 			/** 
