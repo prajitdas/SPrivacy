@@ -10,9 +10,13 @@ import android.content.pm.ProviderInfo;
 
 import com.prajitdas.sprivacy.SPrivacyApplication;
 /**
- * @author prajit.das
- * Class that loads the default policies from network(possibly) or other sources into an ArrayList of PolicyRule
+ * @purpose: Class that loads the default policies from network(possibly) or other sources 
+ * into an ArrayList of PolicyRule to be inserted into the database.
+ * This class also handles the searching and extraction of content provider information and installed application information. 
  * @TODO This class needs to be modified in order to fix how the default policies are loaded.
+ * @last_edit_date: 08/21/2014
+ * @version 1.0
+ * @author prajit.das 
  */
 public class DefaultDataLoader {
 	private Context context;

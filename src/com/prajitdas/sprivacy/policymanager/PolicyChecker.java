@@ -8,6 +8,10 @@ import com.prajitdas.sprivacy.policymanager.util.AccessControl;
 import com.prajitdas.sprivacy.policymanager.util.PolicyQuery;
 import com.prajitdas.sprivacy.policymanager.util.PolicyInfo;
 /**
+ * @purpose: This class returns an {@link #AccessControl} object which contains the policy information (granted/denied) and the access level.
+ * The access level determines whether data provided will be real data, fake data, no data or anonymous data (will be implemented eventually).
+ * @last_edit_date: 08/21/2014
+ * @version 1.0
  * @author prajit.das
  */
 public class PolicyChecker {

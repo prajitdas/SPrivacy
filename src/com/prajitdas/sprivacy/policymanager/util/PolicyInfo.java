@@ -1,7 +1,11 @@
 package com.prajitdas.sprivacy.policymanager.util;
 /**
+ * @purpose: Util class to handle policy information
+ * @last_edit_date: 08/21/2014
+ * @version 1.0
  * @author prajit.das
  */
+
 public class PolicyInfo {
 	private int id;
 	private int appId;

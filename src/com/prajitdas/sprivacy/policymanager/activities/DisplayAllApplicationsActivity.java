@@ -17,6 +17,9 @@ import com.prajitdas.sprivacy.R;
 import com.prajitdas.sprivacy.policymanager.PolicyDBHelper;
 import com.prajitdas.sprivacy.policymanager.util.AppInfo;
 /**
+ * @purpose: Activity to display the applications installed on the phone
+ * @last_edit_date: 08/21/2014
+ * @version 1.0
  * @author prajit.das
  */
 public class DisplayAllApplicationsActivity extends Activity {

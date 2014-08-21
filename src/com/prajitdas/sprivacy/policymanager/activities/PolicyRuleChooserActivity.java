@@ -33,6 +33,9 @@ import com.prajitdas.sprivacy.SPrivacyApplication;
 import com.prajitdas.sprivacy.policymanager.PolicyDBHelper;
 import com.prajitdas.sprivacy.policymanager.util.PolicyInfo;
 /**
+ * @purpose: Activity to control the policies that are being implemented on the phone
+ * @last_edit_date: 08/21/2014
+ * @version 1.0
  * @author prajit.das
  */
 public class PolicyRuleChooserActivity extends Activity {

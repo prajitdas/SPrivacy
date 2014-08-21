@@ -17,6 +17,18 @@ import com.prajitdas.sprivacy.policymanager.util.PolicyInfo;
 import com.prajitdas.sprivacy.policymanager.util.ProvInfo;
 import com.prajitdas.sprivacy.policymanager.util.UserContext;
 /**
+ * @purpose: This DB Helper stores all the policies, provider information, application information associated with the phone.
+ * It is loaded with the default data once at installation time.
+ * The data load is carried out by another class @see{@link #DefaultDataLoader}
+ * This class handles three tables:-
+ * 1) Application table storing all the application info from the phone {@link #APPLICATION_TABLE_NAME}
+ * 2) Provider table storing all the provider info from the phone {@link #PROVIDER_TABLE_NAME}
+ * 3) Policy table storing all the policies to be applied on the phone {@link #POLICY_TABLE_NAME}
+ * We handle all the CRUD operations for policies in this class. 
+ * It is unnecessary to create a content provider for this as these tables are central to the application and they will never
+ * be accessed by any outside application. 
+ * @last_edit_date: 08/21/2014
+ * @version 1.0
  * @author prajit.das
  */
 public class PolicyDBHelper extends SQLiteOpenHelper {

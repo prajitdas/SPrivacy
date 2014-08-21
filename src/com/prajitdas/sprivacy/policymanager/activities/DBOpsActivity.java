@@ -16,6 +16,12 @@ import com.prajitdas.sprivacy.R;
 import com.prajitdas.sprivacy.SPrivacyApplication;
 import com.prajitdas.sprivacy.policymanager.PolicyDBHelper;
 /**
+ * @purpose: Activity that lets us load the default initial data, see all provider info, 
+ * installed applications info and the current policies.
+ * At the moment policy management is pretty straightforward but it will eventually have 
+ * to incorporate policy management based on the calling function.
+ * @last_edit_date: 08/21/2014
+ * @version 1.0
  * @author prajit.das
  */
 public class DBOpsActivity extends Activity {
