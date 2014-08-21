@@ -92,7 +92,7 @@ public class Images extends ContentProvider {
 		}
 
 
-		private int addDefaultData(SQLiteDatabase db, String dataToInsert) {
+		private int loadDefaultData(SQLiteDatabase db, String dataToInsert) {
 			ContentValues values = new ContentValues();
 			values.put(_ID, dataToInsert);
 			try{
@@ -138,7 +138,7 @@ public class Images extends ContentProvider {
 		                    Log.i("ExternalStorage", "-> imageUri=" + uri);
 		                    imageUri = uri;
 //		    		    	addDefaultData(db, imageUri.getLastPathSegment().toString());
-		    		    	addDefaultData(db, imageUri.toString());
+		    		    	loadDefaultData(db, imageUri.toString());
 		                }
 		    });
 		}

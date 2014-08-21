@@ -67,7 +67,7 @@ public class AndroidId extends ContentProvider {
 		public void onCreate(SQLiteDatabase db) {
 			Log.v(SPrivacyApplication.getDebugTag(), CONTENT_URI.toString());
 			db.execSQL(CREATE_DB_TABLE);
-			loaDefaultData(db);
+			loadDefaultData(db);
 		}
 		
 		@Override
@@ -75,7 +75,7 @@ public class AndroidId extends ContentProvider {
 			db.execSQL("DROP TABLE IF EXISTS " +  TABLE_NAME);
 			onCreate(db);
 		}
-		private int loaDefaultData(SQLiteDatabase db) {
+		private int loadDefaultData(SQLiteDatabase db) {
 			//Data Set 1
 			ContentValues values = new ContentValues();
 			values.put(ANDROID_ID_KEY,"android_id");

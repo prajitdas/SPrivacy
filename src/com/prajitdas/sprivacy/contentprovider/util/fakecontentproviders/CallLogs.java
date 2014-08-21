@@ -82,7 +82,7 @@ public class CallLogs extends ContentProvider {
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			db.execSQL(CREATE_DB_TABLE_CALL_LOGS);
-			loaDefaultData(db);
+			loadDefaultData(db);
 		}
 		
 		@Override
@@ -91,7 +91,7 @@ public class CallLogs extends ContentProvider {
 			onCreate(db);
 		}
 		
-		private int loaDefaultData(SQLiteDatabase db) {
+		private int loadDefaultData(SQLiteDatabase db) {
 			int returnValue = -1;
 			returnValue = loadDataSet1(db);
 			returnValue = loadDataSet2(db);

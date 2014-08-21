@@ -153,7 +153,7 @@ public class Contacts extends ContentProvider {
 			db.execSQL(CREATE_DB_TABLE_CONTACTS_RAW);
 			db.execSQL(CREATE_DB_TABLE_CONTACTS_STATUS_UPDATES);
 			Log.v(SPrivacyApplication.getDebugTag(), "came into onCreate for Contacts!");
-			loaDefaultData(db);
+			loadDefaultData(db);
 		}
 		
 		@Override
@@ -166,7 +166,7 @@ public class Contacts extends ContentProvider {
 			onCreate(db);
 		}
 		
-		private int loaDefaultData(SQLiteDatabase db) {
+		private int loadDefaultData(SQLiteDatabase db) {
 			int returnValue = -1;
 			returnValue = loadDataSet1(db);
 			returnValue = loadDataSet2(db);
