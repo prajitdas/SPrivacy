@@ -17,6 +17,11 @@ import android.util.Log;
 
 import com.prajitdas.sprivacy.SPrivacyApplication;
 /**
+ * @purpose: Is internally called by SPrivacy to get fake data
+ * For Call Logs Fake data is not being provided because this data is clashing with call history data.
+ * TODO Fix the call history issue
+ * @last_edit_date: 08/21/2014
+ * @version 1.0
  * @author prajit.das
  */
 public class CallLogs extends ContentProvider {

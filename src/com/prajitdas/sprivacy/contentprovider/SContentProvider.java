@@ -24,8 +24,19 @@ import com.prajitdas.sprivacy.SPrivacyApplication;
 import com.prajitdas.sprivacy.policymanager.PolicyChecker;
 import com.prajitdas.sprivacy.policymanager.util.AccessControl;
 import com.prajitdas.sprivacy.policymanager.util.PolicyQuery;
-
 /**
+ * @purpose: SPrivacy content provider is the class where everything happens. This class acts as the content provider
+ * for any and all data that applications might want to access. The request first comes in as a request to SPrivacy.
+ * The decision to provide data or not is then made in the class {@link PolicyChecker} in the method 
+ * isDataAccessAllowed(PolicyQuery policyQuery, Context context). The input to the method is the {@link PolicyQuery} object
+ * which determines who is making the call, what is the requested data and what is the current user context.
+ * 
+ * The main task of this class to redirect the call to the appropriate provider based on the response of the above method.
+ * If the response is for real data then the appropriate content provider is called. If the response is for null data then a
+ * null cursor is returned immediately. If fake or anonymous data is to be returned as per the response then the fake or anonymous 
+ * content providers are called according to the provider requested.
+ * @last_edit_date: 08/21/2014
+ * @version 1.0
  * @author prajit.das
  */
 public class SContentProvider extends ContentProvider {

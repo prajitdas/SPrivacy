@@ -3,7 +3,6 @@ package com.prajitdas.sprivacy.contentprovider.util.fakecontentproviders;
 import java.util.HashMap;
 
 import com.prajitdas.sprivacy.SPrivacyApplication;
-
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -16,6 +15,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 /**
+ * @purpose: Is internally called by SPrivacy to get fake data
+ * @last_edit_date: 08/21/2014
+ * @version 1.0
  * @author prajit.das
  */
 public class Videos extends ContentProvider {

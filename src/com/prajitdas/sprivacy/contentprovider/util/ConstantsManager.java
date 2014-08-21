@@ -9,7 +9,9 @@ import android.util.Log;
 import com.prajitdas.sprivacy.SPrivacyApplication;
 /**
  * @author prajit.das
- */public class ConstantsManager {
+ * #unusedclass
+ */
+public class ConstantsManager {
 	public static Uri getLookupUri(Context context, long id, String lookupKey) {
 		Log.v(SPrivacyApplication.getDebugTag(), "Came here and no error yet!");
 		setContext(context);

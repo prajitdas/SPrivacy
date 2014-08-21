@@ -16,6 +16,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 /**
+ * @purpose: Is internally called by SPrivacy to get anonymous data
+ * @last_edit_date: 08/21/2014
+ * @version 1.0
  * @author prajit.das
  */
 public class Files extends ContentProvider {

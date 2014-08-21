@@ -16,6 +16,9 @@ import android.net.Uri;
 
 import com.prajitdas.sprivacy.SPrivacyApplication;
 /**
+ * @purpose: Is internally called by SPrivacy to get anonymous data
+ * @last_edit_date: 08/21/2014
+ * @version 1.0
  * @author prajit.das
  */
 public class Images extends ContentProvider {

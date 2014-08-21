@@ -26,6 +26,9 @@ import android.util.Log;
 import com.prajitdas.sprivacy.R;
 import com.prajitdas.sprivacy.SPrivacyApplication;
 /**
+ * @purpose: Is internally called by SPrivacy to get fake data
+ * @last_edit_date: 08/21/2014
+ * @version 1.0
  * @author prajit.das
  */
 public class Images extends ContentProvider {
