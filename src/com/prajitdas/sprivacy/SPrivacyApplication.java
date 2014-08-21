@@ -6,6 +6,9 @@ import android.content.res.Configuration;
 import android.widget.Toast;
 
 /**
+ * Purpose: This class is to handle all the constants that would be required throughout the application. 
+ * Last edit date: 08/21/2014
+ * @version 1.0
  * @author prajit.das
  */
 public class SPrivacyApplication extends Application {
