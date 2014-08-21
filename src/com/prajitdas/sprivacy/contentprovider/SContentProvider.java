@@ -110,6 +110,10 @@ public class SContentProvider extends ContentProvider {
     static final String _ID = "_id";
 	static final String NAME = "name";
 
+	/**
+	 * UriMatcher handles the regex patterns for URIs with inputs.
+	 * If the URI contains an input at the end then it will match to * or #
+	 */
 	static final UriMatcher uriMatcher;
 	static{
 		uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
