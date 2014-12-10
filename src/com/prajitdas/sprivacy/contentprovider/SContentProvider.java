@@ -5,6 +5,7 @@ import java.util.HashMap;
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -1119,7 +1120,7 @@ public class SContentProvider extends ContentProvider {
 		if (sortOrder == null || sortOrder == ""){
 			sortOrder = NAME;
 		}
-
+		
 		Cursor c;
 		switch (uriMatcher.match(uri)) {
 			case SPrivacyQuery.IMAGES:
@@ -1197,6 +1198,12 @@ public class SContentProvider extends ContentProvider {
 //				Log.v(SPrivacyApplication.getDebugTag(), "data14: "+c.getString(17));
 //			} while (c.moveToNext());
 //		}
+		
+		//Ensuring that when the content request is made for "any content" we send out a broadcast letting the listeners know that this request was made
+		Intent contentRequestedSPrivacy = new Intent();
+		contentRequestedSPrivacy.putExtra("uri", uri);
+		getContext().sendBroadcast(contentRequestedSPrivacy);
+		
 		return c;
 	}
 	
